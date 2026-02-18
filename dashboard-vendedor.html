@@ -40,7 +40,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
 .sci-y{background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.16);}
 .sc-val{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;letter-spacing:-1px;margin-bottom:3px;}
 .sc-lbl{font-size:12px;color:var(--muted);}
-.sc-chg{font-size:11px;margin-top:8px;font-weight:500;}
 .vb{background:linear-gradient(135deg,#fff,var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .vg{background:linear-gradient(135deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .vy{background:linear-gradient(135deg,#fff,var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -56,7 +55,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
 .card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
 .pi{display:flex;align-items:center;gap:12px;padding:13px 22px;border-bottom:1px solid var(--border);}
 .pi:last-child{border-bottom:none;}
-.pi-icon{width:38px;height:38px;border-radius:10px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pi-icon{width:38px;height:38px;border-radius:10px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+.pi-icon img{width:100%;height:100%;object-fit:cover;}
 .pi-info{flex:1;}
 .pi-name{font-size:13px;font-weight:500;margin-bottom:2px;}
 .pi-meta{font-size:11px;color:var(--muted);}
@@ -75,9 +75,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
 .hi-amount{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--green);}
 .hi-date{font-size:11px;color:var(--muted);margin-top:2px;}
 .empty-state{padding:28px 22px;text-align:center;color:var(--muted);font-size:13px;}
+.error-state{padding:28px 22px;text-align:center;color:var(--red);font-size:12px;}
 </style>
 </head>
 <body>
+
 <aside class="sidebar">
   <div class="sb-head">
     <div class="sb-logo">VentaConecta</div>
@@ -153,20 +155,24 @@ const SUPABASE_URL = 'https://miiitegvpxoplanszido.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_uONmieVhZiope7XWhMnFHA_gQbIHF2w'
 const { createClient } = supabase
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
+
 let currentUser = null
 
 async function init() {
   const { data: { user } } = await sb.auth.getUser()
   if (!user) { window.location.href = 'login.html'; return }
   currentUser = user
+
   const { data: profile } = await sb.from('users').select('*').eq('id', user.id).single()
   if (!profile || profile.user_type !== 'vendedor') { window.location.href = 'login.html'; return }
+
   const name = profile.full_name || profile.email
   document.getElementById('userName').textContent = name
   document.getElementById('userInitials').textContent = name.substring(0, 2).toUpperCase()
   document.getElementById('greeting').textContent = `¡Hola, ${name.split(' ')[0]}! 🚀`
   const now = new Date()
   document.getElementById('dateStr').textContent = now.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+
   loadStats()
   loadPending()
   loadHistory()
@@ -175,17 +181,21 @@ async function init() {
 async function loadStats() {
   const uid = currentUser.id
   const [notifs, confirmed, sales, unpaid] = await Promise.all([
-    sb.from('notifications').select('id', { count: 'exact' }).eq('vendedor_id', uid),
-    sb.from('notifications').select('id', { count: 'exact' }).eq('vendedor_id', uid).eq('status', 'confirmado'),
+    sb.from('notifications').select('id', { count: 'exact', head: true }).eq('vendedor_id', uid),
+    sb.from('notifications').select('id', { count: 'exact', head: true }).eq('vendedor_id', uid).eq('status', 'confirmado'),
     sb.from('sales').select('commission_amount').eq('vendedor_id', uid),
     sb.from('sales').select('commission_amount').eq('vendedor_id', uid).eq('commission_paid', false)
   ])
+
   document.getElementById('stat-enviados').textContent = notifs.count || 0
   document.getElementById('stat-confirmadas').textContent = confirmed.count || 0
+
   const total = (sales.data || []).reduce((s, r) => s + (r.commission_amount || 0), 0)
   document.getElementById('stat-ganadas').textContent = '$' + total.toLocaleString()
+
   const porCobrar = (unpaid.data || []).reduce((s, r) => s + (r.commission_amount || 0), 0)
   document.getElementById('stat-cobrar').textContent = '$' + porCobrar.toLocaleString()
+
   if (porCobrar > 0) {
     document.getElementById('cobrarBanner').style.display = 'flex'
     document.getElementById('cobrarAmount').textContent = '$' + porCobrar.toLocaleString()
@@ -194,30 +204,122 @@ async function loadStats() {
 }
 
 async function loadPending() {
-  const { data } = await sb.from('notifications').select('*, products(title,commission), users!comercio_id(business_name)').eq('vendedor_id', currentUser.id).in('status', ['enviado']).order('created_at', { ascending: false }).limit(5)
   const list = document.getElementById('pendingList')
-  if (!data || data.length === 0) { list.innerHTML = '<div class="empty-state">No tienes clientes pendientes</div>'; return }
-  list.innerHTML = data.map(n => `
+
+  // Fetch notifications first
+  const { data: notifs, error } = await sb
+    .from('notifications')
+    .select('*')
+    .eq('vendedor_id', currentUser.id)
+    .eq('status', 'enviado')
+    .order('created_at', { ascending: false })
+    .limit(10)
+
+  if (error) {
+    list.innerHTML = `<div class="error-state">Error al cargar pendientes: ${error.message}</div>`
+    return
+  }
+
+  if (!notifs || notifs.length === 0) {
+    list.innerHTML = '<div class="empty-state">No tienes clientes pendientes</div>'
+    return
+  }
+
+  // Fetch related products and comercios separately (robust fallback)
+  const productIds = [...new Set(notifs.map(n => n.product_id).filter(Boolean))]
+  const comercioIds = [...new Set(notifs.map(n => n.comercio_id).filter(Boolean))]
+
+  const [prodsRes, comerciosRes] = await Promise.all([
+    productIds.length > 0 ? sb.from('products').select('id, title, commission, image_url').in('id', productIds) : { data: [] },
+    comercioIds.length > 0 ? sb.from('users').select('id, business_name').in('id', comercioIds) : { data: [] }
+  ])
+
+  const prodMap = {}
+  ;(prodsRes.data || []).forEach(p => { prodMap[p.id] = p })
+  const comercioMap = {}
+  ;(comerciosRes.data || []).forEach(c => { comercioMap[c.id] = c })
+
+  list.innerHTML = notifs.map(n => {
+    const prod = prodMap[n.product_id] || {}
+    const comercio = comercioMap[n.comercio_id] || {}
+    const imgHtml = prod.image_url
+      ? `<img src="${prod.image_url}" alt="${prod.title}">`
+      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8"/></svg>`
+    return `
     <div class="pi">
-      <div class="pi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8"/></svg></div>
-      <div class="pi-info"><div class="pi-name">${n.products?.title || 'Producto'}</div><div class="pi-meta">${n.customer_name} · ${n.users?.business_name || 'Comercio'} · ${n.expected_visit}</div></div>
-      <div class="pi-right"><span class="pill pw">⏳ Esperando</span><div class="pi-comm">+$${n.products?.commission?.toLocaleString() || 0}</div></div>
-    </div>`).join('')
+      <div class="pi-icon">${imgHtml}</div>
+      <div class="pi-info">
+        <div class="pi-name">${prod.title || 'Producto'}</div>
+        <div class="pi-meta">${n.customer_name} · ${comercio.business_name || 'Comercio'} · ${n.expected_visit || ''}</div>
+      </div>
+      <div class="pi-right">
+        <span class="pill pw">⏳ Esperando</span>
+        <div class="pi-comm">+$${(prod.commission || 0).toLocaleString()}</div>
+      </div>
+    </div>`
+  }).join('')
 }
 
 async function loadHistory() {
-  const { data } = await sb.from('sales').select('*, products(title), users!comercio_id(business_name)').eq('vendedor_id', currentUser.id).order('created_at', { ascending: false }).limit(5)
   const list = document.getElementById('historyList')
-  if (!data || data.length === 0) { list.innerHTML = '<div class="empty-state">No tienes ventas aún. ¡Ve al catálogo!</div>'; return }
-  list.innerHTML = data.map(s => `
+
+  const { data: sales, error } = await sb
+    .from('sales')
+    .select('*')
+    .eq('vendedor_id', currentUser.id)
+    .order('created_at', { ascending: false })
+    .limit(10)
+
+  if (error) {
+    list.innerHTML = `<div class="error-state">Error al cargar historial: ${error.message}</div>`
+    return
+  }
+
+  if (!sales || sales.length === 0) {
+    list.innerHTML = '<div class="empty-state">No tienes ventas aún. ¡Ve al catálogo!</div>'
+    return
+  }
+
+  // Fetch products and comercios separately
+  const productIds = [...new Set(sales.map(s => s.product_id).filter(Boolean))]
+  const comercioIds = [...new Set(sales.map(s => s.comercio_id).filter(Boolean))]
+
+  const [prodsRes, comerciosRes] = await Promise.all([
+    productIds.length > 0 ? sb.from('products').select('id, title').in('id', productIds) : { data: [] },
+    comercioIds.length > 0 ? sb.from('users').select('id, business_name').in('id', comercioIds) : { data: [] }
+  ])
+
+  const prodMap = {}
+  ;(prodsRes.data || []).forEach(p => { prodMap[p.id] = p })
+  const comercioMap = {}
+  ;(comerciosRes.data || []).forEach(c => { comercioMap[c.id] = c })
+
+  list.innerHTML = sales.map(s => {
+    const prod = prodMap[s.product_id] || {}
+    const comercio = comercioMap[s.comercio_id] || {}
+    const paidBadge = s.commission_paid
+      ? '<span class="pill pg">✓ Cobrada</span>'
+      : '<span class="pill pw">⏳ Por cobrar</span>'
+    return `
     <div class="hi">
       <div class="hi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d68f" stroke-width="1.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="hi-info"><div class="hi-name">${s.products?.title || 'Producto'}</div><div class="hi-meta">${s.users?.business_name || 'Comercio'}</div></div>
-      <div class="hi-right"><div class="hi-amount">+$${s.commission_amount?.toLocaleString()}</div><div class="hi-date">${new Date(s.created_at).toLocaleDateString('es-MX')}</div></div>
-    </div>`).join('')
+      <div class="hi-info">
+        <div class="hi-name">${prod.title || 'Producto'}</div>
+        <div class="hi-meta">${comercio.business_name || 'Comercio'} · ${paidBadge}</div>
+      </div>
+      <div class="hi-right">
+        <div class="hi-amount">+$${(s.commission_amount || 0).toLocaleString()}</div>
+        <div class="hi-date">${new Date(s.created_at).toLocaleDateString('es-MX')}</div>
+      </div>
+    </div>`
+  }).join('')
 }
 
-async function handleLogout() { await sb.auth.signOut(); window.location.href = 'login.html' }
+async function handleLogout() {
+  await sb.auth.signOut()
+  window.location.href = 'login.html'
+}
+
 init()
 </script>
 </body>
