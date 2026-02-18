@@ -156,6 +156,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
         <div class="mp-comm" id="modal-prod-comm">—</div>
       </div>
     </div>
+    <div id="comercioInfo" style="margin-bottom:16px;background:rgba(0,214,143,0.05);border:1px solid rgba(0,214,143,0.15);border-radius:12px;padding:12px 16px;display:none;">
+      <div style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:8px;">📍 Dónde ir a cobrar</div>
+      <div id="ci-address" style="font-size:13px;margin-bottom:8px;color:var(--text);"></div>
+      <div id="ci-contact" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+    </div>
     <div id="notifForm">
       <div class="form-group"><label class="form-label">Nombre del cliente</label><input class="form-input" type="text" id="n-name" placeholder="Ej. Carlos Mendoza"></div>
       <div class="form-group"><label class="form-label">Teléfono del cliente</label><input class="form-input" type="tel" id="n-phone" placeholder="664 123 4567"></div>
@@ -217,7 +222,7 @@ async function loadProducts() {
     .from('products')
     .select(`
       *,
-      comercio:users!comercio_id ( business_name, business_address )
+      comercio:users!comercio_id ( business_name, address, whatsapp, phone )
     `)
     .eq('active', true)
     .order('commission', { ascending: false })
@@ -248,7 +253,7 @@ async function loadProducts() {
       const comercioIds = [...new Set(res2.data.map(p => p.comercio_id))]
       const { data: comercios } = await sb
         .from('users')
-        .select('id, business_name')
+        .select('id, business_name, address, whatsapp, phone')
         .in('id', comercioIds)
 
       const comercioMap = {}
@@ -339,6 +344,23 @@ function openNotifModal(productId) {
 
   document.getElementById('modal-prod-name').textContent = product.title
   document.getElementById('modal-prod-comm').textContent = `Tu comisión: $${(product.commission || 0).toLocaleString()} · ${comercioName}`
+
+  // Show comercio info (address, whatsapp, phone)
+  const comercio = product.comercio || product.users || {}
+  const address = comercio.address
+  const whatsapp = comercio.whatsapp
+  const phone = comercio.phone
+  const infoEl = document.getElementById('comercioInfo')
+  if (address || whatsapp || phone) {
+    document.getElementById('ci-address').textContent = address ? `📍 ${address}` : ''
+    const contacts = []
+    if (whatsapp) contacts.push(`<a href="https://wa.me/52${whatsapp.replace(/\D/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:8px;color:#25d366;font-size:12px;text-decoration:none;font-weight:500;">💬 WhatsApp</a>`)
+    if (phone) contacts.push(`<a href="tel:${phone}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:rgba(26,86,255,0.08);border:1px solid rgba(26,86,255,0.2);border-radius:8px;color:var(--blue-light);font-size:12px;text-decoration:none;font-weight:500;">📞 Llamar</a>`)
+    document.getElementById('ci-contact').innerHTML = contacts.join('')
+    infoEl.style.display = 'block'
+  } else {
+    infoEl.style.display = 'none'
+  }
 
   // Show product image in modal if available
   const imgWrap = document.getElementById('modalProductImgWrap')
