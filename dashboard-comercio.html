@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VentaConecta — Dashboard Comercio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --blue:#1a56ff;--blue-light:#4d7aff;--green:#00d68f;
+  --yellow:#ffcc00;--red:#ff4d6d;
+  --dark:#070b14;--dark-2:#0f1623;--dark-3:#1a2235;
+  --card-bg:rgba(255,255,255,0.035);--border:rgba(255,255,255,0.07);
+  --text:#eef2ff;--muted:rgba(238,242,255,0.45);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:248px;min-height:100vh;background:var(--dark-2);border-right:1px solid var(--border);padding:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sb-head{padding:24px 24px 20px;border-bottom:1px solid var(--border);}
+.sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:linear-gradient(120deg,#fff,var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;}
+.sb-user{display:flex;align-items:center;gap:10px;}
+.sb-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-light));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#fff;flex-shrink:0;}
+.sb-name{font-size:13px;font-weight:500;}
+.sb-role{font-size:11px;color:var(--muted);}
+
+.sb-nav{padding:16px 0;flex:1;}
+.sb-section{padding:12px 20px 6px;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13.5px;color:var(--muted);cursor:pointer;transition:all 0.18s;text-decoration:none;position:relative;}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
+.sb-item.active{color:var(--text);background:rgba(26,86,255,0.1);border-right:2px solid var(--blue);}
+.sb-item svg{opacity:0.7;flex-shrink:0;}
+.sb-item.active svg{opacity:1;}
+.sb-badge{margin-left:auto;background:var(--yellow);color:#000;border-radius:100px;font-size:10px;font-weight:700;padding:2px 7px;line-height:1.4;}
+.sb-foot{padding:16px 20px;border-top:1px solid var(--border);}
+.sb-logout{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;transition:color 0.2s;}
+.sb-logout:hover{color:var(--red);}
+
+/* MAIN */
+.main{margin-left:248px;flex:1;padding:32px 36px;max-width:calc(100vw - 248px);}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
+.page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.7px;margin-bottom:3px;}
+.page-sub{font-size:13px;color:var(--muted);}
+.btn-new{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--blue);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;}
+.btn-new:hover{background:var(--blue-light);transform:translateY(-1px);box-shadow:0 8px 28px rgba(26,86,255,0.4);}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.sc{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:22px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.sc:hover{border-color:rgba(255,255,255,0.12);}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);}
+.sc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.sci-blue{background:rgba(26,86,255,0.1);border:1px solid rgba(26,86,255,0.18);}
+.sci-green{background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.16);}
+.sci-yellow{background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.16);}
+.sci-red{background:rgba(255,77,109,0.08);border:1px solid rgba(255,77,109,0.16);}
+.sc-val{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;letter-spacing:-1px;margin-bottom:3px;}
+.sc-lbl{font-size:12px;color:var(--muted);}
+.sc-chg{font-size:11px;margin-top:8px;font-weight:500;}
+.up{color:var(--green);}.dn{color:var(--red);}
+.vb{background:linear-gradient(135deg,#fff,var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.vg{background:linear-gradient(135deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.vy{background:linear-gradient(135deg,#fff,var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.vr{background:linear-gradient(135deg,#fff,#ff8fa3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.card-link{font-size:12px;color:var(--blue-light);cursor:pointer;text-decoration:none;}
+
+/* NOTIFS */
+.ni{display:flex;align-items:flex-start;gap:12px;padding:13px 22px;border-bottom:1px solid var(--border);transition:background 0.18s;}
+.ni:last-child{border-bottom:none;}
+.ni:hover{background:rgba(255,255,255,0.02);}
+.ndot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.dy{background:var(--yellow);box-shadow:0 0 8px rgba(255,204,0,0.5);}
+.dg{background:var(--green);}
+.dr{background:var(--red);}
+.ni-body{flex:1;}
+.ni-txt{font-size:13px;line-height:1.5;margin-bottom:3px;}
+.ni-txt strong{font-weight:500;}
+.ni-meta{font-size:11px;color:var(--muted);}
+.ni-acts{display:flex;gap:5px;flex-shrink:0;margin-top:1px;}
+.bconf{padding:5px 11px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.22);color:var(--green);border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.18s;}
+.bconf:hover{background:rgba(0,214,143,0.18);}
+.brej{padding:5px 10px;background:rgba(255,77,109,0.07);border:1px solid rgba(255,77,109,0.18);color:var(--red);border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;}
+
+/* PRODUCTS */
+.pt{width:100%;}
+.pr{display:grid;grid-template-columns:40px 1fr 76px 76px 72px 52px;align-items:center;gap:10px;padding:11px 22px;border-bottom:1px solid var(--border);transition:background 0.18s;}
+.pr:last-child{border-bottom:none;}
+.pr:not(.ph):hover{background:rgba(255,255,255,0.02);}
+.ph{font-size:10px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;color:var(--muted);}
+.pimg{width:38px;height:38px;border-radius:9px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;}
+.pname{font-size:13px;font-weight:500;margin-bottom:2px;}
+.psub{font-size:10px;color:var(--muted);}
+.pprice{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;}
+.pcomm{font-size:13px;font-weight:500;color:var(--green);}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:10px;font-weight:500;}
+.pon{background:rgba(0,214,143,0.08);color:var(--green);border:1px solid rgba(0,214,143,0.18);}
+.poff{background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border);}
+.pacts{display:flex;gap:5px;}
+.ibtn{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s;}
+.ibtn:hover{background:var(--card-bg);color:var(--text);border-color:rgba(255,255,255,0.14);}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">VentaConecta</div>
+    <div class="sb-user">
+      <div class="sb-avatar">MG</div>
+      <div><div class="sb-name">Muebles García</div><div class="sb-role">Comercio · Tijuana</div></div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Principal</div>
+    <a class="sb-item active">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a class="sb-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Mis productos
+    </a>
+    <a class="sb-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notificaciones
+      <span class="sb-badge">3</span>
+    </a>
+    <a class="sb-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Ventas
+    </a>
+    <div class="sb-section">Cuenta</div>
+    <a class="sb-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Configuración
+    </a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-logout">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Cerrar sesión
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">Buenos días, García 👋</div>
+      <div class="page-sub">Martes 17 de febrero · Aquí está tu resumen</div>
+    </div>
+    <button class="btn-new">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Agregar producto
+    </button>
+  </div>
+
+  <div class="stats">
+    <div class="sc">
+      <div class="sc-icon sci-blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+      <div class="sc-val vb">12</div><div class="sc-lbl">Productos activos</div>
+      <div class="sc-chg up">↑ 2 esta semana</div>
+    </div>
+    <div class="sc">
+      <div class="sc-icon sci-green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d68f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+      <div class="sc-val vg">47</div><div class="sc-lbl">Ventas generadas</div>
+      <div class="sc-chg up">↑ 8 este mes</div>
+    </div>
+    <div class="sc">
+      <div class="sc-icon sci-yellow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="sc-val vy">9</div><div class="sc-lbl">Vendedores activos</div>
+      <div class="sc-chg up">↑ 3 nuevos</div>
+    </div>
+    <div class="sc">
+      <div class="sc-icon sci-red"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff8fa3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="sc-val vr">$3,240</div><div class="sc-lbl">Comisiones pagadas</div>
+      <div class="sc-chg dn">↓ vs mes anterior</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <!-- NOTIFICATIONS -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">Clientes entrantes</div><a class="card-link">Ver todas →</a></div>
+      <div class="ni">
+        <div class="ndot dy"></div>
+        <div class="ni-body">
+          <div class="ni-txt"><strong>Carlos Mendoza</strong> viene por <strong>Silla ejecutiva negra</strong></div>
+          <div class="ni-meta">Hoy · @vendedor_luis · hace 15 min</div>
+        </div>
+        <div class="ni-acts"><button class="bconf">✓ Confirmar</button><button class="brej">✗</button></div>
+      </div>
+      <div class="ni">
+        <div class="ndot dy"></div>
+        <div class="ni-body">
+          <div class="ni-txt"><strong>Ana Torres</strong> viene por <strong>Mesa de madera roble</strong></div>
+          <div class="ni-meta">Mañana · @maria_vende · hace 1h</div>
+        </div>
+        <div class="ni-acts"><button class="bconf">✓ Confirmar</button><button class="brej">✗</button></div>
+      </div>
+      <div class="ni">
+        <div class="ndot dy"></div>
+        <div class="ni-body">
+          <div class="ni-txt"><strong>Roberto Silva</strong> viene por <strong>Sofá 3 plazas gris</strong></div>
+          <div class="ni-meta">2-3 días · @vendedor_luis · hace 3h</div>
+        </div>
+        <div class="ni-acts"><button class="bconf">✓ Confirmar</button><button class="brej">✗</button></div>
+      </div>
+      <div class="ni">
+        <div class="ndot dg"></div>
+        <div class="ni-body">
+          <div class="ni-txt"><strong>Patricia Ruiz</strong> — Silla ejecutiva negra</div>
+          <div class="ni-meta">✅ Confirmada · ayer</div>
+        </div>
+      </div>
+      <div class="ni">
+        <div class="ndot dr"></div>
+        <div class="ni-body">
+          <div class="ni-txt"><strong>Miguel Ángel</strong> — Escritorio blanco</div>
+          <div class="ni-meta">✗ Rechazada · ayer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">Mis productos</div><a class="card-link">Ver todos →</a></div>
+      <div class="pt">
+        <div class="pr ph"><div></div><div>Producto</div><div>Retail</div><div>Comisión</div><div>Estado</div><div></div></div>
+        <div class="pr">
+          <div class="pimg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+          <div><div class="pname">Silla ejecutiva</div><div class="psub">47 vistas · 12 ventas</div></div>
+          <div class="pprice">$1,200</div><div class="pcomm">+$300</div>
+          <div><span class="pill pon">● Activo</span></div>
+          <div class="pacts"><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button></div>
+        </div>
+        <div class="pr">
+          <div class="pimg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+          <div><div class="pname">Sofá 3 plazas</div><div class="psub">31 vistas · 8 ventas</div></div>
+          <div class="pprice">$4,500</div><div class="pcomm">+$800</div>
+          <div><span class="pill pon">● Activo</span></div>
+          <div class="pacts"><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button></div>
+        </div>
+        <div class="pr">
+          <div class="pimg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M3 9a2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2"/><path d="M5 11v8h14v-8"/><path d="M10 15h4v4h-4z"/></svg></div>
+          <div><div class="pname">Mesa roble</div><div class="psub">18 vistas · 5 ventas</div></div>
+          <div class="pprice">$2,800</div><div class="pcomm">+$500</div>
+          <div><span class="pill pon">● Activo</span></div>
+          <div class="pacts"><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button></div>
+        </div>
+        <div class="pr">
+          <div class="pimg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div><div class="pname">Escritorio blanco</div><div class="psub">9 vistas · 1 venta</div></div>
+          <div class="pprice">$1,800</div><div class="pcomm">+$350</div>
+          <div><span class="pill poff">Inactivo</span></div>
+          <div class="pacts"><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ibtn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

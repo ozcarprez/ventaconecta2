@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VentaConecta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #1a56ff;
+    --blue-light: #4d7aff;
+    --blue-dark: #0035cc;
+    --green: #00d68f;
+    --green-glow: rgba(0, 214, 143, 0.3);
+    --yellow: #ffcc00;
+    --dark: #0a0e1a;
+    --dark-2: #111827;
+    --dark-3: #1c2333;
+    --card-bg: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f4ff;
+    --text-muted: rgba(240,244,255,0.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .bg-canvas::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(ellipse, rgba(26,86,255,0.18) 0%, transparent 65%);
+    animation: drift1 12s ease-in-out infinite alternate;
+  }
+
+  .bg-canvas::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    right: -10%;
+    width: 55%;
+    height: 55%;
+    background: radial-gradient(ellipse, rgba(0,214,143,0.12) 0%, transparent 65%);
+    animation: drift2 15s ease-in-out infinite alternate;
+  }
+
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px;
+  }
+
+  @keyframes drift1 {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(4%, 6%) scale(1.1); }
+  }
+  @keyframes drift2 {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(-5%, -4%) scale(1.08); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    backdrop-filter: blur(20px);
+    background: rgba(10,14,26,0.6);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, var(--blue-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-login {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+  .nav-login:hover {
+    color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+    background: var(--card-bg);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 24px 80px;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(0,214,143,0.1);
+    border: 1px solid rgba(0,214,143,0.25);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -2.5px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 .line-1 { display: block; color: var(--text); }
+
+  h1 .line-2 {
+    display: block;
+    background: linear-gradient(135deg, var(--blue-light) 0%, var(--green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 auto 48px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-sub strong { color: var(--text); font-weight: 500; }
+
+  .cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: var(--blue);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.2px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 0 0 rgba(26,86,255,0.4);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(26,86,255,0.5), 0 0 0 1px rgba(26,86,255,0.3);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    transition: transform 0.2s;
+  }
+  .btn-primary:hover .btn-arrow { transform: translateX(3px); }
+
+  .login-link {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .login-link:hover { color: var(--text); }
+  .login-link span { color: var(--blue-light); }
+
+  /* ── CARDS ── */
+  .cards-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 24px 100px;
+    display: flex;
+    justify-content: center;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 680px;
+    width: 100%;
+  }
+
+  .card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .card-comercio:hover {
+    box-shadow: 0 20px 60px rgba(26,86,255,0.2);
+    border-color: rgba(26,86,255,0.35);
+  }
+
+  .card-vendedor:hover {
+    box-shadow: 0 20px 60px rgba(0,214,143,0.15);
+    border-color: rgba(0,214,143,0.3);
+  }
+
+  .card-glow-blue {
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(26,86,255,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card-glow-green {
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(0,214,143,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  .icon-blue { background: rgba(26,86,255,0.15); border: 1px solid rgba(26,86,255,0.25); }
+  .icon-green { background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.2); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+
+  .tag-blue { background: rgba(26,86,255,0.15); color: var(--blue-light); }
+  .tag-green { background: rgba(0,214,143,0.1); color: var(--green); }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    padding: 32px 24px;
+    margin-bottom: 0;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+
+  .stat-item {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+    padding: 0 24px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff, var(--blue-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 4px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    position: relative;
+    z-index: 1;
+    padding: 80px 24px;
+    text-align: center;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -1px;
+    margin-bottom: 56px;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .step {
+    background: var(--dark-2);
+    padding: 32px 24px;
+    text-align: left;
+    position: relative;
+  }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .step-svg {
+    display: block;
+    margin-bottom: 14px;
+    opacity: 0.9;
+  }
+
+  .step-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .step-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 32px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav { padding: 16px 20px; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .stats-strip { gap: 0; }
+    .stat-item { padding: 0 16px; }
+    .stat-num { font-size: 24px; }
+  }
+
+  @media (max-width: 400px) {
+    .steps-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-canvas">
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">VentaConecta</div>
+  <a href="#" class="nav-login">Iniciar sesión</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Sin inventario · Sin riesgo
+  </div>
+
+  <h1>
+    <span class="line-1">Vende sin</span>
+    <span class="line-2">inventario.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Conectamos <strong>comercios locales</strong> con <strong>vendedores independientes</strong>. Publica en Facebook Marketplace y gana la diferencia como comisión.
+  </p>
+
+  <div class="cta-group">
+    <a href="#cards" class="btn-primary">
+      Comenzar ahora
+      <span class="btn-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+    <a href="#" class="login-link">¿Ya tienes cuenta? <span>Inicia sesión →</span></a>
+  </div>
+</section>
+
+<!-- Stats Strip -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-num">$0</div>
+    <div class="stat-label">Inversión inicial</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Comisión para ti</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">24/7</div>
+    <div class="stat-label">Catálogo disponible</div>
+  </div>
+</div>
+
+<!-- Cards -->
+<section class="cards-section" id="cards">
+  <div class="cards-grid">
+
+    <div class="card card-comercio">
+      <div class="card-glow-blue"></div>
+      <div class="card-icon icon-blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l1-5h16l1 5"/><path d="M3 9a2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2"/>
+          <path d="M5 11v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/><path d="M10 15h4v4h-4z"/>
+        </svg>
+      </div>
+      <div class="card-title">Soy Comercio</div>
+      <div class="card-desc">Publica tus productos y deja que una red de vendedores traiga clientes a tu tienda.</div>
+      <span class="card-tag tag-blue">→ Crear cuenta</span>
+    </div>
+
+    <div class="card card-vendedor">
+      <div class="card-glow-green"></div>
+      <div class="card-icon icon-green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00d68f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+          <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M6 12h.01M18 12h.01"/>
+        </svg>
+      </div>
+      <div class="card-title">Soy Vendedor</div>
+      <div class="card-desc">Elige productos, publícalos en Facebook Marketplace y cobra tu comisión sin manejar stock.</div>
+      <span class="card-tag tag-green">→ Empezar a ganar</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how-section">
+  <div class="section-label">¿Cómo funciona?</div>
+  <div class="section-title">4 pasos. Sin complicaciones.</div>
+
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <span class="step-svg">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><path d="M9 7h6M9 11h4"/>
+        </svg>
+      </span>
+      <div class="step-text"><strong>Elige un producto</strong> del catálogo y publícalo en tu Facebook Marketplace al precio retail.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <span class="step-svg">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          <path d="M8 10h8M8 14h5"/>
+        </svg>
+      </span>
+      <div class="step-text"><strong>Cuando alguien se interese</strong>, notifica al comercio con los datos del cliente.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <span class="step-svg">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l1-5h16l1 5"/><path d="M3 9a2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2"/>
+          <path d="M5 11v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/><path d="M10 15h4v4h-4z"/>
+        </svg>
+      </span>
+      <div class="step-text"><strong>El cliente va</strong> físicamente a la tienda del comercio a comprar el producto.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <span class="step-svg">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00d68f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M9 12h3"/>
+        </svg>
+      </span>
+      <div class="step-text"><strong>El comercio confirma</strong> la venta y tú cobras tu comisión. Sin inventario, sin riesgo.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 VentaConecta · Conectando comercios con vendedores
+</footer>
+
+<script>
+  // Smooth scroll for CTA
+  document.querySelector('.btn-primary').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('#cards').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Card click effect
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.style.transform = 'scale(0.97)';
+      setTimeout(() => card.style.transform = '', 150);
+    });
+  });
+
+  // Animate stats counter
+  function animateCounter(el, target, suffix = '') {
+    let current = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        el.textContent = target + suffix;
+        clearInterval(timer);
+      } else {
+        el.textContent = Math.floor(current) + suffix;
+      }
+    }, 30);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const nums = entry.target.querySelectorAll('.stat-num');
+        observer.unobserve(entry.target);
+      }
+    });
+  });
+  observer.observe(document.querySelector('.stats-strip'));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VentaConecta — Detalle Producto</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --blue:#1a56ff;--blue-light:#4d7aff;--green:#00d68f;
+  --yellow:#ffcc00;
+  --dark:#070b14;--dark-2:#0f1623;--dark-3:#1a2235;
+  --card-bg:rgba(255,255,255,0.035);--border:rgba(255,255,255,0.07);
+  --text:#eef2ff;--muted:rgba(238,242,255,0.45);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);display:flex;min-height:100vh;}
+
+.sidebar{width:248px;min-height:100vh;background:var(--dark-2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sb-head{padding:24px 24px 20px;border-bottom:1px solid var(--border);}
+.sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:linear-gradient(120deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;}
+.sb-user{display:flex;align-items:center;gap:10px;}
+.sb-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--green),#00b37a);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#000;flex-shrink:0;}
+.sb-name{font-size:13px;font-weight:500;}
+.sb-role{font-size:11px;color:var(--muted);}
+.sb-nav{padding:16px 0;flex:1;}
+.sb-section{padding:12px 20px 6px;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13.5px;color:var(--muted);cursor:pointer;transition:all 0.18s;text-decoration:none;}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
+.sb-item.active{color:var(--text);background:rgba(0,214,143,0.08);border-right:2px solid var(--green);}
+.sb-foot{padding:16px 20px;border-top:1px solid var(--border);}
+
+.main{margin-left:248px;flex:1;padding:32px 36px;max-width:calc(100vw - 248px);}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:24px;}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color 0.18s;}
+.breadcrumb a:hover{color:var(--text);}
+.breadcrumb span{color:var(--text);}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start;}
+
+/* LEFT */
+.prod-image{background:var(--dark-3);border:1px solid var(--border);border-radius:20px;height:320px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;overflow:hidden;}
+.prod-image::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(26,86,255,0.06) 0%,transparent 70%);}
+.prod-desc-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:24px;}
+.prod-desc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;}
+.prod-desc-text{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;}
+
+/* STEPS */
+.steps-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:24px;margin-top:16px;}
+.steps-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:20px;}
+.step-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.step-row:last-child{margin-bottom:0;}
+.step-num{width:28px;height:28px;border-radius:8px;background:rgba(26,86,255,0.12);border:1px solid rgba(26,86,255,0.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:var(--blue-light);flex-shrink:0;margin-top:1px;}
+.step-content{}
+.step-label{font-size:13px;font-weight:500;margin-bottom:2px;}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* RIGHT — STICKY CARD */
+.right-col{position:sticky;top:24px;}
+.action-card{background:var(--card-bg);border:1px solid var(--border);border-radius:24px;padding:28px;margin-bottom:16px;}
+.ac-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.18);border-radius:100px;font-size:11px;font-weight:500;color:var(--green);margin-bottom:16px;}
+.ac-name{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;line-height:1.2;margin-bottom:20px;}
+.ac-prices{background:var(--dark-3);border-radius:14px;padding:18px;margin-bottom:20px;}
+.ac-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.ac-price-row:last-child{margin-bottom:0;padding-top:10px;border-top:1px solid var(--border);}
+.ac-price-label{font-size:12px;color:var(--muted);}
+.ac-price-val{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
+.ac-comm-row .ac-price-label{color:var(--green);}
+.ac-comm-row .ac-price-val{font-size:20px;color:var(--green);}
+.ac-payment{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:20px;}
+.btn-notify{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:var(--green);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;border:none;border-radius:14px;cursor:pointer;transition:all 0.2s;margin-bottom:10px;}
+.btn-notify:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,214,143,0.35);}
+.btn-share{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;border-radius:12px;cursor:pointer;transition:all 0.2s;}
+.btn-share:hover{background:rgba(255,255,255,0.07);color:var(--text);}
+
+/* COMERCIO CARD */
+.comercio-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:22px;}
+.cc-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.cc-info{display:flex;flex-direction:column;gap:10px;}
+.cc-row{display:flex;align-items:center;gap:10px;}
+.cc-icon{width:28px;height:28px;border-radius:8px;background:rgba(26,86,255,0.1);border:1px solid rgba(26,86,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cc-text{font-size:13px;color:var(--text);}
+.cc-sub{font-size:11px;color:var(--muted);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--dark-2);border:1px solid var(--border);border-radius:24px;padding:32px;width:100%;max-width:460px;position:relative;}
+.modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.4px;margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block;}
+.form-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.18s;}
+.form-input:focus{border-color:rgba(0,214,143,0.4);}
+.form-input::placeholder{color:var(--muted);}
+.form-select{width:100%;background:var(--dark-3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;cursor:pointer;}
+.form-select option{background:var(--dark-2);}
+.modal-product{display:flex;align-items:center;gap:12px;background:var(--dark-3);border-radius:12px;padding:12px 16px;margin-bottom:20px;}
+.modal-product-icon{width:36px;height:36px;border-radius:9px;background:var(--dark-2);display:flex;align-items:center;justify-content:center;}
+.modal-product-name{font-size:13px;font-weight:500;}
+.modal-product-comm{font-size:12px;color:var(--green);}
+.btn-send{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:var(--green);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+.btn-send:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,214,143,0.3);}
+.btn-cancel{display:flex;align-items:center;justify-content:center;width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:13px;border-radius:12px;cursor:pointer;margin-top:8px;transition:all 0.2s;}
+.btn-cancel:hover{color:var(--text);border-color:rgba(255,255,255,0.15);}
+.modal-close{position:absolute;top:20px;right:20px;width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s;}
+.modal-close:hover{background:var(--card-bg);color:var(--text);}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">VentaConecta</div>
+    <div class="sb-user">
+      <div class="sb-avatar">LR</div>
+      <div><div class="sb-name">Luis Ramírez</div><div class="sb-role">Vendedor · Tijuana</div></div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Principal</div>
+    <a class="sb-item" href="dashboard-vendedor.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a class="sb-item active" href="catalogo.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Catálogo
+    </a>
+    <a class="sb-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Mis notificaciones
+    </a>
+    <a class="sb-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Mis ganancias
+    </a>
+  </nav>
+  <div class="sb-foot">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Cerrar sesión
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="breadcrumb">
+    <a href="catalogo.html">← Catálogo</a>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    <span>Silla ejecutiva ergonómica negra</span>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT -->
+    <div>
+      <div class="prod-image">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.3)" stroke-width="0.8" stroke-linecap="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+
+      <div class="prod-desc-card">
+        <div class="prod-desc-title">Descripción del producto</div>
+        <div class="prod-desc-text">Silla ejecutiva con soporte lumbar ajustable, reposabrazos regulables y base giratoria de 360°. Tapizado en cuero sintético de alta calidad, perfecta para home office o uso corporativo. Altura regulable de 45 a 55 cm. Capacidad máxima 120 kg. Disponible en color negro.</div>
+      </div>
+
+      <div class="steps-card">
+        <div class="steps-title">Cómo funciona para ti</div>
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-label">Publica en Facebook Marketplace</div>
+            <div class="step-desc">Sube fotos del producto a $1,200 y describe sus características. No menciones que no tienes stock.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-label">Cuando alguien se interese</div>
+            <div class="step-desc">Presiona "Tengo un cliente interesado" y llena los datos. El comercio recibirá una notificación.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-label">El cliente va a la tienda</div>
+            <div class="step-desc">Muebles García está en Blvd. Sánchez Taboada 1234, Tijuana. El cliente compra directamente ahí.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-label">Cobra tu comisión de $300</div>
+            <div class="step-desc">Una vez confirmada la venta, visita el comercio para recoger tu pago en efectivo o recibe transferencia.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+      <div class="action-card">
+        <div class="ac-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Disponible · Muebles García
+        </div>
+        <div class="ac-name">Silla ejecutiva ergonómica negra</div>
+
+        <div class="ac-prices">
+          <div class="ac-price-row">
+            <div class="ac-price-label">Precio al público</div>
+            <div class="ac-price-val">$1,200</div>
+          </div>
+          <div class="ac-price-row">
+            <div class="ac-price-label">Tu costo</div>
+            <div class="ac-price-val" style="color:var(--muted);">$900</div>
+          </div>
+          <div class="ac-price-row ac-comm-row">
+            <div class="ac-price-label">Tu comisión</div>
+            <div class="ac-price-val">$300</div>
+          </div>
+        </div>
+
+        <div class="ac-payment">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Pago en efectivo o transferencia
+        </div>
+
+        <button class="btn-notify" onclick="document.querySelector('.modal-overlay').classList.add('open')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Tengo un cliente interesado
+        </button>
+        <button class="btn-share">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Compartir producto
+        </button>
+      </div>
+
+      <div class="comercio-card">
+        <div class="cc-title">Info del comercio</div>
+        <div class="cc-info">
+          <div class="cc-row">
+            <div class="cc-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg></div>
+            <div><div class="cc-text">Muebles García</div><div class="cc-sub">Comercio verificado</div></div>
+          </div>
+          <div class="cc-row">
+            <div class="cc-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="cc-text">Blvd. Sánchez Taboada 1234</div><div class="cc-sub">Tijuana, B.C.</div></div>
+          </div>
+          <div class="cc-row">
+            <div class="cc-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.6 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17z"/></svg></div>
+            <div><div class="cc-text">664 123 4567</div><div class="cc-sub">Lunes a sábado 9am–7pm</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="document.querySelector('.modal-overlay').classList.remove('open')">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-title">Notificar cliente interesado</div>
+    <div class="modal-sub">El comercio recibirá una alerta con los datos del cliente</div>
+
+    <div class="modal-product">
+      <div class="modal-product-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1.5" stroke-linecap="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div class="modal-product-name">Silla ejecutiva ergonómica negra</div>
+        <div class="modal-product-comm">Tu comisión: $300 · Muebles García</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Nombre del cliente</label>
+      <input class="form-input" type="text" placeholder="Ej. Carlos Mendoza">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Teléfono del cliente</label>
+      <input class="form-input" type="tel" placeholder="Ej. 664 123 4567">
+    </div>
+    <div class="form-group">
+      <label class="form-label">¿Cuándo va a ir a la tienda?</label>
+      <select class="form-select">
+        <option>Hoy</option>
+        <option>Mañana</option>
+        <option>En 2-3 días</option>
+      </select>
+    </div>
+
+    <button class="btn-send">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Enviar notificación al comercio
+    </button>
+    <button class="btn-cancel" onclick="document.querySelector('.modal-overlay').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+</body>
+</html>
