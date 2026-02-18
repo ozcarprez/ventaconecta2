@@ -407,7 +407,7 @@ async function loadNotifications(){
     let dotClass,badge,actions
     if(n.status==='enviado'){
       dotClass='dy';badge='<span class="step-badge step-1">Paso 1 · Nuevo</span>'
-      actions=`<div class="ni-acts"><button class="brecibir" onclick="acusarRecibo('${n.id}')">📬 Acusar recibo</button><button class="brej" onclick="rejectNotif('${n.id}')">✗</button></div>`
+      actions=`<div class="ni-acts"><button class="brecibir" onclick="acusarRecibo('${n.id}')">📬 Recibido · Chatear</button><button class="brej" onclick="rejectNotif('${n.id}')">✗</button></div>`
     }else if(n.status==='recibido'){
       dotClass='db';badge='<span class="step-badge step-2">Paso 2 · En chat</span>'
       const sp=encodeURIComponent(prodTitle),sv=encodeURIComponent(vendName)
