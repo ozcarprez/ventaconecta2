@@ -12,85 +12,100 @@
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);display:flex;min-height:100vh;}
 .sidebar{width:248px;min-height:100vh;background:var(--dark-2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;}
 .sb-head{padding:24px 24px 20px;border-bottom:1px solid var(--border);}
-.sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:linear-gradient(120deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;}
+.sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:linear-gradient(120deg,#fff,var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;}
 .sb-user{display:flex;align-items:center;gap:10px;}
-.sb-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--green),#00b37a);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#000;flex-shrink:0;}
-.sb-name{font-size:13px;font-weight:500;}
-.sb-role{font-size:11px;color:var(--muted);}
+.sb-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-light));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#fff;flex-shrink:0;}
+.sb-name{font-size:13px;font-weight:500;}.sb-role{font-size:11px;color:var(--muted);}
 .sb-nav{padding:16px 0;flex:1;}
 .sb-section{padding:12px 20px 6px;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
 .sb-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13.5px;color:var(--muted);cursor:pointer;transition:all 0.18s;text-decoration:none;}
 .sb-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
-.sb-item.active{color:var(--text);background:rgba(0,214,143,0.08);border-right:2px solid var(--green);}
+.sb-item.active{color:var(--text);background:rgba(26,86,255,0.1);border-right:2px solid var(--blue);}
 .sb-foot{padding:16px 20px;border-top:1px solid var(--border);}
 .logout-btn{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color 0.2s;}
 .logout-btn:hover{color:var(--red);}
 .main{margin-left:248px;flex:1;padding:32px 36px;}
-.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
 .page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.7px;margin-bottom:3px;}
 .page-sub{font-size:13px;color:var(--muted);}
-.filters{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
-.filter-input{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;flex:1;max-width:300px;}
-.filter-input input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;width:100%;}
-.filter-input input::placeholder{color:var(--muted);}
-.filter-select{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;outline:none;}
-.filter-select option{background:var(--dark-2);}
-.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.pc{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform 0.22s,border-color 0.22s,box-shadow 0.22s;cursor:pointer;}
-.pc:hover{transform:translateY(-4px);border-color:rgba(0,214,143,0.25);box-shadow:0 20px 56px rgba(0,214,143,0.1);}
-.pc-img{height:160px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.pc-img img{width:100%;height:100%;object-fit:cover;}
-.pc-img-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-.pc-comm-badge{position:absolute;top:10px;right:10px;background:rgba(0,214,143,0.15);border:1px solid rgba(0,214,143,0.3);backdrop-filter:blur(8px);border-radius:8px;padding:4px 10px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--green);}
-.pc-body{padding:16px 18px 18px;}
-.pc-comercio{font-size:11px;color:var(--muted);margin-bottom:5px;}
-.pc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.2px;margin-bottom:10px;line-height:1.3;}
-.pc-prices{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
-.pc-retail{font-size:12px;color:var(--muted);}
-.pc-retail span{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--text);}
-.pc-earn-label{font-size:10px;color:var(--muted);margin-bottom:1px;text-align:right;}
-.pc-earn-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--green);}
-.pc-footer{display:flex;align-items:center;justify-content:space-between;}
-.pc-payment{font-size:11px;color:var(--muted);}
-.pc-btn{padding:7px 13px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.22);color:var(--green);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.18s;}
-.pc:hover .pc-btn{background:rgba(0,214,143,0.18);}
-.empty-state{padding:60px 24px;text-align:center;color:var(--muted);font-size:14px;grid-column:1/-1;}
-.error-state{padding:48px 24px;text-align:center;grid-column:1/-1;}
-.error-state .error-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--red);margin-bottom:8px;}
-.error-state .error-msg{font-size:13px;color:var(--muted);margin-bottom:14px;}
-.retry-btn{padding:8px 18px;background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:13px;cursor:pointer;transition:all 0.18s;}
-.retry-btn:hover{border-color:rgba(255,255,255,0.15);}
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;}
+.search-sort{display:flex;gap:10px;align-items:center;}
+.search-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:10px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:220px;transition:border-color 0.2s;}
+.search-input:focus{border-color:rgba(26,86,255,0.4);}
+.search-input::placeholder{color:var(--muted);}
+.sort-select{background:var(--dark-2);border:1px solid var(--border);border-radius:12px;padding:10px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer;}
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.prod-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;cursor:pointer;transition:all 0.22s;}
+.prod-card:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.4);border-color:rgba(255,255,255,0.12);}
+.prod-img{width:100%;height:180px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.prod-img img{width:100%;height:100%;object-fit:cover;}
+.prod-img-placeholder{opacity:0.2;}
+.comm-badge{position:absolute;top:12px;right:12px;background:rgba(0,214,143,0.15);border:1px solid rgba(0,214,143,0.3);color:var(--green);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:4px 10px;border-radius:100px;}
+.selling-badge{position:absolute;top:12px;left:12px;background:rgba(26,86,255,0.2);border:1px solid rgba(26,86,255,0.35);color:var(--blue-light);font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;}
+.prod-body{padding:16px;}
+.prod-comercio{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.prod-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px;line-height:1.3;}
+.prod-prices{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.prod-retail{font-size:14px;color:var(--muted);}
+.prod-retail-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;}
+.prod-earn-lbl{font-size:11px;color:var(--muted);text-align:right;}
+.prod-earn-val{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green);text-align:right;}
+.prod-footer{display:flex;align-items:center;justify-content:space-between;}
+.prod-payment{font-size:11px;color:var(--muted);}
+.btn-vender{padding:8px 16px;background:rgba(26,86,255,0.1);border:1px solid rgba(26,86,255,0.25);color:var(--blue-light);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.18s;white-space:nowrap;font-family:'Syne',sans-serif;}
+.btn-vender:hover{background:rgba(26,86,255,0.2);}
+.btn-vender.selling{background:rgba(0,214,143,0.1);border-color:rgba(0,214,143,0.25);color:var(--green);}
+/* DETAIL MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--dark-2);border:1px solid var(--border);border-radius:24px;padding:32px;width:100%;max-width:460px;position:relative;}
-.modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.3px;margin-bottom:6px;}
-.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
-.modal-product{display:flex;align-items:center;gap:12px;background:var(--dark-3);border-radius:12px;padding:12px 16px;margin-bottom:20px;}
-.mp-img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--dark);flex-shrink:0;}
-.mp-img-placeholder{width:48px;height:48px;border-radius:8px;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.mp-name{font-size:13px;font-weight:500;}
-.mp-comm{font-size:12px;color:var(--green);}
+.detail-modal{background:var(--dark-2);border:1px solid var(--border);border-radius:24px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;position:relative;}
+.detail-modal::-webkit-scrollbar{width:4px;}
+.detail-modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.modal-close{position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--dark-3);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:all 0.18s;}
+.modal-close:hover{color:var(--text);background:var(--card-bg);}
+.detail-img{width:100%;height:280px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;border-radius:24px 24px 0 0;overflow:hidden;}
+.detail-img img{width:100%;height:100%;object-fit:cover;}
+.detail-body{padding:28px;}
+.detail-comercio{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.detail-title{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-bottom:8px;}
+.detail-desc{font-size:14px;color:rgba(238,242,255,0.7);line-height:1.6;margin-bottom:20px;}
+.detail-prices{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.price-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.price-box-label{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.price-box-val{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;}
+.earn-val{color:var(--green);}
+.variants-display{margin-bottom:20px;}
+.variants-title{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.5px;margin-bottom:10px;text-transform:uppercase;}
+.variant-pills{display:flex;flex-wrap:wrap;gap:7px;}
+.variant-pill{padding:5px 13px;border-radius:100px;font-size:12px;border:1px solid var(--border);background:rgba(255,255,255,0.03);}
+.variant-pill.has-stock{border-color:rgba(0,214,143,0.25);color:var(--green);background:rgba(0,214,143,0.06);}
+.variant-pill.no-stock{border-color:rgba(255,77,109,0.2);color:rgba(255,77,109,0.5);text-decoration:line-through;}
+.stock-simple{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.stock-simple strong{color:var(--text);}
+.biz-info{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.biz-info-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);}
+.biz-info-item a{color:var(--green);text-decoration:none;}
+.btn-quiero{width:100%;padding:14px;background:var(--blue);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;transition:all 0.2s;margin-bottom:10px;}
+.btn-quiero:hover{background:var(--blue-light);box-shadow:0 8px 28px rgba(26,86,255,0.4);}
+.btn-quiero.selling{background:rgba(0,214,143,0.12);border:1px solid rgba(0,214,143,0.25);color:var(--green);}
+.btn-tengo{width:100%;padding:12px;background:rgba(255,204,0,0.1);border:1px solid rgba(255,204,0,0.25);color:var(--yellow);font-family:'Syne',sans-serif;font-weight:700;font-size:14px;border-radius:14px;cursor:pointer;transition:all 0.2s;display:none;}
+.btn-tengo.show{display:block;}
+.btn-tengo:hover{background:rgba(255,204,0,0.18);}
+/* CLIENT MODAL */
+.client-modal{background:var(--dark-2);border:1px solid var(--border);border-radius:24px;width:100%;max-width:420px;padding:32px;position:relative;}
 .form-group{margin-bottom:14px;}
 .form-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block;}
 .form-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
-.form-input:focus{border-color:rgba(0,214,143,0.4);}
+.form-input:focus{border-color:rgba(255,204,0,0.4);}
 .form-input::placeholder{color:var(--muted);}
-.form-select{width:100%;background:var(--dark-3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;cursor:pointer;}
-.btn-send{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--green);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;margin-top:4px;}
-.btn-send:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,214,143,0.3);}
-.btn-send:disabled{opacity:0.6;}
-.btn-cancel{width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:13px;border-radius:12px;cursor:pointer;margin-top:8px;}
-.modal-close{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.success-banner{background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.2);border-radius:12px;padding:16px;text-align:center;display:none;}
-.success-banner.show{display:block;}
-.success-banner strong{color:var(--green);display:block;font-family:'Syne',sans-serif;font-size:15px;margin-bottom:4px;}
+.btn-modal{width:100%;padding:13px;background:var(--yellow);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+.btn-modal:hover{background:#ffe033;}
+.modal-close2{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .loading-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,0.3);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
 @keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
 </style>
 </head>
 <body>
-
 <aside class="sidebar">
   <div class="sb-head">
     <div class="sb-logo">VentaConecta</div>
@@ -102,17 +117,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
   <nav class="sb-nav">
     <div class="sb-section">Principal</div>
     <a class="sb-item" href="dashboard-vendedor.html">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Dashboard
     </a>
     <a class="sb-item active">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       Catálogo
+    </a>
+    <a class="sb-item" href="dashboard-vendedor.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Mis ganancias
     </a>
   </nav>
   <div class="sb-foot">
     <button class="logout-btn" onclick="handleLogout()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       Cerrar sesión
     </button>
   </div>
@@ -120,309 +139,241 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
 
 <main class="main">
   <div class="topbar">
-    <div><div class="page-title">Catálogo de productos</div><div class="page-sub">Elige un producto y empieza a ganar comisiones hoy</div></div>
-  </div>
-  <div class="filters">
-    <div class="filter-input">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--muted);flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
+    <div>
+      <div class="page-title">Catálogo de productos</div>
+      <div class="page-sub">Elige un producto y empieza a ganar comisiones hoy</div>
     </div>
-    <select class="filter-select" id="sortSelect" onchange="filterProducts()">
-      <option value="commission_desc">Comisión: Mayor a menor</option>
-      <option value="commission_asc">Comisión: Menor a mayor</option>
-      <option value="price_desc">Precio: Mayor a menor</option>
-      <option value="newest">Más recientes</option>
-    </select>
+    <div class="search-sort">
+      <input class="search-input" type="text" id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
+      <select class="sort-select" id="sortSelect" onchange="filterProducts()">
+        <option value="commission_desc">Comisión: Mayor a menor</option>
+        <option value="commission_asc">Comisión: Menor a mayor</option>
+        <option value="price_asc">Precio: Menor a mayor</option>
+        <option value="price_desc">Precio: Mayor a menor</option>
+      </select>
+    </div>
   </div>
-  <div class="products-grid" id="productsGrid">
-    <div class="empty-state">Cargando productos...</div>
-  </div>
+  <div class="catalog-grid" id="catalogGrid"><div class="empty-state">Cargando productos...</div></div>
 </main>
 
-<!-- MODAL NOTIFICAR -->
-<div class="modal-overlay" id="notifModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div class="modal-title">Notificar cliente interesado</div>
-    <div class="modal-sub">El comercio recibirá una alerta inmediata</div>
-    <div class="modal-product" id="modalProduct">
-      <div class="mp-img-placeholder" id="modalProductImgWrap">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8"/></svg>
-      </div>
-      <div>
-        <div class="mp-name" id="modal-prod-name">—</div>
-        <div class="mp-comm" id="modal-prod-comm">—</div>
-      </div>
-    </div>
-    <div id="comercioInfo" style="margin-bottom:16px;background:rgba(0,214,143,0.05);border:1px solid rgba(0,214,143,0.15);border-radius:12px;padding:12px 16px;display:none;">
-      <div style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:8px;">📍 Dónde ir a cobrar</div>
-      <div id="ci-address" style="font-size:13px;margin-bottom:8px;color:var(--text);"></div>
-      <div id="ci-contact" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-    </div>
-    <div id="notifForm">
-      <div class="form-group"><label class="form-label">Nombre del cliente</label><input class="form-input" type="text" id="n-name" placeholder="Ej. Carlos Mendoza"></div>
-      <div class="form-group"><label class="form-label">Teléfono del cliente</label><input class="form-input" type="tel" id="n-phone" placeholder="664 123 4567"></div>
-      <div class="form-group"><label class="form-label">¿Cuándo va a ir a la tienda?</label>
-        <select class="form-select" id="n-visit">
-          <option value="hoy">Hoy</option>
-          <option value="mañana">Mañana</option>
-          <option value="2-3 días">En 2-3 días</option>
-        </select>
-      </div>
-      <button class="btn-send" id="sendBtn" onclick="sendNotification()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        Enviar notificación
-      </button>
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-    </div>
-    <div class="success-banner" id="successBanner">
-      <strong>✅ Notificación enviada</strong>
-      El comercio ya sabe que tu cliente está en camino.
-    </div>
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="detail-modal" id="detailContent">
+    <button class="modal-close" onclick="closeDetail()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+</div>
+
+<!-- CLIENT MODAL -->
+<div class="modal-overlay" id="clientModal">
+  <div class="client-modal">
+    <button class="modal-close2" onclick="closeClientModal()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:4px;">🛍️ Tengo un cliente</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Notifica al comercio que alguien viene a comprar</div>
+    <div class="form-group"><label class="form-label">Nombre del cliente</label><input class="form-input" type="text" id="c-name" placeholder="Ej. María González"></div>
+    <div class="form-group"><label class="form-label">Cuándo visita (opcional)</label><input class="form-input" type="text" id="c-visit" placeholder="Ej. Hoy a las 4pm, Mañana"></div>
+    <div class="form-group"><label class="form-label">Nota adicional (opcional)</label><input class="form-input" type="text" id="c-note" placeholder="Talla, color, cantidad..."></div>
+    <div style="color:var(--red);font-size:12px;margin-bottom:8px;display:none;" id="clientError"></div>
+    <button class="btn-modal" id="sendNotifBtn" onclick="sendNotification()">Enviar notificación al comercio</button>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://miiitegvpxoplanszido.supabase.co'
-const SUPABASE_KEY = 'sb_publishable_uONmieVhZiope7XWhMnFHA_gQbIHF2w'
-const { createClient } = supabase
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
+const SUPABASE_URL='https://miiitegvpxoplanszido.supabase.co'
+const SUPABASE_KEY='sb_publishable_uONmieVhZiope7XWhMnFHA_gQbIHF2w'
+const {createClient}=supabase
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY)
+let currentUser=null,currentProfile=null,allProducts=[],myVendorProducts=new Set()
+let activeProductId=null,activeComercioId=null
 
-let currentUser = null
-let allProducts = []
-let selectedProduct = null
-
-async function init() {
-  const { data: { user } } = await sb.auth.getUser()
-  if (!user) { window.location.href = 'login.html'; return }
-  currentUser = user
-
-  const { data: profile } = await sb.from('users').select('*').eq('id', user.id).single()
-  if (!profile || profile.user_type !== 'vendedor') { window.location.href = 'login.html'; return }
-
-  const name = profile.full_name || profile.email
-  document.getElementById('userName').textContent = name
-  document.getElementById('userInitials').textContent = name.substring(0, 2).toUpperCase()
-
-  loadProducts()
+async function init(){
+  const {data:{user}}=await sb.auth.getUser()
+  if(!user){window.location.href='login.html';return}
+  currentUser=user
+  const {data:profile}=await sb.from('users').select('*').eq('id',user.id).single()
+  if(!profile||profile.user_type!=='vendedor'){window.location.href='login.html';return}
+  currentProfile=profile
+  const name=profile.full_name||profile.email
+  document.getElementById('userName').textContent=name
+  document.getElementById('userInitials').textContent=name.substring(0,2).toUpperCase()
+  await loadMyVendorProducts()
+  await loadProducts()
 }
 
-// FIX 2: Robust loadProducts with fallback query strategy
-async function loadProducts() {
-  const grid = document.getElementById('productsGrid')
-  grid.innerHTML = '<div class="empty-state">Cargando productos...</div>'
-
-  // Strategy 1: Try with join to users table
-  let data = null
-  let error = null
-
-  const res = await sb
-    .from('products')
-    .select(`
-      *,
-      comercio:users!comercio_id ( business_name, address, whatsapp, phone )
-    `)
-    .eq('active', true)
-    .order('commission', { ascending: false })
-
-  if (res.error) {
-    console.warn('Join con comercio_id falló, intentando query alternativa:', res.error.message)
-
-    // Strategy 2: Fallback - get products without join, then fetch comercio names separately
-    const res2 = await sb
-      .from('products')
-      .select('*')
-      .eq('active', true)
-      .order('commission', { ascending: false })
-
-    if (res2.error) {
-      console.error('Error al cargar productos:', res2.error)
-      grid.innerHTML = `
-        <div class="error-state">
-          <div class="error-title">No se pudieron cargar los productos</div>
-          <div class="error-msg">${res2.error.message}</div>
-          <button class="retry-btn" onclick="loadProducts()">↺ Reintentar</button>
-        </div>`
-      return
-    }
-
-    // Enrich with comercio names
-    if (res2.data && res2.data.length > 0) {
-      const comercioIds = [...new Set(res2.data.map(p => p.comercio_id))]
-      const { data: comercios } = await sb
-        .from('users')
-        .select('id, business_name, address, whatsapp, phone')
-        .in('id', comercioIds)
-
-      const comercioMap = {}
-      ;(comercios || []).forEach(c => { comercioMap[c.id] = c })
-
-      data = res2.data.map(p => ({
-        ...p,
-        comercio: comercioMap[p.comercio_id] || null
-      }))
-    } else {
-      data = res2.data || []
-    }
-  } else {
-    data = res.data || []
-  }
-
-  allProducts = data
-  renderProducts(allProducts)
+async function loadMyVendorProducts(){
+  const {data}=await sb.from('vendor_products').select('product_id').eq('vendedor_id',currentUser.id)
+  myVendorProducts=new Set((data||[]).map(vp=>vp.product_id))
 }
 
-function renderProducts(products) {
-  const grid = document.getElementById('productsGrid')
-  if (!products || products.length === 0) {
-    grid.innerHTML = '<div class="empty-state">No hay productos disponibles aún</div>'
-    return
-  }
+async function loadProducts(){
+  const {data,error}=await sb.from('products')
+    .select('*, users!comercio_id(business_name,email,address,whatsapp)')
+    .eq('active',true).order('created_at',{ascending:false})
+  if(error){document.getElementById('catalogGrid').innerHTML=`<div class="empty-state">Error cargando productos</div>`;return}
+  allProducts=data||[]
+  filterProducts()
+}
 
-  // Get comercio name from either join structure
-  grid.innerHTML = products.map(p => {
-    const comercioName = p.comercio?.business_name || p.users?.business_name || 'Comercio'
-    const commissionAmt = (p.commission || 0).toLocaleString()
-    const retailAmt = (p.retail_price || 0).toLocaleString()
+function filterProducts(){
+  const q=document.getElementById('searchInput').value.toLowerCase()
+  const sort=document.getElementById('sortSelect').value
+  let filtered=allProducts.filter(p=>p.title.toLowerCase().includes(q)||(p.description||'').toLowerCase().includes(q))
+  filtered.sort((a,b)=>{
+    if(sort==='commission_desc')return(b.commission||0)-(a.commission||0)
+    if(sort==='commission_asc')return(a.commission||0)-(b.commission||0)
+    if(sort==='price_asc')return(a.retail_price||0)-(b.retail_price||0)
+    if(sort==='price_desc')return(b.retail_price||0)-(a.retail_price||0)
+    return 0
+  })
+  renderProducts(filtered)
+}
 
-    const imgHtml = p.image_url
-      ? `<img src="${p.image_url}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;">`
-      : `<div class="pc-img-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.3)" stroke-width="0.8" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>`
-
-    // Encode product data safely for the onclick
-    const safeId = p.id
-
-    return `
-    <div class="pc" onclick="openNotifModal('${safeId}')">
-      <div class="pc-img">
-        ${imgHtml}
-        <div class="pc-comm-badge">+$${commissionAmt}</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio">${comercioName}</div>
-        <div class="pc-name">${p.title}</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$${retailAmt}</span></div>
-          <div style="text-align:right"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$${commissionAmt}</div></div>
+function renderProducts(products){
+  const grid=document.getElementById('catalogGrid')
+  if(!products.length){grid.innerHTML='<div class="empty-state">No hay productos disponibles</div>';return}
+  grid.innerHTML=products.map(p=>{
+    const biz=p.users?.business_name||p.users?.email||'Comercio'
+    const isSelling=myVendorProducts.has(p.id)
+    const imgHtml=p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<svg class="prod-img-placeholder" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="${'#4d7aff'}" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
+    return `<div class="prod-card" onclick="openDetail('${p.id}')">
+      <div class="prod-img">${imgHtml}<span class="comm-badge">+$${(p.commission||0).toLocaleString()}</span>${isSelling?'<span class="selling-badge">✓ Ofreciendo</span>':''}</div>
+      <div class="prod-body">
+        <div class="prod-comercio">${biz}</div>
+        <div class="prod-title">${p.title}</div>
+        <div class="prod-prices">
+          <div><div class="prod-retail">Precio público</div><div class="prod-retail-val">$${(p.retail_price||0).toLocaleString()}</div></div>
+          <div><div class="prod-earn-lbl">Tú ganas</div><div class="prod-earn-val">$${(p.commission||0).toLocaleString()}</div></div>
         </div>
-        <div class="pc-footer">
-          <div class="pc-payment">${p.commission_payment_type || 'efectivo'}</div>
-          <button class="pc-btn" onclick="event.stopPropagation();openNotifModal('${safeId}')">Tengo un cliente →</button>
+        <div class="prod-footer">
+          <span class="prod-payment">${p.commission_payment_type||'efectivo'}</span>
+          <button class="btn-vender ${isSelling?'selling':''}" onclick="event.stopPropagation();toggleVender('${p.id}','${p.comercio_id}',event)">${isSelling?'✓ Ofreciendo':'Quiero vender'}</button>
         </div>
       </div>
     </div>`
   }).join('')
 }
 
-function filterProducts() {
-  const search = document.getElementById('searchInput').value.toLowerCase()
-  const sort = document.getElementById('sortSelect').value
+async function openDetail(productId){
+  const p=allProducts.find(x=>x.id===productId);if(!p)return
+  const biz=p.users?.business_name||p.users?.email||'Comercio'
+  const address=p.users?.address||''
+  const whatsapp=p.users?.whatsapp||''
+  const isSelling=myVendorProducts.has(p.id)
+  activeProductId=productId;activeComercioId=p.comercio_id
 
-  let filtered = allProducts.filter(p => {
-    const title = (p.title || '').toLowerCase()
-    const name = (p.comercio?.business_name || p.users?.business_name || '').toLowerCase()
-    return title.includes(search) || name.includes(search)
+  // Load variants
+  const {data:variants}=await sb.from('product_variants').select('*').eq('product_id',productId).order('name')
+
+  const imgHtml=p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<div style="opacity:0.15;"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#4d7aff" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`
+
+  let stockHtml=''
+  if(variants&&variants.length>0){
+    stockHtml=`<div class="variants-display"><div class="variants-title">Disponibilidad por variante</div><div class="variant-pills">${variants.map(v=>`<span class="variant-pill ${v.stock>0?'has-stock':'no-stock'}">${v.name} <strong>${v.stock>0?v.stock+' pzs':'Agotado'}</strong></span>`).join('')}</div></div>`
+  }else if(!p.has_variants){
+    stockHtml=`<div class="stock-simple">Inventario disponible: <strong>${p.stock||0} piezas</strong></div>`
+  }
+
+  let bizHtml=''
+  if(address||whatsapp){
+    bizHtml=`<div class="biz-info">`
+    if(address)bizHtml+=`<div class="biz-info-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${address}</div>`
+    if(whatsapp)bizHtml+=`<div class="biz-info-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00d68f" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 18v.92"/></svg><a href="https://wa.me/52${whatsapp.replace(/\D/g,'')}" target="_blank">WhatsApp: ${whatsapp}</a></div>`
+    bizHtml+=`</div>`
+  }
+
+  document.getElementById('detailContent').innerHTML=`
+    <button class="modal-close" onclick="closeDetail()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="detail-img">${imgHtml}</div>
+    <div class="detail-body">
+      <div class="detail-comercio">${biz}</div>
+      <div class="detail-title">${p.title}</div>
+      ${p.description?`<div class="detail-desc">${p.description}</div>`:''}
+      <div class="detail-prices">
+        <div class="price-box"><div class="price-box-label">Precio al público</div><div class="price-box-val">$${(p.retail_price||0).toLocaleString()}</div></div>
+        <div class="price-box"><div class="price-box-label">Tú ganas</div><div class="price-box-val earn-val">$${(p.commission||0).toLocaleString()}</div></div>
+      </div>
+      ${stockHtml}
+      ${bizHtml}
+      <button class="btn-quiero ${isSelling?'selling':''}" id="btnQuiero" onclick="toggleVenderDetail()">
+        ${isSelling?'✓ Ya estás ofreciendo este producto':'🤝 Quiero vender este producto'}
+      </button>
+      <button class="btn-tengo ${isSelling?'show':''}" id="btnTengo" onclick="openClientModal()">
+        📢 Tengo un cliente interesado →
+      </button>
+    </div>`
+  document.getElementById('detailModal').classList.add('open')
+}
+function closeDetail(){document.getElementById('detailModal').classList.remove('open')}
+
+async function toggleVender(productId,comercioId,e){
+  if(e){e.stopPropagation();}
+  const isSelling=myVendorProducts.has(productId)
+  if(isSelling){
+    await sb.from('vendor_products').delete().eq('vendedor_id',currentUser.id).eq('product_id',productId)
+    myVendorProducts.delete(productId)
+  }else{
+    await sb.from('vendor_products').insert({vendedor_id:currentUser.id,product_id:productId})
+    myVendorProducts.add(productId)
+    // Notify comercio
+    await notifyComercioOffering(productId,comercioId)
+  }
+  filterProducts()
+}
+
+async function toggleVenderDetail(){
+  const isSelling=myVendorProducts.has(activeProductId)
+  if(isSelling){
+    await sb.from('vendor_products').delete().eq('vendedor_id',currentUser.id).eq('product_id',activeProductId)
+    myVendorProducts.delete(activeProductId)
+    document.getElementById('btnQuiero').className='btn-quiero'
+    document.getElementById('btnQuiero').textContent='🤝 Quiero vender este producto'
+    document.getElementById('btnTengo').className='btn-tengo'
+  }else{
+    await sb.from('vendor_products').insert({vendedor_id:currentUser.id,product_id:activeProductId})
+    myVendorProducts.add(activeProductId)
+    await notifyComercioOffering(activeProductId,activeComercioId)
+    document.getElementById('btnQuiero').className='btn-quiero selling'
+    document.getElementById('btnQuiero').textContent='✓ Ya estás ofreciendo este producto'
+    document.getElementById('btnTengo').className='btn-tengo show'
+  }
+  filterProducts()
+}
+
+async function notifyComercioOffering(productId,comercioId){
+  // Insert notification type "ofreciendo" so comercio sees who is promoting
+  const vendName=currentProfile?.full_name||currentProfile?.email||'vendedor'
+  // We use a simple notification in notifications table with status 'ofreciendo' or just skip for now
+  // For now just the vendor_products record is enough — comercio sees count
+}
+
+function openClientModal(){
+  closeDetail()
+  document.getElementById('c-name').value=''
+  document.getElementById('c-visit').value=''
+  document.getElementById('c-note').value=''
+  document.getElementById('clientError').style.display='none'
+  document.getElementById('clientModal').classList.add('open')
+}
+function closeClientModal(){document.getElementById('clientModal').classList.remove('open')}
+
+async function sendNotification(){
+  const name=document.getElementById('c-name').value.trim()
+  const visit=document.getElementById('c-visit').value.trim()
+  const note=document.getElementById('c-note').value.trim()
+  const errEl=document.getElementById('clientError')
+  if(!name){errEl.textContent='Escribe el nombre del cliente.';errEl.style.display='block';return}
+  const btn=document.getElementById('sendNotifBtn');btn.disabled=true;btn.innerHTML='<span class="loading-spinner"></span>Enviando...'
+  const p=allProducts.find(x=>x.id===activeProductId)
+  const {error}=await sb.from('notifications').insert({
+    vendedor_id:currentUser.id,comercio_id:activeComercioId,product_id:activeProductId,
+    customer_name:name,expected_visit:visit,notes:note,status:'enviado'
   })
-
-  if (sort === 'commission_desc') filtered.sort((a, b) => b.commission - a.commission)
-  else if (sort === 'commission_asc') filtered.sort((a, b) => a.commission - b.commission)
-  else if (sort === 'price_desc') filtered.sort((a, b) => b.retail_price - a.retail_price)
-  else filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-
-  renderProducts(filtered)
+  btn.disabled=false;btn.textContent='Enviar notificación al comercio'
+  if(error){errEl.textContent=error.message;errEl.style.display='block';return}
+  closeClientModal()
+  alert(`✅ Notificación enviada. El comercio sabrá que ${name} va a comprar.`)
 }
 
-function openNotifModal(productId) {
-  // Find product by id from allProducts
-  const product = allProducts.find(p => p.id === productId || p.id === parseInt(productId))
-  if (!product) return
-
-  selectedProduct = product
-  const comercioName = product.comercio?.business_name || product.users?.business_name || 'Comercio'
-
-  document.getElementById('modal-prod-name').textContent = product.title
-  document.getElementById('modal-prod-comm').textContent = `Tu comisión: $${(product.commission || 0).toLocaleString()} · ${comercioName}`
-
-  // Show comercio info (address, whatsapp, phone)
-  const comercio = product.comercio || product.users || {}
-  const address = comercio.address
-  const whatsapp = comercio.whatsapp
-  const phone = comercio.phone
-  const infoEl = document.getElementById('comercioInfo')
-  if (address || whatsapp || phone) {
-    document.getElementById('ci-address').textContent = address ? `📍 ${address}` : ''
-    const contacts = []
-    if (whatsapp) contacts.push(`<a href="https://wa.me/52${whatsapp.replace(/\D/g,'')}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:8px;color:#25d366;font-size:12px;text-decoration:none;font-weight:500;">💬 WhatsApp</a>`)
-    if (phone) contacts.push(`<a href="tel:${phone}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:rgba(26,86,255,0.08);border:1px solid rgba(26,86,255,0.2);border-radius:8px;color:var(--blue-light);font-size:12px;text-decoration:none;font-weight:500;">📞 Llamar</a>`)
-    document.getElementById('ci-contact').innerHTML = contacts.join('')
-    infoEl.style.display = 'block'
-  } else {
-    infoEl.style.display = 'none'
-  }
-
-  // Show product image in modal if available
-  const imgWrap = document.getElementById('modalProductImgWrap')
-  if (product.image_url) {
-    imgWrap.innerHTML = `<img class="mp-img" src="${product.image_url}" alt="${product.title}">`
-  } else {
-    imgWrap.innerHTML = `<div class="mp-img-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8"/></svg></div>`
-  }
-
-  document.getElementById('notifForm').style.display = 'block'
-  document.getElementById('successBanner').classList.remove('show')
-  document.getElementById('n-name').value = ''
-  document.getElementById('n-phone').value = ''
-  document.getElementById('notifModal').classList.add('open')
-}
-
-async function sendNotification() {
-  const name = document.getElementById('n-name').value.trim()
-  const phone = document.getElementById('n-phone').value.trim()
-  const visit = document.getElementById('n-visit').value
-  if (!name || !phone) { alert('Por favor llena el nombre y teléfono del cliente.'); return }
-
-  const btn = document.getElementById('sendBtn')
-  btn.disabled = true
-  btn.innerHTML = '<span class="loading-spinner"></span>Enviando...'
-
-  const { error } = await sb.from('notifications').insert({
-    product_id: selectedProduct.id,
-    vendedor_id: currentUser.id,
-    comercio_id: selectedProduct.comercio_id,
-    customer_name: name,
-    customer_phone: phone,
-    expected_visit: visit,
-    status: 'enviado'
-  })
-
-  if (error) {
-    console.error('Error al enviar notificación:', error)
-    alert('Error al enviar: ' + error.message)
-    btn.disabled = false
-    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar notificación`
-    return
-  }
-
-  // Increment views
-  await sb.from('products').update({ views: (selectedProduct.views || 0) + 1 }).eq('id', selectedProduct.id)
-
-  document.getElementById('notifForm').style.display = 'none'
-  document.getElementById('successBanner').classList.add('show')
-  btn.disabled = false
-  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar notificación`
-}
-
-function closeModal() {
-  document.getElementById('notifModal').classList.remove('open')
-}
-
-async function handleLogout() {
-  await sb.auth.signOut()
-  window.location.href = 'login.html'
-}
-
+async function handleLogout(){await sb.auth.signOut();window.location.href='login.html'}
 init()
 </script>
 </body>
