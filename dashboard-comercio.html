@@ -593,6 +593,7 @@ async function sendMessage(){
   if(!text||!chatNotifId)return
   document.getElementById('chatInput').value=''
   await sb.from('messages').insert({notification_id:chatNotifId,sender_id:currentUser.id,text})
+  loadMessages()
 }
 function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
 async function marcarVendido(){
