@@ -317,6 +317,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
       <!-- Con variantes -->
       <div class="variants-section" id="variantsSection">
         <div id="variantRows"></div>
+        <div style="display:grid;grid-template-columns:1fr 80px 80px 80px 28px;gap:8px;margin-bottom:6px;padding:0 2px;">
+          <div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.5px;">VARIANTE</div>
+          <div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.5px;text-align:center;">CANT.</div>
+          <div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.5px;text-align:center;">P. PÚBLICO</div>
+          <div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.5px;text-align:center;">TU COSTO</div>
+          <div></div>
+        </div>
         <button class="btn-add-variant" onclick="addVariantRow()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Agregar variante
@@ -396,7 +403,7 @@ async function loadNotifications(){
     .select('*, products(title,commission), users!vendedor_id(full_name,email)')
     .eq('comercio_id',currentUser.id).order('created_at',{ascending:false}).limit(8)
   const list=document.getElementById('notifList')
-  const active=(data||[]).filter(n=>n.status==='enviado'||n.status==='recibido')
+  const active=(data||[]).filter(n=>n.status==='enviado')
   const badge=document.getElementById('notifBadge')
   if(active.length>0){badge.textContent=active.length;badge.style.display='inline'}else{badge.style.display='none'}
   if(!data||data.length===0){list.innerHTML='<div class="empty-state">No hay notificaciones aún</div>';return}
@@ -479,9 +486,25 @@ function toggleVariants(){
 function addVariantRow(){
   const container=document.getElementById('variantRows')
   const row=document.createElement('div')
-  row.className='variant-row'
-  row.innerHTML=`<input class="variant-input" type="text" placeholder="Ej. Talla M, Color Azul, 38..."><input class="variant-input" type="number" placeholder="Qty" min="0" style="text-align:center;"><button class="btn-del-variant" onclick="this.parentElement.remove()">×</button>`
+  row.className='variant-row-full'
+  row.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 80px 80px 80px 28px;gap:8px;align-items:center;margin-bottom:8px;">
+      <input class="variant-input vname" type="text" placeholder="Ej. King Size, Talla M...">
+      <input class="variant-input vqty" type="number" placeholder="Qty" min="0" style="text-align:center;" title="Cantidad">
+      <input class="variant-input vretail" type="number" placeholder="P. público" min="0" oninput="updateVariantComm(this)" title="Precio público">
+      <input class="variant-input vwholesale" type="number" placeholder="Tu costo" min="0" oninput="updateVariantComm(this)" title="Tu costo">
+      <button class="btn-del-variant" onclick="this.closest('.variant-row-full').remove()">×</button>
+    </div>
+    <div class="variant-comm-preview" style="font-size:11px;color:var(--muted);margin-bottom:10px;padding-left:4px;">Comisión: <strong style="color:var(--green);">$—</strong></div>`
   container.appendChild(row)
+}
+
+function updateVariantComm(input){
+  const row=input.closest('.variant-row-full')
+  const retail=parseFloat(row.querySelector('.vretail').value)||0
+  const wholesale=parseFloat(row.querySelector('.vwholesale').value)||0
+  const comm=retail-wholesale
+  row.querySelector('.variant-comm-preview').innerHTML=`Comisión: <strong style="color:var(--green);">${comm>0?'$'+comm.toLocaleString():'$—'}</strong>`
 }
 
 function updateCommission(){
@@ -540,13 +563,15 @@ async function saveProduct(){
     if(error){errEl.textContent=`Error: ${error.message}`;btn.disabled=false;btn.textContent='Publicar producto';return}
     // Save variants
     if(hasV&&prod){
-      const rows=document.querySelectorAll('#variantRows .variant-row')
+      const rows=document.querySelectorAll('#variantRows .variant-row-full')
       const variants=[]
       rows.forEach(row=>{
-        const inputs=row.querySelectorAll('input')
-        const name=inputs[0].value.trim()
-        const qty=parseInt(inputs[1].value)||0
-        if(name)variants.push({product_id:prod.id,name,stock:qty})
+        const name=row.querySelector('.vname').value.trim()
+        const qty=parseInt(row.querySelector('.vqty').value)||0
+        const retail=parseFloat(row.querySelector('.vretail').value)||0
+        const wholesale=parseFloat(row.querySelector('.vwholesale').value)||0
+        const commission=retail-wholesale
+        if(name)variants.push({product_id:prod.id,name,stock:qty,retail_price:retail,wholesale_price:wholesale,commission})
       })
       if(variants.length>0)await sb.from('product_variants').insert(variants)
     }

@@ -234,13 +234,16 @@ function renderProducts(products){
     const biz=p.users?.business_name||p.users?.email||'Comercio'
     const isSelling=myVendorProducts.has(p.id)
     const imgHtml=p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<svg class="prod-img-placeholder" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="${'#4d7aff'}" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
+    // For variant products, show range
+    const commLabel=p.has_variants?'Desde +$'+((p.commission||0).toLocaleString()):'+$'+((p.commission||0).toLocaleString())
+    const priceLabel=p.has_variants?'Desde $'+((p.retail_price||0).toLocaleString()):'$'+((p.retail_price||0).toLocaleString())
     return `<div class="prod-card" onclick="openDetail('${p.id}')">
-      <div class="prod-img">${imgHtml}<span class="comm-badge">+$${(p.commission||0).toLocaleString()}</span>${isSelling?'<span class="selling-badge">✓ Ofreciendo</span>':''}</div>
+      <div class="prod-img">${imgHtml}<span class="comm-badge">${commLabel}</span>${isSelling?'<span class="selling-badge">✓ Ofreciendo</span>':''}</div>
       <div class="prod-body">
         <div class="prod-comercio">${biz}</div>
         <div class="prod-title">${p.title}</div>
         <div class="prod-prices">
-          <div><div class="prod-retail">Precio público</div><div class="prod-retail-val">$${(p.retail_price||0).toLocaleString()}</div></div>
+          <div><div class="prod-retail">Precio público</div><div class="prod-retail-val">${priceLabel}</div></div>
           <div><div class="prod-earn-lbl">Tú ganas</div><div class="prod-earn-val">$${(p.commission||0).toLocaleString()}</div></div>
         </div>
         <div class="prod-footer">
@@ -267,7 +270,12 @@ async function openDetail(productId){
 
   let stockHtml=''
   if(variants&&variants.length>0){
-    stockHtml=`<div class="variants-display"><div class="variants-title">Disponibilidad por variante</div><div class="variant-pills">${variants.map(v=>`<span class="variant-pill ${v.stock>0?'has-stock':'no-stock'}">${v.name} <strong>${v.stock>0?v.stock+' pzs':'Agotado'}</strong></span>`).join('')}</div></div>`
+    const hasVariantPrices=variants.some(v=>v.retail_price>0)
+    stockHtml=`<div class="variants-display"><div class="variants-title">Variantes disponibles</div><div class="variant-pills">${variants.map(v=>{
+      const priceLabel=v.retail_price>0?` · $${v.retail_price.toLocaleString()}`:''
+      const commLabel=v.commission>0?` · <span style="color:var(--green)">+$${v.commission.toLocaleString()}</span>`:''
+      return `<span class="variant-pill ${v.stock>0?'has-stock':'no-stock'}">${v.name}${priceLabel}${commLabel} <strong>${v.stock>0?'('+v.stock+' pzs)':'(Agotado)'}</strong></span>`
+    }).join('')}</div></div>`
   }else if(!p.has_variants){
     stockHtml=`<div class="stock-simple">Inventario disponible: <strong>${p.stock||0} piezas</strong></div>`
   }
