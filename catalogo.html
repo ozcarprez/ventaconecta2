@@ -5,17 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VentaConecta — Catálogo</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --blue:#1a56ff;--blue-light:#4d7aff;--green:#00d68f;
-  --yellow:#ffcc00;
-  --dark:#070b14;--dark-2:#0f1623;--dark-3:#1a2235;
-  --card-bg:rgba(255,255,255,0.035);--border:rgba(255,255,255,0.07);
-  --text:#eef2ff;--muted:rgba(238,242,255,0.45);
-}
+:root{--blue:#1a56ff;--blue-light:#4d7aff;--green:#00d68f;--yellow:#ffcc00;--red:#ff4d6d;--dark:#070b14;--dark-2:#0f1623;--dark-3:#1a2235;--card-bg:rgba(255,255,255,0.035);--border:rgba(255,255,255,0.07);--text:#eef2ff;--muted:rgba(238,242,255,0.45);}
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);display:flex;min-height:100vh;}
-
 .sidebar{width:248px;min-height:100vh;background:var(--dark-2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;}
 .sb-head{padding:24px 24px 20px;border-bottom:1px solid var(--border);}
 .sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:linear-gradient(120deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;}
@@ -29,53 +23,70 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
 .sb-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
 .sb-item.active{color:var(--text);background:rgba(0,214,143,0.08);border-right:2px solid var(--green);}
 .sb-foot{padding:16px 20px;border-top:1px solid var(--border);}
-
+.logout-btn{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color 0.2s;}
+.logout-btn:hover{color:var(--red);}
 .main{margin-left:248px;flex:1;padding:32px 36px;}
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;}
 .page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.7px;margin-bottom:3px;}
 .page-sub{font-size:13px;color:var(--muted);}
-
-/* FILTERS */
 .filters{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
-.filter-input{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;flex:1;max-width:320px;}
+.filter-input{display:flex;align-items:center;gap:8px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;flex:1;max-width:300px;}
 .filter-input input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;width:100%;}
 .filter-input input::placeholder{color:var(--muted);}
 .filter-select{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;outline:none;}
 .filter-select option{background:var(--dark-2);}
-.filter-pill{padding:8px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.18s;white-space:nowrap;}
-.filter-pill:hover,.filter-pill.active{color:var(--green);background:rgba(0,214,143,0.08);border-color:rgba(0,214,143,0.2);}
-
-/* GRID */
 .products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-
-.pc{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform 0.22s,border-color 0.22s,box-shadow 0.22s;cursor:pointer;text-decoration:none;display:block;color:inherit;}
+.pc{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform 0.22s,border-color 0.22s,box-shadow 0.22s;cursor:pointer;}
 .pc:hover{transform:translateY(-4px);border-color:rgba(0,214,143,0.25);box-shadow:0 20px 56px rgba(0,214,143,0.1);}
-.pc-img{height:160px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.pc-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.3) 100%);}
-.pc-comm-badge{position:absolute;top:12px;right:12px;background:rgba(0,214,143,0.15);border:1px solid rgba(0,214,143,0.3);backdrop-filter:blur(8px);border-radius:8px;padding:5px 10px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--green);z-index:1;}
-.pc-body{padding:18px 18px 20px;}
-.pc-comercio{font-size:11px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.pc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.3px;margin-bottom:10px;line-height:1.3;}
-.pc-prices{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+.pc-img{height:140px;background:var(--dark-3);display:flex;align-items:center;justify-content:center;position:relative;}
+.pc-comm-badge{position:absolute;top:10px;right:10px;background:rgba(0,214,143,0.15);border:1px solid rgba(0,214,143,0.3);backdrop-filter:blur(8px);border-radius:8px;padding:4px 10px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--green);}
+.pc-body{padding:16px 18px 18px;}
+.pc-comercio{font-size:11px;color:var(--muted);margin-bottom:5px;}
+.pc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:-0.2px;margin-bottom:10px;line-height:1.3;}
+.pc-prices{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
 .pc-retail{font-size:12px;color:var(--muted);}
-.pc-retail span{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--text);}
-.pc-earn{text-align:right;}
-.pc-earn-label{font-size:10px;color:var(--muted);margin-bottom:2px;}
-.pc-earn-val{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--green);}
+.pc-retail span{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--text);}
+.pc-earn-label{font-size:10px;color:var(--muted);margin-bottom:1px;text-align:right;}
+.pc-earn-val{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--green);}
 .pc-footer{display:flex;align-items:center;justify-content:space-between;}
-.pc-payment{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
-.pc-btn{padding:7px 14px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.22);color:var(--green);border-radius:8px;font-size:12px;font-weight:500;transition:all 0.18s;}
+.pc-payment{font-size:11px;color:var(--muted);}
+.pc-btn{padding:7px 13px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.22);color:var(--green);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.18s;}
 .pc:hover .pc-btn{background:rgba(0,214,143,0.18);}
+.empty-state{padding:60px 24px;text-align:center;color:var(--muted);font-size:14px;grid-column:1/-1;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--dark-2);border:1px solid var(--border);border-radius:24px;padding:32px;width:100%;max-width:460px;position:relative;}
+.modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.3px;margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.modal-product{display:flex;align-items:center;gap:12px;background:var(--dark-3);border-radius:12px;padding:12px 16px;margin-bottom:20px;}
+.mp-name{font-size:13px;font-weight:500;}
+.mp-comm{font-size:12px;color:var(--green);}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block;}
+.form-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:rgba(0,214,143,0.4);}
+.form-input::placeholder{color:var(--muted);}
+.form-select{width:100%;background:var(--dark-3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;cursor:pointer;}
+.btn-send{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--green);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+.btn-send:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,214,143,0.3);}
+.btn-send:disabled{opacity:0.6;}
+.btn-cancel{width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:13px;border-radius:12px;cursor:pointer;margin-top:8px;}
+.modal-close{position:absolute;top:18px;right:18px;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.success-banner{background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.2);border-radius:12px;padding:16px;text-align:center;display:none;}
+.success-banner.show{display:block;}
+.success-banner strong{color:var(--green);display:block;font-family:'Syne',sans-serif;font-size:15px;margin-bottom:4px;}
+.loading-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,0.3);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
-
 <aside class="sidebar">
   <div class="sb-head">
     <div class="sb-logo">VentaConecta</div>
     <div class="sb-user">
-      <div class="sb-avatar">LR</div>
-      <div><div class="sb-name">Luis Ramírez</div><div class="sb-role">Vendedor · Tijuana</div></div>
+      <div class="sb-avatar" id="userInitials">?</div>
+      <div><div class="sb-name" id="userName">Cargando...</div><div class="sb-role">Vendedor</div></div>
     </div>
   </div>
   <nav class="sb-nav">
@@ -88,171 +99,166 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       Catálogo
     </a>
-    <a class="sb-item">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      Mis notificaciones
-    </a>
-    <a class="sb-item">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      Mis ganancias
-    </a>
   </nav>
   <div class="sb-foot">
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;">
+    <button class="logout-btn" onclick="handleLogout()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       Cerrar sesión
-    </div>
+    </button>
   </div>
 </aside>
 
 <main class="main">
   <div class="topbar">
-    <div>
-      <div class="page-title">Catálogo de productos</div>
-      <div class="page-sub">Elige un producto y empieza a ganar comisiones hoy</div>
-    </div>
+    <div><div class="page-title">Catálogo de productos</div><div class="page-sub">Elige un producto y empieza a ganar comisiones hoy</div></div>
   </div>
-
   <div class="filters">
     <div class="filter-input">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted);flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input placeholder="Buscar productos...">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--muted);flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
     </div>
-    <select class="filter-select">
-      <option>Comisión: Mayor a menor</option>
-      <option>Comisión: Menor a mayor</option>
-      <option>Precio: Mayor a menor</option>
-      <option>Más recientes</option>
+    <select class="filter-select" id="sortSelect" onchange="filterProducts()">
+      <option value="commission_desc">Comisión: Mayor a menor</option>
+      <option value="commission_asc">Comisión: Menor a mayor</option>
+      <option value="price_desc">Precio: Mayor a menor</option>
+      <option value="newest">Más recientes</option>
     </select>
-    <select class="filter-select">
-      <option>Pago: Todos</option>
-      <option>Efectivo</option>
-      <option>Transferencia</option>
-      <option>Ambos</option>
-    </select>
-    <div class="filter-pill active">Todos</div>
-    <div class="filter-pill">Muebles</div>
-    <div class="filter-pill">Tecnología</div>
-    <div class="filter-pill">Hogar</div>
   </div>
-
-  <div class="products-grid">
-
-    <a href="detalle-producto.html" class="pc">
-      <div class="pc-img">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1" stroke-linecap="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        <div class="pc-comm-badge">+$300</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>Muebles García</div>
-        <div class="pc-name">Silla ejecutiva ergonómica negra</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$1,200</span></div>
-          <div class="pc-earn"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$300</div></div>
-        </div>
-        <div class="pc-footer">
-          <div class="pc-payment"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Efectivo o transferencia</div>
-          <span class="pc-btn">Ver producto →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="detalle-producto.html" class="pc">
-      <div class="pc-img">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        <div class="pc-comm-badge">+$450</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>TechStore MX</div>
-        <div class="pc-name">Monitor gaming 27" curvo 144Hz</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$3,200</span></div>
-          <div class="pc-earn"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$450</div></div>
-        </div>
-        <div class="pc-footer">
-          <div class="pc-payment"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Transferencia</div>
-          <span class="pc-btn">Ver producto →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="detalle-producto.html" class="pc">
-      <div class="pc-img">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        <div class="pc-comm-badge">+$800</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>Muebles García</div>
-        <div class="pc-name">Sofá modular 3 plazas gris</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$4,500</span></div>
-          <div class="pc-earn"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$800</div></div>
-        </div>
-        <div class="pc-footer">
-          <div class="pc-payment"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Efectivo</div>
-          <span class="pc-btn">Ver producto →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="detalle-producto.html" class="pc">
-      <div class="pc-img">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M3 9a2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2"/><path d="M5 11v8h14v-8"/><path d="M10 15h4v4h-4z"/></svg>
-        <div class="pc-comm-badge">+$500</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>Muebles García</div>
-        <div class="pc-name">Mesa de madera roble maciza</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$2,800</span></div>
-          <div class="pc-earn"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$500</div></div>
-        </div>
-        <div class="pc-footer">
-          <div class="pc-payment"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Efectivo o transferencia</div>
-          <span class="pc-btn">Ver producto →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="detalle-producto.html" class="pc">
-      <div class="pc-img">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><path d="M9 7h6M9 11h4"/></svg>
-        <div class="pc-comm-badge">+$600</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>TechStore MX</div>
-        <div class="pc-name">iPhone 15 128GB reacondicionado</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$8,500</span></div>
-          <div class="pc-earn"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$600</div></div>
-        </div>
-        <div class="pc-footer">
-          <div class="pc-payment"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Transferencia</div>
-          <span class="pc-btn">Ver producto →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="detalle-producto.html" class="pc">
-      <div class="pc-img">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.4)" stroke-width="1" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        <div class="pc-comm-badge">+$350</div>
-      </div>
-      <div class="pc-body">
-        <div class="pc-comercio"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>Muebles García</div>
-        <div class="pc-name">Escritorio moderno blanco 120cm</div>
-        <div class="pc-prices">
-          <div class="pc-retail">Precio público<br><span>$1,800</span></div>
-          <div class="pc-earn"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$350</div></div>
-        </div>
-        <div class="pc-footer">
-          <div class="pc-payment"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Efectivo</div>
-          <span class="pc-btn">Ver producto →</span>
-        </div>
-      </div>
-    </a>
-
+  <div class="products-grid" id="productsGrid">
+    <div class="empty-state">Cargando productos...</div>
   </div>
 </main>
+
+<!-- MODAL NOTIFICAR -->
+<div class="modal-overlay" id="notifModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-title">Notificar cliente interesado</div>
+    <div class="modal-sub">El comercio recibirá una alerta inmediata</div>
+    <div class="modal-product">
+      <div><div class="mp-name" id="modal-prod-name">—</div><div class="mp-comm" id="modal-prod-comm">—</div></div>
+    </div>
+    <div id="notifForm">
+      <div class="form-group"><label class="form-label">Nombre del cliente</label><input class="form-input" type="text" id="n-name" placeholder="Ej. Carlos Mendoza"></div>
+      <div class="form-group"><label class="form-label">Teléfono del cliente</label><input class="form-input" type="tel" id="n-phone" placeholder="664 123 4567"></div>
+      <div class="form-group"><label class="form-label">¿Cuándo va a ir a la tienda?</label>
+        <select class="form-select" id="n-visit"><option value="hoy">Hoy</option><option value="mañana">Mañana</option><option value="2-3 días">En 2-3 días</option></select>
+      </div>
+      <button class="btn-send" id="sendBtn" onclick="sendNotification()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Enviar notificación
+      </button>
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    </div>
+    <div class="success-banner" id="successBanner">
+      <strong>✅ Notificación enviada</strong>
+      El comercio ya sabe que tu cliente está en camino.
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://miiitegvpxoplanszido.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_uONmieVhZiope7XWhMnFHA_gQbIHF2w'
+const { createClient } = supabase
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
+let currentUser = null
+let allProducts = []
+let selectedProduct = null
+
+async function init() {
+  const { data: { user } } = await sb.auth.getUser()
+  if (!user) { window.location.href = 'login.html'; return }
+  currentUser = user
+  const { data: profile } = await sb.from('users').select('*').eq('id', user.id).single()
+  if (!profile || profile.user_type !== 'vendedor') { window.location.href = 'login.html'; return }
+  const name = profile.full_name || profile.email
+  document.getElementById('userName').textContent = name
+  document.getElementById('userInitials').textContent = name.substring(0, 2).toUpperCase()
+  loadProducts()
+}
+
+async function loadProducts() {
+  const { data } = await sb.from('products').select('*, users!comercio_id(business_name, business_address)').eq('active', true).order('commission', { ascending: false })
+  allProducts = data || []
+  renderProducts(allProducts)
+}
+
+function renderProducts(products) {
+  const grid = document.getElementById('productsGrid')
+  if (!products.length) { grid.innerHTML = '<div class="empty-state">No hay productos disponibles aún</div>'; return }
+  grid.innerHTML = products.map(p => `
+    <div class="pc">
+      <div class="pc-img">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(77,122,255,0.3)" stroke-width="0.8" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <div class="pc-comm-badge">+$${p.commission?.toLocaleString()}</div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-comercio">${p.users?.business_name || 'Comercio'}</div>
+        <div class="pc-name">${p.title}</div>
+        <div class="pc-prices">
+          <div class="pc-retail">Precio público<br><span>$${p.retail_price?.toLocaleString()}</span></div>
+          <div class="text-right"><div class="pc-earn-label">Tú ganas</div><div class="pc-earn-val">$${p.commission?.toLocaleString()}</div></div>
+        </div>
+        <div class="pc-footer">
+          <div class="pc-payment">${p.commission_payment_type || 'efectivo'}</div>
+          <button class="pc-btn" onclick="openNotifModal(${JSON.stringify(p).replace(/"/g, '&quot;')})">Tengo un cliente →</button>
+        </div>
+      </div>
+    </div>`).join('')
+}
+
+function filterProducts() {
+  const search = document.getElementById('searchInput').value.toLowerCase()
+  const sort = document.getElementById('sortSelect').value
+  let filtered = allProducts.filter(p => p.title.toLowerCase().includes(search) || (p.users?.business_name || '').toLowerCase().includes(search))
+  if (sort === 'commission_desc') filtered.sort((a, b) => b.commission - a.commission)
+  else if (sort === 'commission_asc') filtered.sort((a, b) => a.commission - b.commission)
+  else if (sort === 'price_desc') filtered.sort((a, b) => b.retail_price - a.retail_price)
+  else filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  renderProducts(filtered)
+}
+
+function openNotifModal(product) {
+  selectedProduct = product
+  document.getElementById('modal-prod-name').textContent = product.title
+  document.getElementById('modal-prod-comm').textContent = `Tu comisión: $${product.commission?.toLocaleString()} · ${product.users?.business_name}`
+  document.getElementById('notifForm').style.display = 'block'
+  document.getElementById('successBanner').classList.remove('show')
+  document.getElementById('n-name').value = ''
+  document.getElementById('n-phone').value = ''
+  document.getElementById('notifModal').classList.add('open')
+}
+
+async function sendNotification() {
+  const name = document.getElementById('n-name').value.trim()
+  const phone = document.getElementById('n-phone').value.trim()
+  const visit = document.getElementById('n-visit').value
+  if (!name || !phone) { alert('Por favor llena el nombre y teléfono del cliente.'); return }
+  const btn = document.getElementById('sendBtn')
+  btn.disabled = true
+  btn.innerHTML = '<span class="loading-spinner"></span>Enviando...'
+  await sb.from('notifications').insert({
+    product_id: selectedProduct.id,
+    vendedor_id: currentUser.id,
+    comercio_id: selectedProduct.comercio_id,
+    customer_name: name,
+    customer_phone: phone,
+    expected_visit: visit,
+    status: 'enviado'
+  })
+  await sb.from('products').update({ views: (selectedProduct.views || 0) + 1 }).eq('id', selectedProduct.id)
+  document.getElementById('notifForm').style.display = 'none'
+  document.getElementById('successBanner').classList.add('show')
+  btn.disabled = false
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar notificación'
+}
+
+function closeModal() { document.getElementById('notifModal').classList.remove('open') }
+async function handleLogout() { await sb.auth.signOut(); window.location.href = 'login.html' }
+init()
+</script>
 </body>
 </html>
