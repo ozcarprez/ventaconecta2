@@ -473,7 +473,7 @@ async function loadProducts(){
   }).join('')
 }
 
-async function deleteProduct(id){if(!confirm('¿Eliminar?'))return;await sb.from('products').update({active:false}).eq('id',id);loadProducts();loadStats()}
+async function deleteProduct(id){if(!confirm('¿Eliminar este producto?'))return;const {error}=await sb.from('products').delete().eq('id',id);if(error){alert('Error: '+error.message);return;}loadProducts();loadStats()}
 
 // VARIANTS UI
 function toggleVariants(){
