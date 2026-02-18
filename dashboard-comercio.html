@@ -141,7 +141,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);d
 .toggle-switch input:checked ~ .toggle-knob{left:20px;background:var(--blue-light);}
 .variants-section{display:none;margin-bottom:14px;}
 .variants-section.show{display:block;}
-.variant-row{display:grid;grid-template-columns:1fr 80px 28px;gap:8px;align-items:center;margin-bottom:8px;}
+.variant-row{display:grid;grid-template-columns:1.5fr 100px 100px 60px 60px 28px;gap:8px;align-items:center;margin-bottom:8px;}
 .variant-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;}
 .variant-input:focus{border-color:rgba(26,86,255,0.4);}
 .btn-add-variant{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(26,86,255,0.08);border:1px solid rgba(26,86,255,0.2);color:var(--blue-light);border-radius:8px;font-size:12px;cursor:pointer;transition:all 0.18s;margin-top:4px;}
@@ -483,6 +483,14 @@ function toggleVariants(){
   if(hasV&&document.getElementById('variantRows').children.length===0)addVariantRow()
 }
 
+function calcVariantComm(input){
+  const row=input.closest('.variant-row')
+  const inputs=row.querySelectorAll('input[type="number"]')
+  const retail=parseFloat(inputs[0].value)||0
+  const wholesale=parseFloat(inputs[1].value)||0
+  const comm=retail-wholesale
+  row.querySelector('.variant-comm').textContent=comm>0?'+$'+comm.toLocaleString():'$—'
+}
 function addVariantRow(){
   const container=document.getElementById('variantRows')
   const row=document.createElement('div')
