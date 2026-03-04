@@ -26,6 +26,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .modal-overlay{position:fixed;inset:0;background:rgba(15,23,41,.5);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center}.modal-overlay.open{display:flex}.client-modal{background:var(--white);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;padding:32px;position:relative;box-shadow:0 20px 60px rgba(15,23,41,.15)}.form-group{margin-bottom:14px}.form-label{font-size:12px;font-weight:500;color:var(--navy-50);margin-bottom:6px;display:block}.form-input{width:100%;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;padding:11px 14px;color:var(--navy);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .15s}.form-input:focus{border-color:var(--navy-30);box-shadow:0 0 0 3px var(--navy-06)}.form-input::placeholder{color:var(--navy-30)}.btn-modal-y{width:100%;padding:13px;background:var(--orange);color:#fff;font-weight:600;font-size:14px;border:none;border-radius:10px;cursor:pointer;transition:all .15s;margin-top:4px}.btn-modal-y:hover{background:var(--orange-hover)}.modal-close2{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--white);color:var(--navy-30);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}.empty-state{padding:28px 20px;text-align:center;color:var(--navy-30);font-size:13px}.empty-state a{color:var(--orange);text-decoration:none}
 @media(max-width:900px){.sidebar{display:none}.main{margin-left:0;max-width:100%}}@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+.nf-tabs{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);overflow-x:auto}.nf-btn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--white);color:var(--navy-50);cursor:pointer;white-space:nowrap;transition:all .12s;font-family:var(--sans)}.nf-btn:hover{background:var(--navy-03);color:var(--navy)}.nf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.conv-stat{font-size:11px;color:var(--navy-30);margin-top:4px;font-family:var(--sans)}.conv-bar{height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden}.conv-fill{height:100%;background:var(--green);border-radius:2px;transition:width .3s}
+.hi-total{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px;font-weight:600;background:var(--navy-03)}.hi-total-val{color:var(--green)}
 </style>
 </head>
 <body>
@@ -37,8 +40,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 <main class="main">
   <div class="topbar"><div><div class="page-title" id="greeting">Hola</div><div class="page-sub" id="dateStr"></div></div><a class="btn-catalog" href="catalogo.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Ver catalogo</a></div>
   <div id="cobrarBanner" style="display:none" class="cobrar-banner"><div><div class="cobrar-text">Tienes comisiones por cobrar</div><div style="font-size:11px;color:var(--navy-30)" id="cobrarSub"></div></div><div class="cobrar-amount" id="cobrarTotal">$0</div></div>
-  <div class="stats"><div class="sc"><div class="sc-label">Clientes enviados</div><div class="sc-val" id="stat-enviados">--</div></div><div class="sc"><div class="sc-label">Ventas confirmadas</div><div class="sc-val v-green" id="stat-ventas">--</div></div><div class="sc"><div class="sc-label">Comisiones ganadas</div><div class="sc-val v-orange" id="stat-comisiones">--</div></div><div class="sc"><div class="sc-label">Por cobrar</div><div class="sc-val" id="stat-cobrar">--</div></div></div>
-  <div class="grid2"><div class="card"><div class="card-head"><div class="card-title">Pendientes</div></div><div id="pendingList"><div class="empty-state">Cargando...</div></div></div><div class="card"><div class="card-head"><div class="card-title">Historial de ganancias</div></div><div id="historyList"><div class="empty-state">Cargando...</div></div></div></div>
+  <div class="stats"><div class="sc"><div class="sc-label">Clientes enviados</div><div class="sc-val" id="stat-enviados">--</div></div><div class="sc"><div class="sc-label">Ventas confirmadas</div><div class="sc-val v-green" id="stat-ventas">--</div><div class="conv-stat" id="stat-conversion"></div><div class="conv-bar"><div class="conv-fill" id="stat-conv-bar" style="width:0%"></div></div></div><div class="sc"><div class="sc-label">Comisiones ganadas</div><div class="sc-val v-orange" id="stat-comisiones">--</div></div><div class="sc"><div class="sc-label">Por cobrar</div><div class="sc-val" id="stat-cobrar">--</div></div></div>
+  <div class="grid2"><div class="card"><div class="card-head"><div class="card-title">Pendientes</div></div><div class="nf-tabs" id="pendTabs"><button class="nf-btn active" onclick="filterPending('all',this)">Todos</button><button class="nf-btn" onclick="filterPending('enviado',this)">Esperando</button><button class="nf-btn" onclick="filterPending('recibido',this)">En chat</button></div><div id="pendingList"><div class="empty-state">Cargando...</div></div></div><div class="card"><div class="card-head"><div class="card-title">Historial de ganancias</div></div><div class="nf-tabs" id="histTabs"><button class="nf-btn active" onclick="filterHistory('all',this)">Todos</button><button class="nf-btn" onclick="filterHistory('pending',this)">Por cobrar</button><button class="nf-btn" onclick="filterHistory('paid',this)">Pagados</button></div><div id="historyList"><div class="empty-state">Cargando...</div></div><div class="hi-total" id="histTotal" style="display:none"><span>Total</span><span class="hi-total-val" id="histTotalVal">$0</span></div></div></div>
   <div class="card-full"><div class="card-head"><div class="card-title">Mis productos</div><a class="btn-see-catalog" href="catalogo.html">+ Agregar</a></div><div id="myProductsList"><div class="empty-state">No estas ofreciendo ningun producto. <a href="catalogo.html">Explora el catalogo</a></div></div></div>
 </main>
 <div class="chat-overlay" id="chatOverlay"><div class="chat-box"><div class="chat-head"><div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub" id="chatSub"></div></div><button class="chat-close" onclick="closeChat()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="chat-messages" id="chatMessages"><div class="chat-empty">Cargando...</div></div><div class="chat-success-banner" id="chatSuccessBanner">Venta confirmada. La comision fue activada.</div><div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="Escribe un mensaje..." rows="1" onkeydown="handleChatKey(event)"></textarea><button class="chat-send-btn" onclick="sendMessage()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div></div>
@@ -50,6 +53,7 @@ const{createClient}=supabase
 const sb=createClient(SB_URL,SB_KEY)
 let currentUser=null,currentProfile=null,chatNotifId=null,chatChannel=null
 let activeProductForClient=null,activeComercioForClient=null
+let allPending=[],allHistory=[],pendFilter='all',histFilter='all'
 
 async function init(){
   const{data:{user}}=await sb.auth.getUser()
@@ -73,8 +77,12 @@ async function loadStats(){
     sb.from('sales').select('id',{count:'exact',head:true}).eq('vendedor_id',uid),
     sb.from('sales').select('commission_amount').eq('vendedor_id',uid).eq('commission_paid',false)
   ])
-  document.getElementById('stat-enviados').textContent=notifs.count||0
-  document.getElementById('stat-ventas').textContent=sales.count||0
+  const enviados=notifs.count||0
+  const ventas=sales.count||0
+  document.getElementById('stat-enviados').textContent=enviados
+  document.getElementById('stat-ventas').textContent=ventas
+  // Conversion rate
+  if(enviados>0){const rate=Math.round((ventas/enviados)*100);document.getElementById('stat-conversion').textContent=rate+'% conversion';document.getElementById('stat-conv-bar').style.width=rate+'%'}else{document.getElementById('stat-conversion').textContent='';document.getElementById('stat-conv-bar').style.width='0%'}
   const pendingTotal=(cobrar.data||[]).reduce((s,r)=>s+(r.commission_amount||0),0)
   const{data:paid}=await sb.from('sales').select('commission_amount').eq('vendedor_id',uid).eq('commission_paid',true)
   const paidTotal=(paid||[]).reduce((s,r)=>s+(r.commission_amount||0),0)
@@ -90,24 +98,40 @@ async function loadStats(){
 
 async function loadPending(){
   const{data}=await sb.from('notifications').select('*, products(title,commission), users!comercio_id(business_name,email)').eq('vendedor_id',currentUser.id).in('status',['enviado','recibido']).order('created_at',{ascending:false})
+  allPending=data||[]
+  renderPending()
+}
+function filterPending(f,btn){pendFilter=f;document.querySelectorAll('#pendTabs .nf-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPending()}
+function renderPending(){
   const list=document.getElementById('pendingList')
-  if(!data||!data.length){list.innerHTML='<div class="empty-state">No tienes clientes pendientes</div>';return}
-  list.innerHTML=data.map(n=>{
+  const filtered=pendFilter==='all'?allPending:allPending.filter(n=>n.status===pendFilter)
+  if(!filtered.length){list.innerHTML='<div class="empty-state">'+(pendFilter==='all'?'No tienes clientes pendientes':'Sin resultados')+'</div>';return}
+  list.innerHTML=filtered.map(n=>{
     const biz=n.users?.business_name||n.users?.email||'comercio'
     const prod=n.products?.title||'producto'
     const comm=n.products?.commission||0
+    const ago=getTimeAgo(n.created_at)
     let dot,badge,acts
     if(n.status==='enviado'){dot='dy';badge='<span class="step-badge step-1">Esperando acuse</span>';acts=''}
     else{dot='db';badge='<span class="step-badge step-2">Chat abierto</span>';const sp=encodeURIComponent(prod),sb2=encodeURIComponent(biz);acts='<div class="pi-acts"><button class="bchat" onclick="openChat(\''+n.id+"','"+sp+"','"+sb2+"')\">Abrir chat</button></div>"}
-    return '<div class="pi"><div class="pidot '+dot+'"></div><div class="pi-body"><div class="pi-txt"><strong>'+n.customer_name+'</strong> &rarr; '+prod+'</div><div class="pi-meta">'+badge+' &middot; '+biz+' &middot; +$'+comm+'</div></div>'+acts+'</div>'
+    return '<div class="pi"><div class="pidot '+dot+'"></div><div class="pi-body"><div class="pi-txt"><strong>'+n.customer_name+'</strong> &rarr; '+prod+'</div><div class="pi-meta">'+badge+' &middot; '+biz+' &middot; +$'+comm+' &middot; '+ago+'</div>'+(n.notes?'<div style="font-size:11px;color:var(--navy-50);margin-top:2px;">'+n.notes+'</div>':'')+'</div>'+acts+'</div>'
   }).join('')
 }
+function getTimeAgo(d){const now=new Date(),diff=Math.floor((now-new Date(d))/1000);if(diff<60)return'ahora';if(diff<3600)return Math.floor(diff/60)+'m';if(diff<86400)return Math.floor(diff/3600)+'h';return Math.floor(diff/86400)+'d'}
 
 async function loadHistory(){
-  const{data}=await sb.from('sales').select('*, products(title), users!comercio_id(business_name,email)').eq('vendedor_id',currentUser.id).order('created_at',{ascending:false}).limit(8)
+  const{data}=await sb.from('sales').select('*, products(title), users!comercio_id(business_name,email)').eq('vendedor_id',currentUser.id).order('created_at',{ascending:false})
+  allHistory=data||[]
+  renderHistory()
+}
+function filterHistory(f,btn){histFilter=f;document.querySelectorAll('#histTabs .nf-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderHistory()}
+function renderHistory(){
   const list=document.getElementById('historyList')
-  if(!data||!data.length){list.innerHTML='<div class="empty-state">Sin historial aun</div>';return}
-  list.innerHTML=data.map(s=>{
+  let filtered=allHistory
+  if(histFilter==='pending')filtered=allHistory.filter(s=>!s.commission_paid)
+  else if(histFilter==='paid')filtered=allHistory.filter(s=>s.commission_paid)
+  if(!filtered.length){list.innerHTML='<div class="empty-state">'+(histFilter==='all'?'Sin historial aun':'Sin resultados')+'</div>';document.getElementById('histTotal').style.display='none';return}
+  list.innerHTML=filtered.map(s=>{
     const biz=s.users?.business_name||s.users?.email||'comercio'
     const prod=s.products?.title||'producto'
     const date=new Date(s.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})
@@ -115,6 +139,9 @@ async function loadHistory(){
     const statusText=s.commission_paid?'Pagado':'Por cobrar'
     return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div></div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span></div></div>'
   }).join('')
+  const total=filtered.reduce((s,r)=>s+(r.commission_amount||0),0)
+  document.getElementById('histTotal').style.display='flex'
+  document.getElementById('histTotalVal').textContent='$'+total.toLocaleString()
 }
 
 async function loadMyProducts(){
@@ -124,8 +151,10 @@ async function loadMyProducts(){
   list.innerHTML='<div class="my-prod-grid">'+vp.map(v=>{
     const p=v.products;if(!p)return''
     const biz=p.users?.business_name||p.users?.email||'comercio'
-    const img=p.image_url?'<img src="'+p.image_url+'" alt="'+p.title+'">':'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0f1729" stroke-width="1" stroke-linecap="round" style="opacity:.12"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'
-    return '<div class="my-prod-card"><div class="my-prod-img">'+img+'</div><button class="btn-quitar" onclick="quitarProducto(\''+p.id+'\')">x</button><div class="my-prod-body"><div class="my-prod-title">'+p.title+'</div><div class="my-prod-comm">+$'+(p.commission||0).toLocaleString()+'</div><div class="my-prod-biz">'+biz+'</div><button class="btn-tiene-cliente" onclick="openClientForProduct(\''+p.id+"','"+p.comercio_id+"')\">Tengo un cliente</button></div></div>"
+    const firstImg=(p.images&&p.images.length>0)?p.images[0]:p.image_url
+    const img=firstImg?'<img src="'+firstImg+'" alt="'+p.title+'">':'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0f1729" stroke-width="1" stroke-linecap="round" style="opacity:.12"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'
+    const stockLabel=p.has_variants?'Variantes':(p.stock>0?p.stock+' pzs':'<span style="color:var(--red)">Agotado</span>')
+    return '<div class="my-prod-card"><div class="my-prod-img">'+img+'</div><button class="btn-quitar" onclick="quitarProducto(\''+p.id+'\')" title="Dejar de vender">x</button><div class="my-prod-body"><div class="my-prod-title">'+p.title+'</div><div class="my-prod-comm">+$'+(p.commission||0).toLocaleString()+' <span style="font-weight:400;color:var(--navy-30);font-size:10px;">'+stockLabel+'</span></div><div class="my-prod-biz">'+biz+'</div><button class="btn-tiene-cliente" onclick="openClientForProduct(\''+p.id+"','"+p.comercio_id+"')\">Tengo un cliente</button></div></div>"
   }).join('')+'</div>'
 }
 
