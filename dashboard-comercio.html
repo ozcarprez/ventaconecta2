@@ -199,7 +199,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 
 /* MOBILE */
 @media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;max-width:100%;}.mobile-head{display:flex}}
-.mobile-head{display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--white);margin:-28px -32px 20px}.mobile-head-logo{font-weight:700;font-size:15px;letter-spacing:-.4px}.mobile-head-logo span{color:var(--orange)}.mobile-logout{padding:6px 12px;background:var(--navy-03);border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--navy-50);cursor:pointer;font-family:var(--sans)}.mobile-logout:hover{color:var(--red);background:var(--red-bg)}
+.mobile-head{display:none;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:50}.mobile-head-logo{font-weight:700;font-size:15px;letter-spacing:-.4px}.mobile-head-logo span{color:var(--orange)}.mobile-logout{padding:6px 12px;background:var(--navy-03);border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--navy-50);cursor:pointer;font-family:var(--sans)}.mobile-logout:hover{color:var(--red);background:var(--red-bg)}
 @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}.pr{grid-template-columns:36px 1fr 60px 60px;}.pr .pcomm,.pr .ibtn{display:none;}.ph>div:nth-child(n+5){display:none;}}
 .sub-banner{border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .notif-filters{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);overflow-x:auto;}.nf-btn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--white);color:var(--navy-50);cursor:pointer;white-space:nowrap;transition:all 0.12s;font-family:var(--sans);}.nf-btn:hover{background:var(--navy-03);color:var(--navy);}.nf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
@@ -240,8 +240,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
   </div>
 </aside>
 
+<div class="mobile-head"><div class="mobile-head-logo">Venta<span>Conecta</span></div><button class="mobile-logout" onclick="handleLogout()">Cerrar sesion</button></div>
 <main class="main">
-  <div class="mobile-head"><div class="mobile-head-logo">Venta<span>Conecta</span></div><button class="mobile-logout" onclick="handleLogout()">Cerrar sesion</button></div>
   <div class="topbar">
     <div><div class="page-title" id="greeting">Bienvenido</div><div class="page-sub" id="dateStr"></div></div>
     <button class="btn-new" onclick="openModal()">
