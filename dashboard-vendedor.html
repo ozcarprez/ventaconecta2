@@ -29,12 +29,13 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .nf-tabs{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);overflow-x:auto}.nf-btn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--white);color:var(--navy-50);cursor:pointer;white-space:nowrap;transition:all .12s;font-family:var(--sans)}.nf-btn:hover{background:var(--navy-03);color:var(--navy)}.nf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 .conv-stat{font-size:11px;color:var(--navy-30);margin-top:4px;font-family:var(--sans)}.conv-bar{height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden}.conv-fill{height:100%;background:var(--green);border-radius:2px;transition:width .3s}
 .hi-total{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px;font-weight:600;background:var(--navy-03)}.hi-total-val{color:var(--green)}
+.btn-cobrar{padding:4px 10px;background:var(--green-08);border:1px solid var(--green-border);color:var(--green);border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;font-family:var(--sans);margin-left:8px;white-space:nowrap}.btn-cobrar:hover{background:rgba(26,140,94,.15)}
 </style>
 </head>
 <body>
 <aside class="sidebar">
   <div class="sb-head"><div class="sb-logo">Venta<span>Conecta</span></div><div class="sb-user"><div class="sb-avatar" id="userInitials">?</div><div><div class="sb-name" id="userName">Cargando...</div><div class="sb-role">Vendedor</div></div></div></div>
-  <nav class="sb-nav"><div class="sb-section">Principal</div><a class="sb-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a><a class="sb-item" href="catalogo.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Catalogo</a><a class="sb-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Mis ganancias</a></nav>
+  <nav class="sb-nav"><div class="sb-section">Principal</div><a class="sb-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a><a class="sb-item" href="catalogo.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Catalogo</a></nav>
   <div class="sb-foot"><button class="logout-btn" onclick="handleLogout()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesion</button></div>
 </aside>
 <main class="main">
@@ -137,7 +138,8 @@ function renderHistory(){
     const date=new Date(s.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})
     const statusClass=s.commission_paid?'hs-pagado':'hs-cobrar'
     const statusText=s.commission_paid?'Pagado':'Por cobrar'
-    return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div></div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span></div></div>'
+    const cobrarBtn=s.commission_paid?'':'<button class="btn-cobrar" onclick="marcarPagado(\''+s.id+'\')">Me pagaron</button>'
+    return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div></div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span>'+cobrarBtn+'</div></div>'
   }).join('')
   const total=filtered.reduce((s,r)=>s+(r.commission_amount||0),0)
   document.getElementById('histTotal').style.display='flex'
@@ -159,6 +161,8 @@ async function loadMyProducts(){
 }
 
 async function quitarProducto(pid){if(!confirm('Dejar de ofrecer este producto?'))return;await sb.from('vendor_products').delete().eq('vendedor_id',currentUser.id).eq('product_id',pid);loadMyProducts()}
+
+async function marcarPagado(saleId){if(!confirm('Confirmar que te pagaron esta comision?'))return;await sb.from('sales').update({commission_paid:true}).eq('id',saleId);loadHistory();loadStats()}
 
 function openClientForProduct(pid,cid){activeProductForClient=pid;activeComercioForClient=cid;document.getElementById('c-name').value='';document.getElementById('c-visit').value='';document.getElementById('c-note').value='';document.getElementById('clientError').style.display='none';document.getElementById('clientModal').classList.add('open')}
 function closeClientModal(){document.getElementById('clientModal').classList.remove('open')}
