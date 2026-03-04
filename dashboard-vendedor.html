@@ -162,7 +162,7 @@ async function loadMyProducts(){
 
 async function quitarProducto(pid){if(!confirm('Dejar de ofrecer este producto?'))return;await sb.from('vendor_products').delete().eq('vendedor_id',currentUser.id).eq('product_id',pid);loadMyProducts()}
 
-async function marcarPagado(saleId){if(!confirm('Confirmar que te pagaron esta comision?'))return;await sb.from('sales').update({commission_paid:true}).eq('id',saleId);loadHistory();loadStats()}
+async function marcarPagado(saleId){await sb.from('sales').update({commission_paid:true}).eq('id',saleId);loadHistory();loadStats()}
 
 function openClientForProduct(pid,cid){activeProductForClient=pid;activeComercioForClient=cid;document.getElementById('c-name').value='';document.getElementById('c-visit').value='';document.getElementById('c-note').value='';document.getElementById('clientError').style.display='none';document.getElementById('clientModal').classList.add('open')}
 function closeClientModal(){document.getElementById('clientModal').classList.remove('open')}
