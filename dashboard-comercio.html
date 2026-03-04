@@ -455,7 +455,7 @@ async function handleSubAction(){
 
     const resp=await fetch(SUPABASE_URL+endpoint,{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_KEY},
       body:JSON.stringify(bodyKey)
     })
     const result=await resp.json()
