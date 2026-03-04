@@ -124,7 +124,7 @@ function renderPending(){
 function getTimeAgo(d){const now=new Date(),diff=Math.floor((now-new Date(d))/1000);if(diff<60)return'ahora';if(diff<3600)return Math.floor(diff/60)+'m';if(diff<86400)return Math.floor(diff/3600)+'h';return Math.floor(diff/86400)+'d'}
 
 async function loadHistory(){
-  const{data}=await sb.from('sales').select('*, products(title), users!comercio_id(business_name,email)').eq('vendedor_id',currentUser.id).order('created_at',{ascending:false})
+  const{data}=await sb.from('sales').select('*, products(title,commission_payment_type), users!comercio_id(business_name,email,address,whatsapp)').eq('vendedor_id',currentUser.id).order('created_at',{ascending:false})
   allHistory=data||[]
   renderHistory()
 }
@@ -142,7 +142,18 @@ function renderHistory(){
     const statusClass=s.commission_paid?'hs-pagado':'hs-cobrar'
     const statusText=s.commission_paid?'Pagado':'Por cobrar'
     const cobrarBtn=s.commission_paid?'':'<button class="btn-cobrar" onclick="marcarPagado(\''+s.id+'\')">Me pagaron</button>'
-    return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div></div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span>'+cobrarBtn+'</div></div>'
+    // Payment info for unpaid
+    let payInfo=''
+    if(!s.commission_paid){
+      const payType=s.products?.commission_payment_type||'efectivo'
+      const addr=s.users?.address||''
+      const wa=s.users?.whatsapp||''
+      let details='<span style="color:var(--navy-50);">Pago: <b>'+payType+'</b></span>'
+      if(addr)details+=' &middot; <span style="color:var(--navy-50);">'+addr+'</span>'
+      if(wa)details+=' &middot; <a href="https://wa.me/52'+wa+'" target="_blank" style="color:var(--green);text-decoration:none;font-weight:600;">WhatsApp '+wa+'</a>'
+      payInfo='<div style="font-size:10px;margin-top:3px;">'+details+'</div>'
+    }
+    return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div>'+payInfo+'</div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span>'+cobrarBtn+'</div></div>'
   }).join('')
   const total=filtered.reduce((s,r)=>s+(r.commission_amount||0),0)
   document.getElementById('histTotal').style.display='flex'
