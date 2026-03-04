@@ -24,6 +24,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .my-prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;padding:16px 20px}.my-prod-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;transition:all .15s}.my-prod-card:hover{border-color:var(--border-2);box-shadow:0 2px 12px var(--navy-06)}.my-prod-img{width:100%;height:110px;background:var(--white);display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid var(--border)}.my-prod-img img{width:100%;height:100%;object-fit:cover}.my-prod-body{padding:10px 12px}.my-prod-title{font-size:12px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.my-prod-comm{font-size:12px;color:var(--green);font-weight:700}.my-prod-biz{font-size:10px;color:var(--navy-30);margin-top:1px}.btn-tiene-cliente{width:100%;margin-top:8px;padding:6px;background:var(--orange-12);border:1px solid var(--orange-border);color:var(--orange);border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s}.btn-tiene-cliente:hover{background:rgba(232,93,36,.18)}.btn-quitar{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:6px;background:var(--white);border:1px solid var(--border);color:var(--navy-30);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .12s}.btn-quitar:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
 .share-row{display:flex;gap:4px;margin-top:6px}.btn-share{flex:1;padding:5px 4px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:3px;border:1px solid}.btn-wa{background:#dcf8c6;border-color:#25d366;color:#128c7e}.btn-wa:hover{background:#c5f0a4}.btn-copy{background:var(--navy-03);border-color:var(--border);color:var(--navy-50)}.btn-copy:hover{background:var(--navy-06);color:var(--navy)}.btn-copy.copied{background:var(--green-08);border-color:var(--green-border);color:var(--green)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all .3s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.unread-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 5px;background:var(--orange);color:#fff;border-radius:100px;font-size:9px;font-weight:700;margin-left:5px;line-height:1}
 .chat-overlay{position:fixed;inset:0;background:rgba(15,23,41,.5);backdrop-filter:blur(6px);z-index:300;display:none;align-items:center;justify-content:center}.chat-overlay.open{display:flex}.chat-box{background:var(--white);border:1px solid var(--border);border-radius:20px;width:440px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(15,23,41,.15)}.chat-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}.chat-title{font-weight:600;font-size:15px}.chat-sub{font-size:11px;color:var(--navy-30);margin-top:1px}.chat-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--white);color:var(--navy-30);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:380px}.msg{display:flex;flex-direction:column;max-width:78%}.msg.mine{align-self:flex-end;align-items:flex-end}.msg.theirs{align-self:flex-start;align-items:flex-start}.msg-sender{font-size:10px;color:var(--navy-30);margin-bottom:3px;font-weight:500}.msg-bubble{padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.45}.msg.mine .msg-bubble{background:var(--navy);color:#fff;border-bottom-right-radius:4px}.msg.theirs .msg-bubble{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:4px}.msg-time{font-size:10px;color:var(--navy-30);margin-top:3px}.chat-success-banner{margin:0 16px 12px;padding:10px 14px;background:var(--green-08);border:1px solid var(--green-border);border-radius:10px;font-size:12px;color:var(--green);display:none;flex-shrink:0}.chat-input-row{display:flex;gap:8px;padding:14px 16px;border-top:1px solid var(--border);flex-shrink:0}.chat-input{flex:1;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;padding:10px 14px;color:var(--navy);font-family:var(--sans);font-size:13px;outline:none;resize:none}.chat-input:focus{border-color:var(--navy-30)}.chat-send-btn{width:36px;height:36px;border-radius:9px;background:var(--navy);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}.chat-send-btn:hover{background:var(--navy-70)}.chat-empty{text-align:center;color:var(--navy-30);font-size:12px;padding:24px}
 .modal-overlay{position:fixed;inset:0;background:rgba(15,23,41,.5);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center}.modal-overlay.open{display:flex}.client-modal{background:var(--white);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;padding:32px;position:relative;box-shadow:0 20px 60px rgba(15,23,41,.15)}.form-group{margin-bottom:14px}.form-label{font-size:12px;font-weight:500;color:var(--navy-50);margin-bottom:6px;display:block}.form-input{width:100%;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;padding:11px 14px;color:var(--navy);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .15s}.form-input:focus{border-color:var(--navy-30);box-shadow:0 0 0 3px var(--navy-06)}.form-input::placeholder{color:var(--navy-30)}.btn-modal-y{width:100%;padding:13px;background:var(--orange);color:#fff;font-weight:600;font-size:14px;border:none;border-radius:10px;cursor:pointer;transition:all .15s;margin-top:4px}.btn-modal-y:hover{background:var(--orange-hover)}.modal-close2{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--white);color:var(--navy-30);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}.empty-state{padding:28px 20px;text-align:center;color:var(--navy-30);font-size:13px}.empty-state a{color:var(--orange);text-decoration:none}
@@ -71,7 +72,7 @@ async function init(){
   document.getElementById('userInitials').textContent=name.substring(0,2).toUpperCase()
   document.getElementById('greeting').textContent='Hola, '+name.split(' ')[0]
   document.getElementById('dateStr').textContent=new Date().toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
-  loadStats();loadPending();loadHistory();loadMyProducts();subscribeRealtime()
+  loadStats();loadPending();loadHistory();loadMyProducts();subscribeRealtime();loadUnreadCounts()
 }
 
 async function loadStats(){
@@ -117,7 +118,13 @@ function renderPending(){
     const ago=getTimeAgo(n.created_at)
     let dot,badge,acts
     if(n.status==='enviado'){dot='dy';badge='<span class="step-badge step-1">Esperando acuse</span>';acts=''}
-    else{dot='db';badge='<span class="step-badge step-2">Chat abierto</span>';const sp=encodeURIComponent(prod),sb2=encodeURIComponent(biz);acts='<div class="pi-acts"><button class="bchat" onclick="openChat(\''+n.id+"','"+sp+"','"+sb2+"')\">Abrir chat</button></div>"}
+    else{
+      dot='db';badge='<span class="step-badge step-2">Chat abierto</span>'
+      const sp=encodeURIComponent(prod),sb2=encodeURIComponent(biz)
+      const unread=window._unreadMap?.[n.id]||0
+      const ubadge=unread>0?' <span class="unread-badge">'+unread+'</span>':''
+      acts='<div class="pi-acts"><button class="bchat" onclick="openChat(\''+n.id+"','"+sp+"','"+sb2+"')\">Chat"+ubadge+'</button></div>'
+    }
     return '<div class="pi"><div class="pidot '+dot+'"></div><div class="pi-body"><div class="pi-txt"><strong>'+n.customer_name+'</strong> &rarr; '+prod+'</div><div class="pi-meta">'+badge+' &middot; '+biz+' &middot; +$'+comm+' &middot; '+ago+'</div>'+(n.notes?'<div style="font-size:11px;color:var(--navy-50);margin-top:2px;">'+n.notes+'</div>':'')+'</div>'+acts+'</div>'
   }).join('')
 }
@@ -149,7 +156,9 @@ function renderHistory(){
       const nid=s.notification_id||''
       const sp=encodeURIComponent(prod)
       const sb2=encodeURIComponent(biz)
-      cobrarActions='<button class="bchat" style="margin-left:6px" onclick="openChat(\''+nid+'\',\''+sp+'\',\''+sb2+'\')">Chat</button><button class="btn-cobrar" onclick="marcarPagado(\''+s.id+'\')">Me pagaron</button>'
+      const unread=window._unreadMap?.[nid]||0
+      const ubadge=unread>0?' <span class="unread-badge">'+unread+'</span>':''
+      cobrarActions='<button class="bchat" style="margin-left:6px" onclick="openChat(\''+nid+'\',\''+sp+'\',\''+sb2+'\')">Chat'+ubadge+'</button><button class="btn-cobrar" onclick="marcarPagado(\''+s.id+'\')">Me pagaron</button>'
     }
     return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div>'+payInfo+'</div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span>'+cobrarActions+'</div></div>'
   }).join('')
@@ -238,7 +247,37 @@ async function sendNotification(){
   closeClientModal();loadPending();loadStats()
 }
 
-function openChat(notifId,sp,sb2){chatNotifId=notifId;document.getElementById('chatTitle').textContent=decodeURIComponent(sp);document.getElementById('chatSub').textContent='Con '+decodeURIComponent(sb2);document.getElementById('chatSuccessBanner').style.display='none';document.getElementById('chatOverlay').classList.add('open');document.getElementById('chatInput').value='';loadMessages();subscribeToChat()}
+function openChat(notifId,sp,sb2){chatNotifId=notifId;document.getElementById('chatTitle').textContent=decodeURIComponent(sp);document.getElementById('chatSub').textContent='Con '+decodeURIComponent(sb2);document.getElementById('chatSuccessBanner').style.display='none';document.getElementById('chatOverlay').classList.add('open');document.getElementById('chatInput').value='';loadMessages();subscribeToChat();markAsRead(notifId)}
+
+async function markAsRead(notifId){
+  const{data:existing}=await sb.from('chat_reads').select('id').eq('notification_id',notifId).eq('user_id',currentUser.id).maybeSingle()
+  if(existing){await sb.from('chat_reads').update({last_read_at:new Date().toISOString()}).eq('id',existing.id)}
+  else{await sb.from('chat_reads').insert({notification_id:notifId,user_id:currentUser.id,last_read_at:new Date().toISOString()})}
+  loadUnreadCounts()
+}
+
+async function loadUnreadCounts(){
+  const uid=currentUser.id
+  // Get all notification IDs where this user is involved
+  const{data:notifs}=await sb.from('notifications').select('id').eq('vendedor_id',uid)
+  if(!notifs||!notifs.length){window._unreadMap={};return}
+  const nids=notifs.map(n=>n.id)
+  // Get read timestamps
+  const{data:reads}=await sb.from('chat_reads').select('notification_id,last_read_at').eq('user_id',uid)
+  const readMap={};(reads||[]).forEach(r=>{readMap[r.notification_id]=r.last_read_at})
+  // Get message counts per notification that are newer than last read and not from me
+  const{data:msgs}=await sb.from('messages').select('notification_id,created_at,sender_id').in('notification_id',nids).neq('sender_id',uid)
+  const unreadMap={}
+  ;(msgs||[]).forEach(m=>{
+    const lastRead=readMap[m.notification_id]
+    if(!lastRead||new Date(m.created_at)>new Date(lastRead)){
+      unreadMap[m.notification_id]=(unreadMap[m.notification_id]||0)+1
+    }
+  })
+  window._unreadMap=unreadMap
+  renderPending()
+  renderHistory()
+}
 
 async function loadMessages(){
   const c=document.getElementById('chatMessages')
