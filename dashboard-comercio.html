@@ -49,7 +49,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .btn-new:hover{background:var(--orange-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(232,93,36,0.2);}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;}
 .sc{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;}
 .sc-label{font-size:12px;color:var(--navy-30);margin-bottom:8px;}
 .sc-val{font-family:var(--serif);font-size:28px;letter-spacing:-1px;line-height:1;}
@@ -203,7 +203,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .sub-banner{border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .notif-filters{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);overflow-x:auto;}.nf-btn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--white);color:var(--navy-50);cursor:pointer;white-space:nowrap;transition:all 0.12s;font-family:var(--sans);}.nf-btn:hover{background:var(--navy-03);color:var(--navy);}.nf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 .ni .barchive{padding:4px 8px;background:var(--navy-03);border:1px solid var(--border);color:var(--navy-30);border-radius:6px;font-size:10px;cursor:pointer;transition:all 0.12s;font-family:var(--sans);}.ni .barchive:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
-.pr{cursor:pointer;transition:background 0.12s;}.pr:hover{background:var(--navy-03);}.pr.ph{cursor:default;}.pr.ph:hover{background:transparent;}.sub-none{background:rgba(232,93,36,0.06);border:1px solid rgba(232,93,36,0.15);}.sub-active{background:rgba(26,140,94,0.06);border:1px solid rgba(26,140,94,0.15);}.sub-canceled{background:rgba(192,136,0,0.06);border:1px solid rgba(192,136,0,0.15);}.sub-past-due{background:rgba(217,48,37,0.06);border:1px solid rgba(217,48,37,0.12);}.sub-icon{font-size:20px;margin-right:4px;flex-shrink:0;}.sub-text{flex:1;}.sub-title{font-weight:600;font-size:14px;margin-bottom:2px;}.sub-desc{font-size:12px;color:var(--navy-50);}.sub-none .sub-title{color:var(--orange);}.sub-active .sub-title{color:var(--green);}.sub-canceled .sub-title{color:var(--yellow);}.sub-past-due .sub-title{color:var(--red);}.btn-sub{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:var(--sans);}.btn-sub-pay{background:var(--orange);color:#fff;}.btn-sub-pay:hover{background:var(--orange-hover);}.btn-sub-manage{background:var(--navy-03);border:1px solid var(--border);color:var(--navy-50);}.btn-sub-manage:hover{background:var(--navy-06);color:var(--navy);}
+.pr{cursor:pointer;transition:background 0.12s;}.pr:hover{background:var(--navy-03);}.pr.ph{cursor:default;}.pr.ph:hover{background:transparent;}
+.ci{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border)}.ci:last-child{border-bottom:none}.ci-dot{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.ci-dot.pending{background:var(--yellow-bg);border:1px solid var(--yellow-border)}.ci-dot.paid{background:var(--green-08);border:1px solid var(--green-border)}.ci-body{flex:1;min-width:0}.ci-prod{font-size:13px;font-weight:500;margin-bottom:1px}.ci-meta{font-size:11px;color:var(--navy-30)}.ci-right{display:flex;align-items:center;gap:6px;flex-shrink:0}.ci-amount{font-weight:700;font-size:14px}.ci-amount.pending{color:var(--yellow)}.ci-amount.paid{color:var(--green)}.ci-status{font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px}.cs-pending{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}.cs-paid{background:var(--green-08);color:var(--green);border:1px solid var(--green-border)}
+.btn-pagar{padding:4px 10px;background:var(--green-08);border:1px solid var(--green-border);color:var(--green);border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;font-family:var(--sans);white-space:nowrap}.btn-pagar:hover{background:rgba(26,140,94,.15)}
+.comm-total{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px;font-weight:600;background:var(--navy-03)}.comm-total-val{color:var(--green)}.sub-none{background:rgba(232,93,36,0.06);border:1px solid rgba(232,93,36,0.15);}.sub-active{background:rgba(26,140,94,0.06);border:1px solid rgba(26,140,94,0.15);}.sub-canceled{background:rgba(192,136,0,0.06);border:1px solid rgba(192,136,0,0.15);}.sub-past-due{background:rgba(217,48,37,0.06);border:1px solid rgba(217,48,37,0.12);}.sub-icon{font-size:20px;margin-right:4px;flex-shrink:0;}.sub-text{flex:1;}.sub-title{font-weight:600;font-size:14px;margin-bottom:2px;}.sub-desc{font-size:12px;color:var(--navy-50);}.sub-none .sub-title{color:var(--orange);}.sub-active .sub-title{color:var(--green);}.sub-canceled .sub-title{color:var(--yellow);}.sub-past-due .sub-title{color:var(--red);}.btn-sub{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:var(--sans);}.btn-sub-pay{background:var(--orange);color:#fff;}.btn-sub-pay:hover{background:var(--orange-hover);}.btn-sub-manage{background:var(--navy-03);border:1px solid var(--border);color:var(--navy-50);}.btn-sub-manage:hover{background:var(--navy-06);color:var(--navy);}
 </style>
 </head>
 <body>
@@ -254,6 +257,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
     <div class="sc"><div class="sc-label">Vendedores activos</div><div class="sc-val" id="stat-vendedores">--</div></div>
     <div class="sc"><div class="sc-label">Ventas generadas</div><div class="sc-val v-orange" id="stat-ventas">--</div></div>
     <div class="sc"><div class="sc-label">Comisiones pagadas</div><div class="sc-val v-green" id="stat-comisiones">--</div></div>
+    <div class="sc"><div class="sc-label">Comisiones por pagar</div><div class="sc-val" id="stat-porpagar" style="color:var(--yellow)">--</div></div>
   </div>
 
   <div class="grid2">
@@ -268,6 +272,19 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
       </div>
       <div id="notifList"><div class="empty-state">Cargando...</div></div>
     </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Comisiones a vendedores</div></div>
+      <div class="notif-filters" id="commFilters">
+        <button class="nf-btn active" onclick="filterComm('all',this)">Todos</button>
+        <button class="nf-btn" onclick="filterComm('pending',this)">Por pagar</button>
+        <button class="nf-btn" onclick="filterComm('paid',this)">Pagados</button>
+      </div>
+      <div id="commList"><div class="empty-state">Cargando...</div></div>
+      <div class="comm-total" id="commTotal" style="display:none"><span>Total</span><span class="comm-total-val" id="commTotalVal">$0</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
     <div class="card">
       <div class="card-head"><div class="card-title">Mis productos</div></div>
       <div class="pt">
@@ -371,6 +388,7 @@ let currentUser=null,currentProfile=null
 let chatNotifId=null,chatVendorId=null,chatCommission=0,chatChannel=null
 let editingProductId=null,allNotifications=[],currentNotifFilter='all'
 let pendingPhotos=[],existingPhotos=[]
+let allCommissions=[],commFilter='all'
 
 async function init(){
   const{data:{user}}=await sb.auth.getUser()
@@ -387,7 +405,7 @@ async function init(){
   if(profile.whatsapp)document.getElementById('pf-whatsapp').value=profile.whatsapp
   const now=new Date()
   document.getElementById('dateStr').textContent=now.toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
-  loadStats();loadNotifications();loadProducts()
+  loadStats();loadNotifications();loadProducts();loadCommissions()
   subscribeToNewNotifications()
   renderSubBanner(profile)
   // Handle ?subscribed=true from Stripe checkout success
@@ -465,18 +483,21 @@ async function handleSubAction(){
 }
 async function loadStats(){
   const uid=currentUser.id
-  const[prods,ventas,notifs,sales]=await Promise.all([
+  const[prods,ventas,notifs,salesPaid,salesPending]=await Promise.all([
     sb.from('products').select('id',{count:'exact',head:true}).eq('comercio_id',uid).eq('active',true),
     sb.from('sales').select('id',{count:'exact',head:true}).eq('comercio_id',uid),
     sb.from('notifications').select('vendedor_id').eq('comercio_id',uid),
-    sb.from('sales').select('commission_amount').eq('comercio_id',uid).eq('commission_paid',true)
+    sb.from('sales').select('commission_amount').eq('comercio_id',uid).eq('commission_paid',true),
+    sb.from('sales').select('commission_amount').eq('comercio_id',uid).eq('commission_paid',false)
   ])
   document.getElementById('stat-productos').textContent=prods.count||0
   document.getElementById('stat-ventas').textContent=ventas.count||0
   const uniqueV=new Set((notifs.data||[]).map(n=>n.vendedor_id)).size
   document.getElementById('stat-vendedores').textContent=uniqueV
-  const total=(sales.data||[]).reduce((s,r)=>s+(r.commission_amount||0),0)
-  document.getElementById('stat-comisiones').textContent='$'+total.toLocaleString()
+  const paidTotal=(salesPaid.data||[]).reduce((s,r)=>s+(r.commission_amount||0),0)
+  document.getElementById('stat-comisiones').textContent='$'+paidTotal.toLocaleString()
+  const pendingTotal=(salesPending.data||[]).reduce((s,r)=>s+(r.commission_amount||0),0)
+  document.getElementById('stat-porpagar').textContent='$'+pendingTotal.toLocaleString()
 }
 async function loadNotifications(){
   const{data}=await sb.from('notifications').select('*, products(title,commission), users!vendedor_id(full_name,email)').eq('comercio_id',currentUser.id).order('created_at',{ascending:false}).limit(50)
@@ -577,6 +598,33 @@ async function openEditProduct(productId){
   document.getElementById('productModal').classList.add('open')
 }
 async function deleteProduct(id){if(!confirm('Eliminar este producto?'))return;await sb.from('products').delete().eq('id',id);loadProducts();loadStats()}
+
+async function loadCommissions(){
+  const{data}=await sb.from('sales').select('*, products(title), users!vendedor_id(full_name,email)').eq('comercio_id',currentUser.id).order('created_at',{ascending:false})
+  allCommissions=data||[]
+  renderComm()
+}
+function filterComm(f,btn){commFilter=f;document.querySelectorAll('#commFilters .nf-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderComm()}
+function renderComm(){
+  const list=document.getElementById('commList')
+  let filtered=allCommissions
+  if(commFilter==='pending')filtered=allCommissions.filter(s=>!s.commission_paid)
+  else if(commFilter==='paid')filtered=allCommissions.filter(s=>s.commission_paid)
+  if(!filtered.length){list.innerHTML='<div class="empty-state">'+(commFilter==='all'?'Sin comisiones aun':'Sin resultados')+'</div>';document.getElementById('commTotal').style.display='none';return}
+  list.innerHTML=filtered.map(s=>{
+    const vend=s.users?.full_name||s.users?.email||'vendedor'
+    const prod=s.products?.title||'producto'
+    const date=new Date(s.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})
+    const isPaid=s.commission_paid
+    const dotIcon=isPaid?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c08800" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    const pagarBtn=isPaid?'':'<button class="btn-pagar" onclick="marcarPagadoComercio(\''+s.id+'\')">Ya pague</button>'
+    return '<div class="ci"><div class="ci-dot '+(isPaid?'paid':'pending')+'">'+dotIcon+'</div><div class="ci-body"><div class="ci-prod">'+prod+'</div><div class="ci-meta">@'+vend+' &middot; '+date+'</div></div><div class="ci-right"><span class="ci-amount '+(isPaid?'paid':'pending')+'">$'+(s.commission_amount||0).toLocaleString()+'</span><span class="ci-status '+(isPaid?'cs-paid':'cs-pending')+'">'+(isPaid?'Pagado':'Por pagar')+'</span>'+pagarBtn+'</div></div>'
+  }).join('')
+  const total=filtered.reduce((s,r)=>s+(r.commission_amount||0),0)
+  document.getElementById('commTotal').style.display='flex'
+  document.getElementById('commTotalVal').textContent='$'+total.toLocaleString()
+}
+async function marcarPagadoComercio(saleId){await sb.from('sales').update({commission_paid:true}).eq('id',saleId);loadCommissions();loadStats()}
 function toggleVariants(){const h=document.getElementById('hasVariants').checked;document.getElementById('stockSimple').style.display=h?'none':'block';document.getElementById('variantsSection').classList.toggle('show',h);if(h&&document.getElementById('variantRows').children.length===0)addVariantRow()}
 function addVariantRow(){
   const c=document.getElementById('variantRows'),r=document.createElement('div');r.className='variant-row-full'
