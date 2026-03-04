@@ -246,7 +246,7 @@ async function handleRegister(){
       const session=await sb.auth.getSession()
       const resp=await fetch(SUPABASE_URL+'/functions/v1/create-checkout-session',{
         method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.data.session.access_token},
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.data.session.access_token,'apikey':SUPABASE_KEY},
         body:JSON.stringify({
           success_url:window.location.origin+'/dashboard-comercio.html?subscribed=true',
           cancel_url:window.location.origin+'/registro.html?tipo=comercio&pending=true'
