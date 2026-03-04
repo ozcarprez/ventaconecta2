@@ -154,8 +154,16 @@ async function loadMyProducts(){
   const list=document.getElementById('myProductsList')
   if(!vp||!vp.length){list.innerHTML='<div class="empty-state">No estas ofreciendo ningun producto. <a href="catalogo.html">Explora el catalogo</a></div>';return}
   window._myProds={}
+  // Load variants for products that have them
+  const prodIds=vp.filter(v=>v.products?.has_variants).map(v=>v.products.id)
+  let variantsMap={}
+  if(prodIds.length>0){
+    const{data:vars}=await sb.from('product_variants').select('*').in('product_id',prodIds)
+    if(vars)vars.forEach(v=>{if(!variantsMap[v.product_id])variantsMap[v.product_id]=[];variantsMap[v.product_id].push(v)})
+  }
   list.innerHTML='<div class="my-prod-grid">'+vp.map(v=>{
     const p=v.products;if(!p)return''
+    p._variants=variantsMap[p.id]||[]
     window._myProds[p.id]=p
     const biz=p.users?.business_name||p.users?.email||'comercio'
     const firstImg=(p.images&&p.images.length>0)?p.images[0]:p.image_url
@@ -174,7 +182,17 @@ function buildShareText(pid){
   const price='$'+(p.retail_price||0).toLocaleString()+' MXN'
   const desc=p.description?'\n'+p.description:''
   const vendorName=currentProfile?.full_name||''
-  let txt='*'+p.title+'*\n'+price+desc+'\n\nInteresado? Escribeme para mas info.'
+  const imgs=(p.images&&p.images.length>0)?p.images:(p.image_url?[p.image_url]:[])
+  let txt='*'+p.title+'*\n'+price+desc
+  // Variants
+  if(p.has_variants&&p._variants&&p._variants.length>0){
+    txt+='\n\nDisponible en: '+p._variants.map(v=>v.name+(v.stock>0?' ('+v.stock+' pzs)':' (Agotado)')).join(', ')
+  }else if(!p.has_variants&&p.stock>0){
+    txt+='\nDisponibles: '+p.stock+' piezas'
+  }
+  // Photos
+  if(imgs.length>0){txt+='\n\n'+imgs.map((url,i)=>'Foto '+(i+1)+': '+url).join('\n')}
+  txt+='\n\nInteresado? Escribeme para mas info.'
   if(vendorName)txt+='\n— '+vendorName
   return txt
 }
