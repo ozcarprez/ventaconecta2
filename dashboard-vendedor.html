@@ -186,7 +186,7 @@ function buildShareText(pid){
   let txt='*'+p.title+'*\n'+price+desc
   // Variants
   if(p.has_variants&&p._variants&&p._variants.length>0){
-    txt+='\n\nDisponible en: '+p._variants.map(v=>v.name+(v.stock>0?' ('+v.stock+' pzs)':' (Agotado)')).join(', ')
+    txt+='\n\nDisponible en:\n'+p._variants.map(v=>'• '+v.name+' — $'+(v.retail_price||0).toLocaleString()+' MXN'+(v.stock>0?' ('+v.stock+' disponibles)':' (Agotado)')).join('\n')
   }else if(!p.has_variants&&p.stock>0){
     txt+='\nDisponibles: '+p.stock+' piezas'
   }
