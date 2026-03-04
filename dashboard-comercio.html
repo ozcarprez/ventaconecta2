@@ -206,7 +206,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 /* MOBILE */
 @media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;max-width:100%;}}
 @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}.pr{grid-template-columns:36px 1fr 60px 60px;}.pr .pcomm,.pr .ibtn{display:none;}.ph>div:nth-child(n+5){display:none;}}
-.sub-banner{border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}.sub-none{background:rgba(232,93,36,0.06);border:1px solid rgba(232,93,36,0.15);}.sub-active{background:rgba(26,140,94,0.06);border:1px solid rgba(26,140,94,0.15);}.sub-canceled{background:rgba(192,136,0,0.06);border:1px solid rgba(192,136,0,0.15);}.sub-past-due{background:rgba(217,48,37,0.06);border:1px solid rgba(217,48,37,0.12);}.sub-icon{font-size:20px;margin-right:4px;flex-shrink:0;}.sub-text{flex:1;}.sub-title{font-weight:600;font-size:14px;margin-bottom:2px;}.sub-desc{font-size:12px;color:var(--navy-50);}.sub-none .sub-title{color:var(--orange);}.sub-active .sub-title{color:var(--green);}.sub-canceled .sub-title{color:var(--yellow);}.sub-past-due .sub-title{color:var(--red);}.btn-sub{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:var(--sans);}.btn-sub-pay{background:var(--orange);color:#fff;}.btn-sub-pay:hover{background:var(--orange-hover);}.btn-sub-manage{background:var(--navy-03);border:1px solid var(--border);color:var(--navy-50);}.btn-sub-manage:hover{background:var(--navy-06);color:var(--navy);}
+.sub-banner{border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.notif-filters{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);overflow-x:auto;}.nf-btn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--white);color:var(--navy-50);cursor:pointer;white-space:nowrap;transition:all 0.12s;font-family:var(--sans);}.nf-btn:hover{background:var(--navy-03);color:var(--navy);}.nf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.ni .barchive{padding:4px 8px;background:var(--navy-03);border:1px solid var(--border);color:var(--navy-30);border-radius:6px;font-size:10px;cursor:pointer;transition:all 0.12s;font-family:var(--sans);}.ni .barchive:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.pr{cursor:pointer;transition:background 0.12s;}.pr:hover{background:var(--navy-03);}.pr.ph{cursor:default;}.pr.ph:hover{background:transparent;}.sub-none{background:rgba(232,93,36,0.06);border:1px solid rgba(232,93,36,0.15);}.sub-active{background:rgba(26,140,94,0.06);border:1px solid rgba(26,140,94,0.15);}.sub-canceled{background:rgba(192,136,0,0.06);border:1px solid rgba(192,136,0,0.15);}.sub-past-due{background:rgba(217,48,37,0.06);border:1px solid rgba(217,48,37,0.12);}.sub-icon{font-size:20px;margin-right:4px;flex-shrink:0;}.sub-text{flex:1;}.sub-title{font-weight:600;font-size:14px;margin-bottom:2px;}.sub-desc{font-size:12px;color:var(--navy-50);}.sub-none .sub-title{color:var(--orange);}.sub-active .sub-title{color:var(--green);}.sub-canceled .sub-title{color:var(--yellow);}.sub-past-due .sub-title{color:var(--red);}.btn-sub{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:var(--sans);}.btn-sub-pay{background:var(--orange);color:#fff;}.btn-sub-pay:hover{background:var(--orange-hover);}.btn-sub-manage{background:var(--navy-03);border:1px solid var(--border);color:var(--navy-50);}.btn-sub-manage:hover{background:var(--navy-06);color:var(--navy);}
 </style>
 </head>
 <body>
@@ -262,6 +265,13 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
   <div class="grid2">
     <div class="card">
       <div class="card-head"><div class="card-title">Clientes entrantes</div></div>
+      <div class="notif-filters" id="notifFilters">
+        <button class="nf-btn active" onclick="filterNotifs('all',this)">Todos</button>
+        <button class="nf-btn" onclick="filterNotifs('enviado',this)">Nuevos</button>
+        <button class="nf-btn" onclick="filterNotifs('recibido',this)">En chat</button>
+        <button class="nf-btn" onclick="filterNotifs('vendido',this)">Vendidos</button>
+        <button class="nf-btn" onclick="filterNotifs('rechazado',this)">Rechazados</button>
+      </div>
       <div id="notifList"><div class="empty-state">Cargando...</div></div>
     </div>
     <div class="card">
@@ -370,6 +380,7 @@ const {createClient}=supabase
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY)
 let currentUser=null,currentProfile=null,selectedFile=null
 let chatNotifId=null,chatVendorId=null,chatCommission=0,chatChannel=null
+let editingProductId=null,allNotifications=[],currentNotifFilter='all'
 
 async function init(){
   const{data:{user}}=await sb.auth.getUser()
@@ -478,25 +489,39 @@ async function loadStats(){
   document.getElementById('stat-comisiones').textContent='$'+total.toLocaleString()
 }
 async function loadNotifications(){
-  const{data}=await sb.from('notifications').select('*, products(title,commission), users!vendedor_id(full_name,email)').eq('comercio_id',currentUser.id).order('created_at',{ascending:false}).limit(8)
-  const list=document.getElementById('notifList')
-  const active=(data||[]).filter(n=>n.status==='enviado')
+  const{data}=await sb.from('notifications').select('*, products(title,commission), users!vendedor_id(full_name,email)').eq('comercio_id',currentUser.id).order('created_at',{ascending:false}).limit(50)
+  allNotifications=data||[]
+  const active=allNotifications.filter(n=>n.status==='enviado')
   const badge=document.getElementById('notifBadge')
   if(active.length>0){badge.textContent=active.length;badge.style.display='inline'}else{badge.style.display='none'}
-  if(!data||data.length===0){list.innerHTML='<div class="empty-state">No hay notificaciones aun</div>';return}
-  list.innerHTML=data.map(n=>{
+  renderNotifications()
+}
+function filterNotifs(filter,btn){
+  currentNotifFilter=filter
+  document.querySelectorAll('.nf-btn').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  renderNotifications()
+}
+function renderNotifications(){
+  const list=document.getElementById('notifList')
+  const filtered=currentNotifFilter==='all'?allNotifications:allNotifications.filter(n=>n.status===currentNotifFilter)
+  if(filtered.length===0){list.innerHTML='<div class="empty-state">'+(currentNotifFilter==='all'?'No hay notificaciones aun':'No hay notificaciones con este estado')+'</div>';return}
+  list.innerHTML=filtered.map(n=>{
     const vendName=n.users?.full_name||n.users?.email||'vendedor'
     const prodTitle=n.products?.title||'producto'
     const commission=n.products?.commission||0
     let dotClass,badge2,actions
     if(n.status==='enviado'){dotClass='dy';badge2='<span class="step-badge step-1">Nuevo</span>';actions=`<div class="ni-acts"><button class="brecibir" onclick="acusarRecibo('${n.id}')">Recibido</button><button class="brej" onclick="rejectNotif('${n.id}')">x</button></div>`}
     else if(n.status==='recibido'){dotClass='db';badge2='<span class="step-badge step-2">En chat</span>';const sp=encodeURIComponent(prodTitle),sv=encodeURIComponent(vendName);actions=`<div class="ni-acts"><button class="bchat" onclick="openChat('${n.id}','${n.vendedor_id}',${commission},'${sp}','${sv}')">Chat</button><button class="bvendido" onclick="marcarVendidoDirecto('${n.id}','${n.vendedor_id}',${commission})">Vendido</button></div>`}
-    else if(n.status==='vendido'){dotClass='dg';badge2='<span class="step-badge step-3">Vendido</span>';actions=''}
-    else if(n.status==='rechazado'){dotClass='dr';badge2='<span class="step-badge step-x">Rechazado</span>';actions=''}
-    else{dotClass='dg';badge2='<span class="step-badge step-3">Confirmado</span>';actions=''}
-    return `<div class="ni"><div class="ndot ${dotClass}"></div><div class="ni-body"><div class="ni-txt"><strong>${n.customer_name}</strong> &rarr; ${prodTitle}</div><div class="ni-meta">${badge2} &middot; @${vendName} ${n.expected_visit?'&middot; '+n.expected_visit:''}</div></div>${actions}</div>`
+    else if(n.status==='vendido'){dotClass='dg';badge2='<span class="step-badge step-3">Vendido</span>';actions=`<div class="ni-acts"><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
+    else if(n.status==='rechazado'){dotClass='dr';badge2='<span class="step-badge step-x">Rechazado</span>';actions=`<div class="ni-acts"><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
+    else{dotClass='dg';badge2='<span class="step-badge step-3">Confirmado</span>';actions=`<div class="ni-acts"><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
+    const timeAgo=getTimeAgo(n.created_at)
+    return `<div class="ni"><div class="ndot ${dotClass}"></div><div class="ni-body"><div class="ni-txt"><strong>${n.customer_name}</strong> &rarr; ${prodTitle}</div><div class="ni-meta">${badge2} &middot; @${vendName} &middot; ${timeAgo}${n.expected_visit?' &middot; '+n.expected_visit:''}</div>${n.notes?'<div style="font-size:11px;color:var(--navy-50);margin-top:2px;">'+n.notes+'</div>':''}</div>${actions}</div>`
   }).join('')
 }
+function getTimeAgo(dateStr){const now=new Date(),d=new Date(dateStr),diff=Math.floor((now-d)/1000);if(diff<60)return'ahora';if(diff<3600)return Math.floor(diff/60)+'m';if(diff<86400)return Math.floor(diff/3600)+'h';return Math.floor(diff/86400)+'d'}
+async function archiveNotif(id){await sb.from('notifications').delete().eq('id',id);loadNotifications()}
 async function acusarRecibo(id){await sb.from('notifications').update({status:'recibido'}).eq('id',id);loadNotifications()}
 async function rejectNotif(id){await sb.from('notifications').update({status:'rechazado'}).eq('id',id);loadNotifications()}
 async function marcarVendidoDirecto(notifId,vendorId,commission){if(!confirm('Confirmar venta? Se activara la comision.'))return;await _registrarVenta(notifId,vendorId,commission)}
@@ -519,8 +544,50 @@ async function loadProducts(){
     const imgHtml=p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f1729" stroke-width="1.5" stroke-linecap="round" style="opacity:0.2;"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`
     const count=vpCount[p.id]||0
     const ofBadge=count>0?`<span class="offering-badge">${count} vendedor${count>1?'es':''}</span>`:''
-    return `<div class="pr"><div class="pimg">${imgHtml}</div><div><div class="pname">${p.title}</div><div class="psub">${ofBadge}</div></div><div class="pprice">$${(p.retail_price||0).toLocaleString()}</div><div class="pcomm">+$${(p.commission||0).toLocaleString()}</div><div style="font-size:12px;color:${p.stock===0&&!p.has_variants?'var(--red)':'var(--navy-30)'};">${p.has_variants?'Variantes':(p.stock||0)+' pzs'}</div><div><button class="ibtn" onclick="deleteProduct('${p.id}')" title="Eliminar"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button></div></div>`
+    return `<div class="pr" onclick="openEditProduct('${p.id}')"><div class="pimg">${imgHtml}</div><div><div class="pname">${p.title}</div><div class="psub">${ofBadge}</div></div><div class="pprice">$${(p.retail_price||0).toLocaleString()}</div><div class="pcomm">+$${(p.commission||0).toLocaleString()}</div><div style="font-size:12px;color:${p.stock===0&&!p.has_variants?'var(--red)':'var(--navy-30)'};">${p.has_variants?'Variantes':(p.stock||0)+' pzs'}</div><div><button class="ibtn" onclick="event.stopPropagation();deleteProduct('${p.id}')" title="Eliminar"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button></div></div>`
   }).join('')
+}
+async function openEditProduct(productId){
+  editingProductId=productId
+  const{data:p}=await sb.from('products').select('*').eq('id',productId).single()
+  if(!p)return
+  document.getElementById('p-title').value=p.title||''
+  document.getElementById('p-desc').value=p.description||''
+  document.getElementById('p-retail').value=p.retail_price||''
+  document.getElementById('p-wholesale').value=p.wholesale_price||''
+  document.getElementById('p-payment').value=p.commission_payment_type||'efectivo'
+  document.getElementById('p-stock').value=p.stock||0
+  document.getElementById('hasVariants').checked=p.has_variants||false
+  document.getElementById('stockSimple').style.display=p.has_variants?'none':'block'
+  document.getElementById('variantsSection').classList.toggle('show',p.has_variants||false)
+  document.getElementById('variantRows').innerHTML=''
+  updateCommission()
+  // Load existing photo preview
+  if(p.image_url){
+    document.getElementById('filePreviewImg').src=p.image_url
+    document.getElementById('fileName').textContent='Foto actual'
+    document.getElementById('uploadPlaceholder').style.display='none'
+    document.getElementById('filePreviewContainer').style.display='block'
+  }else{removeFile(null)}
+  selectedFile=null
+  // Load variants if any
+  if(p.has_variants){
+    const{data:variants}=await sb.from('product_variants').select('*').eq('product_id',productId).order('name')
+    if(variants&&variants.length>0){
+      variants.forEach(v=>{
+        const c=document.getElementById('variantRows'),r=document.createElement('div');r.className='variant-row-full'
+        r.innerHTML=`<div style="display:grid;grid-template-columns:1fr 80px 80px 80px 28px;gap:8px;align-items:center;margin-bottom:8px;"><input class="variant-input vname" type="text" value="${v.name||''}" placeholder="Ej. Talla M"><input class="variant-input vqty" type="number" value="${v.stock||0}" placeholder="Qty" min="0" style="text-align:center;"><input class="variant-input vretail" type="number" value="${v.retail_price||0}" placeholder="P. publico" min="0" oninput="updateVariantComm(this)"><input class="variant-input vwholesale" type="number" value="${v.wholesale_price||0}" placeholder="Tu costo" min="0" oninput="updateVariantComm(this)"><button class="btn-del-variant" onclick="this.closest('.variant-row-full').remove()">x</button></div><div class="variant-comm-preview" style="font-size:11px;color:var(--navy-30);margin-bottom:10px;padding-left:4px;">Comision: <strong style="color:var(--green);">${v.commission>0?'$'+v.commission.toLocaleString():'--'}</strong></div>`
+        c.appendChild(r)
+      })
+    }
+  }
+  document.getElementById('saveError').textContent=''
+  document.getElementById('uploadProgress').style.display='none'
+  document.getElementById('saveProductBtn').disabled=false
+  document.getElementById('saveProductBtn').textContent='Guardar cambios'
+  document.querySelector('.modal-title').textContent='Editar producto'
+  document.querySelector('.modal-sub').textContent='Modifica los datos de tu producto'
+  document.getElementById('productModal').classList.add('open')
 }
 async function deleteProduct(id){if(!confirm('Eliminar este producto?'))return;await sb.from('products').delete().eq('id',id);loadProducts();loadStats()}
 function toggleVariants(){const h=document.getElementById('hasVariants').checked;document.getElementById('stockSimple').style.display=h?'none':'block';document.getElementById('variantsSection').classList.toggle('show',h);if(h&&document.getElementById('variantRows').children.length===0)addVariantRow()}
@@ -540,13 +607,41 @@ async function saveProduct(){
   const title=document.getElementById('p-title').value.trim(),desc=document.getElementById('p-desc').value.trim(),retail=parseFloat(document.getElementById('p-retail').value),wholesale=parseFloat(document.getElementById('p-wholesale').value),payment=document.getElementById('p-payment').value,hasV=document.getElementById('hasVariants').checked,errEl=document.getElementById('saveError');errEl.textContent=''
   if(!title||!retail||!wholesale){errEl.textContent='Llena todos los campos obligatorios.';return}
   if(retail<=wholesale){errEl.textContent='El precio publico debe ser mayor al costo.';return}
-  const btn=document.getElementById('saveProductBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Publicando...'
-  try{let imageUrl=null;if(selectedFile){btn.innerHTML='<span class="spinner"></span>Subiendo foto...';imageUrl=await uploadPhoto(selectedFile)}
-  btn.innerHTML='<span class="spinner"></span>Guardando...';const stock=hasV?0:parseInt(document.getElementById('p-stock').value)||0
-  const{data:prod,error}=await sb.from('products').insert({comercio_id:currentUser.id,title,description:desc,retail_price:retail,wholesale_price:wholesale,commission:retail-wholesale,commission_payment_type:payment,image_url:imageUrl,active:true,views:0,sales_count:0,has_variants:hasV,stock}).select().single()
-  if(error){errEl.textContent=`Error: ${error.message}`;btn.disabled=false;btn.textContent='Publicar producto';return}
-  if(hasV&&prod){const rows=document.querySelectorAll('#variantRows .variant-row-full'),variants=[];rows.forEach(row=>{const name=row.querySelector('.vname').value.trim(),qty=parseInt(row.querySelector('.vqty').value)||0,retail=parseFloat(row.querySelector('.vretail').value)||0,wholesale=parseFloat(row.querySelector('.vwholesale').value)||0;if(name)variants.push({product_id:prod.id,name,stock:qty,retail_price:retail,wholesale_price:wholesale,commission:retail-wholesale})});if(variants.length>0)await sb.from('product_variants').insert(variants)}
-  closeModal();await loadProducts();await loadStats()}catch(err){errEl.textContent=err.message||'Error inesperado.';btn.disabled=false;btn.textContent='Publicar producto'}
+  const btn=document.getElementById('saveProductBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Guardando...'
+  try{
+    let imageUrl=null
+    if(selectedFile){btn.innerHTML='<span class="spinner"></span>Subiendo foto...';imageUrl=await uploadPhoto(selectedFile)}
+    const stock=hasV?0:parseInt(document.getElementById('p-stock').value)||0
+    const productData={title,description:desc,retail_price:retail,wholesale_price:wholesale,commission:retail-wholesale,commission_payment_type:payment,has_variants:hasV,stock}
+    if(imageUrl)productData.image_url=imageUrl
+
+    if(editingProductId){
+      // UPDATE existing product
+      const{error}=await sb.from('products').update(productData).eq('id',editingProductId)
+      if(error){errEl.textContent=`Error: ${error.message}`;btn.disabled=false;btn.textContent='Guardar cambios';return}
+      // Update variants
+      if(hasV){
+        await sb.from('product_variants').delete().eq('product_id',editingProductId)
+        const rows=document.querySelectorAll('#variantRows .variant-row-full'),variants=[]
+        rows.forEach(row=>{const name=row.querySelector('.vname').value.trim(),qty=parseInt(row.querySelector('.vqty').value)||0,r2=parseFloat(row.querySelector('.vretail').value)||0,w2=parseFloat(row.querySelector('.vwholesale').value)||0;if(name)variants.push({product_id:editingProductId,name,stock:qty,retail_price:r2,wholesale_price:w2,commission:r2-w2})})
+        if(variants.length>0)await sb.from('product_variants').insert(variants)
+      }
+    }else{
+      // CREATE new product
+      productData.comercio_id=currentUser.id
+      productData.active=true
+      productData.views=0
+      productData.sales_count=0
+      const{data:prod,error}=await sb.from('products').insert(productData).select().single()
+      if(error){errEl.textContent=`Error: ${error.message}`;btn.disabled=false;btn.textContent='Publicar producto';return}
+      if(hasV&&prod){
+        const rows=document.querySelectorAll('#variantRows .variant-row-full'),variants=[]
+        rows.forEach(row=>{const name=row.querySelector('.vname').value.trim(),qty=parseInt(row.querySelector('.vqty').value)||0,r2=parseFloat(row.querySelector('.vretail').value)||0,w2=parseFloat(row.querySelector('.vwholesale').value)||0;if(name)variants.push({product_id:prod.id,name,stock:qty,retail_price:r2,wholesale_price:w2,commission:r2-w2})})
+        if(variants.length>0)await sb.from('product_variants').insert(variants)
+      }
+    }
+    closeModal();await loadProducts();await loadStats()
+  }catch(err){errEl.textContent=err.message||'Error inesperado.';btn.disabled=false;btn.textContent=editingProductId?'Guardar cambios':'Publicar producto'}
 }
 async function saveProfile(){const address=document.getElementById('pf-address').value.trim(),whatsapp=document.getElementById('pf-whatsapp').value.trim();await sb.from('users').update({address,whatsapp}).eq('id',currentUser.id);const saved=document.getElementById('pfSaved');saved.style.display='inline';setTimeout(()=>{saved.style.display='none'},2500)}
 function openChat(notifId,vendorId,commission,sp,sv){chatNotifId=notifId;chatVendorId=vendorId;chatCommission=commission;document.getElementById('chatTitle').textContent=decodeURIComponent(sp);document.getElementById('chatSub').textContent=`Con ${decodeURIComponent(sv)}`;document.getElementById('chatVendidoBanner').style.display='flex';const btn=document.getElementById('btnMarcarVendido');btn.disabled=false;btn.textContent='Marcar vendido';document.getElementById('chatOverlay').classList.add('open');document.getElementById('chatInput').value='';loadMessages();subscribeToChat()}
@@ -557,7 +652,7 @@ function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();se
 async function marcarVendido(){const btn=document.getElementById('btnMarcarVendido');btn.disabled=true;btn.textContent='Registrando...';await _registrarVenta(chatNotifId,chatVendorId,chatCommission);closeChat()}
 function closeChat(){document.getElementById('chatOverlay').classList.remove('open');if(chatChannel){sb.removeChannel(chatChannel);chatChannel=null}chatNotifId=null}
 function subscribeToNewNotifications(){sb.channel('notifs-c-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`comercio_id=eq.${currentUser.id}`},()=>{loadNotifications();loadStats()}).subscribe()}
-function openModal(){['p-title','p-retail','p-wholesale','p-stock'].forEach(id=>document.getElementById(id).value='');document.getElementById('p-desc').value='';document.getElementById('saveError').textContent='';document.getElementById('uploadProgress').style.display='none';document.getElementById('uploadProgressBar').style.width='0%';document.getElementById('hasVariants').checked=false;document.getElementById('stockSimple').style.display='block';document.getElementById('variantsSection').classList.remove('show');document.getElementById('variantRows').innerHTML='';removeFile(null);selectedFile=null;document.getElementById('saveProductBtn').disabled=false;document.getElementById('saveProductBtn').textContent='Publicar producto';document.getElementById('commPreview').innerHTML='Comision para el vendedor: <strong>--</strong>';document.getElementById('productModal').classList.add('open')}
+function openModal(){editingProductId=null;['p-title','p-retail','p-wholesale','p-stock'].forEach(id=>document.getElementById(id).value='');document.getElementById('p-desc').value='';document.getElementById('saveError').textContent='';document.getElementById('uploadProgress').style.display='none';document.getElementById('uploadProgressBar').style.width='0%';document.getElementById('hasVariants').checked=false;document.getElementById('stockSimple').style.display='block';document.getElementById('variantsSection').classList.remove('show');document.getElementById('variantRows').innerHTML='';removeFile(null);selectedFile=null;document.getElementById('saveProductBtn').disabled=false;document.getElementById('saveProductBtn').textContent='Publicar producto';document.getElementById('commPreview').innerHTML='Comision para el vendedor: <strong>--</strong>';document.querySelector('.modal-title').textContent='Agregar producto';document.querySelector('.modal-sub').textContent='Publica un producto para que los vendedores lo promuevan';document.getElementById('productModal').classList.add('open')}
 function closeModal(){document.getElementById('productModal').classList.remove('open')}
 async function handleLogout(){await sb.auth.signOut();window.location.href='login.html'}
 init()
