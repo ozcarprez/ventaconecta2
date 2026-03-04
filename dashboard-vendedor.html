@@ -141,15 +141,15 @@ function renderHistory(){
     const date=new Date(s.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})
     const statusClass=s.commission_paid?'hs-pagado':'hs-cobrar'
     const statusText=s.commission_paid?'Pagado':'Por cobrar'
-    // Payment info and actions for unpaid
     let payInfo='',cobrarActions=''
     if(!s.commission_paid){
       const payType=s.products?.commission_payment_type||'efectivo'
       const addr=s.users?.address||''
       payInfo='<div style="font-size:10px;margin-top:3px;color:var(--navy-50);">Pago: <b>'+payType+'</b>'+(addr?' &middot; '+addr:'')+'</div>'
       const nid=s.notification_id||''
-      const sp=encodeURIComponent(prod),sb2=encodeURIComponent(biz)
-      cobrarActions='<button class="bchat" style="margin-left:6px;" onclick="openChat(\''+nid+"','"+sp+"','"+sb2+"')\">Chat</button><button class=\"btn-cobrar\" onclick=\"marcarPagado('"+s.id+"')\">Me pagaron</button>'
+      const sp=encodeURIComponent(prod)
+      const sb2=encodeURIComponent(biz)
+      cobrarActions='<button class="bchat" style="margin-left:6px" onclick="openChat(\''+nid+'\',\''+sp+'\',\''+sb2+'\')">Chat</button><button class="btn-cobrar" onclick="marcarPagado(\''+s.id+'\')">Me pagaron</button>'
     }
     return '<div class="hi"><div class="hi-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a8c5e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hi-body"><div class="hi-prod">'+prod+'</div><div class="hi-meta">'+biz+' &middot; '+date+'</div>'+payInfo+'</div><div style="display:flex;align-items:center"><span class="hi-comm">+$'+(s.commission_amount||0).toLocaleString()+'</span><span class="hi-status '+statusClass+'">'+statusText+'</span>'+cobrarActions+'</div></div>'
   }).join('')
