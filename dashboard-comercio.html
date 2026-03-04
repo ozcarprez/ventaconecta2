@@ -203,6 +203,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .sub-banner{border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .notif-filters{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);overflow-x:auto;}.nf-btn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--white);color:var(--navy-50);cursor:pointer;white-space:nowrap;transition:all 0.12s;font-family:var(--sans);}.nf-btn:hover{background:var(--navy-03);color:var(--navy);}.nf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 .ni .barchive{padding:4px 8px;background:var(--navy-03);border:1px solid var(--border);color:var(--navy-30);border-radius:6px;font-size:10px;cursor:pointer;transition:all 0.12s;font-family:var(--sans);}.ni .barchive:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.unread-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 5px;background:var(--orange);color:#fff;border-radius:100px;font-size:9px;font-weight:700;margin-left:4px;line-height:1}
 .pr{cursor:pointer;transition:background 0.12s;}.pr:hover{background:var(--navy-03);}.pr.ph{cursor:default;}.pr.ph:hover{background:transparent;}
 .ci{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border)}.ci:last-child{border-bottom:none}.ci-dot{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.ci-dot.pending{background:var(--yellow-bg);border:1px solid var(--yellow-border)}.ci-dot.paid{background:var(--green-08);border:1px solid var(--green-border)}.ci-body{flex:1;min-width:0}.ci-prod{font-size:13px;font-weight:500;margin-bottom:1px}.ci-meta{font-size:11px;color:var(--navy-30)}.ci-right{display:flex;align-items:center;gap:6px;flex-shrink:0}.ci-amount{font-weight:700;font-size:14px}.ci-amount.pending{color:var(--yellow)}.ci-amount.paid{color:var(--green)}.ci-status{font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px}.cs-pending{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}.cs-paid{background:var(--green-08);color:var(--green);border:1px solid var(--green-border)}
 .btn-pagar{padding:4px 10px;background:var(--green-08);border:1px solid var(--green-border);color:var(--green);border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;font-family:var(--sans);white-space:nowrap}.btn-pagar:hover{background:rgba(26,140,94,.15)}
@@ -405,7 +406,7 @@ async function init(){
   if(profile.whatsapp)document.getElementById('pf-whatsapp').value=profile.whatsapp
   const now=new Date()
   document.getElementById('dateStr').textContent=now.toLocaleDateString('es-MX',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
-  loadStats();loadNotifications();loadProducts();loadCommissions()
+  loadStats();loadNotifications();loadProducts();loadCommissions();loadUnreadCounts()
   subscribeToNewNotifications()
   renderSubBanner(profile)
   // Handle ?subscribed=true from Stripe checkout success
@@ -523,8 +524,8 @@ function renderNotifications(){
     const commission=n.products?.commission||0
     let dotClass,badge2,actions
     if(n.status==='enviado'){dotClass='dy';badge2='<span class="step-badge step-1">Nuevo</span>';actions=`<div class="ni-acts"><button class="brecibir" onclick="acusarRecibo('${n.id}')">Recibido</button><button class="brej" onclick="rejectNotif('${n.id}')">x</button></div>`}
-    else if(n.status==='recibido'){dotClass='db';badge2='<span class="step-badge step-2">En chat</span>';const sp=encodeURIComponent(prodTitle),sv=encodeURIComponent(vendName);actions=`<div class="ni-acts"><button class="bchat" onclick="openChat('${n.id}','${n.vendedor_id}',${commission},'${sp}','${sv}')">Chat</button><button class="bvendido" onclick="marcarVendidoDirecto('${n.id}','${n.vendedor_id}',${commission})">Vendido</button></div>`}
-    else if(n.status==='vendido'){dotClass='dg';badge2='<span class="step-badge step-3">Vendido</span>';const sp=encodeURIComponent(prodTitle),sv=encodeURIComponent(vendName);actions=`<div class="ni-acts"><button class="bchat" onclick="openChat('${n.id}','${n.vendedor_id}',0,'${sp}','${sv}')">Chat</button><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
+    else if(n.status==='recibido'){dotClass='db';badge2='<span class="step-badge step-2">En chat</span>';const sp=encodeURIComponent(prodTitle),sv=encodeURIComponent(vendName);const ub=window._unreadMap?.[n.id]||0;const ubh=ub>0?`<span class="unread-badge">${ub}</span>`:'';actions=`<div class="ni-acts"><button class="bchat" onclick="openChat('${n.id}','${n.vendedor_id}',${commission},'${sp}','${sv}')">Chat${ubh}</button><button class="bvendido" onclick="marcarVendidoDirecto('${n.id}','${n.vendedor_id}',${commission})">Vendido</button></div>`}
+    else if(n.status==='vendido'){dotClass='dg';badge2='<span class="step-badge step-3">Vendido</span>';const sp=encodeURIComponent(prodTitle),sv=encodeURIComponent(vendName);const ub=window._unreadMap?.[n.id]||0;const ubh=ub>0?`<span class="unread-badge">${ub}</span>`:'';actions=`<div class="ni-acts"><button class="bchat" onclick="openChat('${n.id}','${n.vendedor_id}',0,'${sp}','${sv}')">Chat${ubh}</button><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
     else if(n.status==='rechazado'){dotClass='dr';badge2='<span class="step-badge step-x">Rechazado</span>';actions=`<div class="ni-acts"><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
     else{dotClass='dg';badge2='<span class="step-badge step-3">Confirmado</span>';actions=`<div class="ni-acts"><button class="barchive" onclick="archiveNotif('${n.id}')">Archivar</button></div>`}
     const timeAgo=getTimeAgo(n.created_at)
@@ -712,7 +713,33 @@ async function saveProduct(){
   }catch(err){errEl.textContent=err.message||'Error inesperado.';btn.disabled=false;btn.textContent=editingProductId?'Guardar cambios':'Publicar producto'}
 }
 async function saveProfile(){const address=document.getElementById('pf-address').value.trim(),whatsapp=document.getElementById('pf-whatsapp').value.trim();await sb.from('users').update({address,whatsapp}).eq('id',currentUser.id);const saved=document.getElementById('pfSaved');saved.style.display='inline';setTimeout(()=>{saved.style.display='none'},2500)}
-function openChat(notifId,vendorId,commission,sp,sv){chatNotifId=notifId;chatVendorId=vendorId;chatCommission=commission;document.getElementById('chatTitle').textContent=decodeURIComponent(sp);document.getElementById('chatSub').textContent=`Con ${decodeURIComponent(sv)}`;if(commission>0){document.getElementById('chatVendidoBanner').style.display='flex';const btn=document.getElementById('btnMarcarVendido');btn.disabled=false;btn.textContent='Marcar vendido'}else{document.getElementById('chatVendidoBanner').style.display='none'}document.getElementById('chatOverlay').classList.add('open');document.getElementById('chatInput').value='';loadMessages();subscribeToChat()}
+function openChat(notifId,vendorId,commission,sp,sv){chatNotifId=notifId;chatVendorId=vendorId;chatCommission=commission;document.getElementById('chatTitle').textContent=decodeURIComponent(sp);document.getElementById('chatSub').textContent=`Con ${decodeURIComponent(sv)}`;if(commission>0){document.getElementById('chatVendidoBanner').style.display='flex';const btn=document.getElementById('btnMarcarVendido');btn.disabled=false;btn.textContent='Marcar vendido'}else{document.getElementById('chatVendidoBanner').style.display='none'}document.getElementById('chatOverlay').classList.add('open');document.getElementById('chatInput').value='';loadMessages();subscribeToChat();markAsRead(notifId)}
+
+async function markAsRead(notifId){
+  const{data:existing}=await sb.from('chat_reads').select('id').eq('notification_id',notifId).eq('user_id',currentUser.id).maybeSingle()
+  if(existing){await sb.from('chat_reads').update({last_read_at:new Date().toISOString()}).eq('id',existing.id)}
+  else{await sb.from('chat_reads').insert({notification_id:notifId,user_id:currentUser.id,last_read_at:new Date().toISOString()})}
+  loadUnreadCounts()
+}
+
+async function loadUnreadCounts(){
+  const uid=currentUser.id
+  const{data:notifs}=await sb.from('notifications').select('id').eq('comercio_id',uid)
+  if(!notifs||!notifs.length){window._unreadMap={};return}
+  const nids=notifs.map(n=>n.id)
+  const{data:reads}=await sb.from('chat_reads').select('notification_id,last_read_at').eq('user_id',uid)
+  const readMap={};(reads||[]).forEach(r=>{readMap[r.notification_id]=r.last_read_at})
+  const{data:msgs}=await sb.from('messages').select('notification_id,created_at,sender_id').in('notification_id',nids).neq('sender_id',uid)
+  const unreadMap={}
+  ;(msgs||[]).forEach(m=>{
+    const lastRead=readMap[m.notification_id]
+    if(!lastRead||new Date(m.created_at)>new Date(lastRead)){
+      unreadMap[m.notification_id]=(unreadMap[m.notification_id]||0)+1
+    }
+  })
+  window._unreadMap=unreadMap
+  renderNotifications()
+}
 async function loadMessages(){const c=document.getElementById('chatMessages');const{data,error}=await sb.from('messages').select('*, users!sender_id(full_name,business_name,email)').eq('notification_id',chatNotifId).order('created_at',{ascending:true});if(error||!data||data.length===0){c.innerHTML='<div class="chat-empty">Sin mensajes aun</div>';return}c.innerHTML=data.map(msg=>{const isMine=msg.sender_id===currentUser.id;const name=msg.users?.business_name||msg.users?.full_name||msg.users?.email||'?';const time=new Date(msg.created_at).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});return `<div class="msg ${isMine?'mine':'theirs'}"><div class="msg-sender">${isMine?'Tu':name}</div><div class="msg-bubble">${msg.text}</div><div class="msg-time">${time}</div></div>`}).join('');c.scrollTop=c.scrollHeight}
 function subscribeToChat(){if(chatChannel){sb.removeChannel(chatChannel);chatChannel=null}chatChannel=sb.channel('chat-c-'+chatNotifId).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`notification_id=eq.${chatNotifId}`},()=>loadMessages()).subscribe()}
 async function sendMessage(){const text=document.getElementById('chatInput').value.trim();if(!text||!chatNotifId)return;document.getElementById('chatInput').value='';await sb.from('messages').insert({notification_id:chatNotifId,sender_id:currentUser.id,text});loadMessages()}
