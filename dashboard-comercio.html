@@ -97,7 +97,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .pr:last-child{border-bottom:none;}
 .pr:not(.ph):hover{background:var(--navy-03);}
 .ph{font-size:10px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;color:var(--navy-30);}
-.pimg{width:36px;height:36px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.pimg{width:36px;height:36px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
 .pimg img{width:100%;height:100%;object-fit:cover;}
 .pname{font-size:13px;font-weight:500;margin-bottom:1px;}.psub{font-size:10px;color:var(--navy-30);}
 .pprice{font-weight:600;font-size:13px;}
@@ -140,15 +140,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
 .modal-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--white);color:var(--navy-30);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.12s;}
 .modal-close:hover{background:var(--bg);color:var(--navy);}
 
-/* FILE UPLOAD */
-.file-upload-area{border:2px dashed var(--border-2);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
-.file-upload-area:hover{border-color:var(--navy-30);background:var(--navy-03);}
-.file-upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.file-upload-text{font-size:13px;color:var(--navy-50);}
-.file-upload-text strong{color:var(--orange);}
-.file-preview{margin-top:10px;position:relative;display:inline-block;}
-.file-preview img{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1px solid var(--border);}
-.file-preview-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:#fff;border:none;}
+/* PHOTO GRID */
+.photos-grid{display:flex;flex-wrap:wrap;gap:8px;}.photo-add{width:80px;height:80px;border:2px dashed var(--border-2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:all 0.15s;gap:2px;}.photo-add:hover{border-color:var(--navy-30);background:var(--navy-03);}.photo-add input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}.photo-add svg{color:var(--navy-30);}.photo-add span{font-size:10px;color:var(--navy-30);}
+.photo-thumb{width:80px;height:80px;border-radius:10px;position:relative;overflow:hidden;border:1px solid var(--border);}.photo-thumb img{width:100%;height:100%;object-fit:cover;}.photo-thumb-remove{position:absolute;top:4px;right:4px;width:18px;height:18px;background:rgba(0,0,0,0.6);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:#fff;border:none;transition:background 0.12s;}.photo-thumb-remove:hover{background:var(--red);}.photo-thumb.main::after{content:'Principal';position:absolute;bottom:0;left:0;right:0;background:rgba(15,23,41,0.7);color:#fff;font-size:9px;text-align:center;padding:2px 0;font-weight:600;}
 .upload-progress{margin-top:8px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
 .upload-progress-bar{height:100%;background:var(--orange);width:0%;transition:width 0.3s;}
 .error-msg{color:var(--red);font-size:12px;margin-top:8px;display:none;}
@@ -303,17 +297,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--navy);display:flex
     <div class="modal-title">Agregar producto</div>
     <div class="modal-sub">Publica un producto para que los vendedores lo promuevan</div>
     <div class="form-group">
-      <label class="form-label">Foto del producto (opcional)</label>
-      <div class="file-upload-area" id="uploadArea">
-        <input type="file" id="p-photo" accept="image/*" onchange="handleFileSelect(this)">
-        <div id="uploadPlaceholder">
-          <div style="color:var(--navy-30);margin-bottom:6px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-          <div class="file-upload-text">Arrastra o <strong>haz clic para seleccionar</strong></div>
-          <div style="font-size:11px;color:var(--navy-30);margin-top:4px;">JPG, PNG, WebP. Max 5MB</div>
-        </div>
-        <div id="filePreviewContainer" style="display:none;">
-          <div class="file-preview"><img id="filePreviewImg" src="" alt="preview"><button class="file-preview-remove" onclick="removeFile(event)">x</button></div>
-          <div style="font-size:12px;color:var(--navy-50);margin-top:6px;" id="fileName"></div>
+      <label class="form-label">Fotos del producto (hasta 8)</label>
+      <div class="photos-grid" id="photosGrid">
+        <div class="photo-add" id="photoAddBtn">
+          <input type="file" id="p-photo" accept="image/*" multiple onchange="handleFilesSelect(this)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Agregar</span>
         </div>
       </div>
       <div class="upload-progress" id="uploadProgress" style="display:none;"><div class="upload-progress-bar" id="uploadProgressBar"></div></div>
@@ -378,9 +367,10 @@ const SUPABASE_URL='https://miiitegvpxoplanszido.supabase.co'
 const SUPABASE_KEY='sb_publishable_uONmieVhZiope7XWhMnFHA_gQbIHF2w'
 const {createClient}=supabase
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY)
-let currentUser=null,currentProfile=null,selectedFile=null
+let currentUser=null,currentProfile=null
 let chatNotifId=null,chatVendorId=null,chatCommission=0,chatChannel=null
 let editingProductId=null,allNotifications=[],currentNotifFilter='all'
+let pendingPhotos=[],existingPhotos=[]
 
 async function init(){
   const{data:{user}}=await sb.auth.getUser()
@@ -541,7 +531,8 @@ async function loadProducts(){
   const{data:vpData}=await sb.from('vendor_products').select('product_id').in('product_id',productIds)
   const vpCount={};(vpData||[]).forEach(vp=>{vpCount[vp.product_id]=(vpCount[vp.product_id]||0)+1})
   list.innerHTML=data.map(p=>{
-    const imgHtml=p.image_url?`<img src="${p.image_url}" alt="${p.title}">`:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f1729" stroke-width="1.5" stroke-linecap="round" style="opacity:0.2;"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`
+    const firstImg=(p.images&&p.images.length>0)?p.images[0]:p.image_url;const imgCount=(p.images&&p.images.length>1)?`<span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;padding:1px 4px;border-radius:4px;font-weight:600;">${p.images.length}</span>`:''
+    const imgHtml=firstImg?`<img src="${firstImg}" alt="${p.title}">${imgCount}`:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f1729" stroke-width="1.5" stroke-linecap="round" style="opacity:0.2;"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`
     const count=vpCount[p.id]||0
     const ofBadge=count>0?`<span class="offering-badge">${count} vendedor${count>1?'es':''}</span>`:''
     return `<div class="pr" onclick="openEditProduct('${p.id}')"><div class="pimg">${imgHtml}</div><div><div class="pname">${p.title}</div><div class="psub">${ofBadge}</div></div><div class="pprice">$${(p.retail_price||0).toLocaleString()}</div><div class="pcomm">+$${(p.commission||0).toLocaleString()}</div><div style="font-size:12px;color:${p.stock===0&&!p.has_variants?'var(--red)':'var(--navy-30)'};">${p.has_variants?'Variantes':(p.stock||0)+' pzs'}</div><div><button class="ibtn" onclick="event.stopPropagation();deleteProduct('${p.id}')" title="Eliminar"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button></div></div>`
@@ -562,14 +553,10 @@ async function openEditProduct(productId){
   document.getElementById('variantsSection').classList.toggle('show',p.has_variants||false)
   document.getElementById('variantRows').innerHTML=''
   updateCommission()
-  // Load existing photo preview
-  if(p.image_url){
-    document.getElementById('filePreviewImg').src=p.image_url
-    document.getElementById('fileName').textContent='Foto actual'
-    document.getElementById('uploadPlaceholder').style.display='none'
-    document.getElementById('filePreviewContainer').style.display='block'
-  }else{removeFile(null)}
-  selectedFile=null
+  // Load existing photos
+  existingPhotos=(p.images&&p.images.length>0)?[...p.images]:(p.image_url?[p.image_url]:[])
+  pendingPhotos=[]
+  renderPhotoGrid()
   // Load variants if any
   if(p.has_variants){
     const{data:variants}=await sb.from('product_variants').select('*').eq('product_id',productId).order('name')
@@ -598,8 +585,35 @@ function addVariantRow(){
 }
 function updateVariantComm(input){const r=input.closest('.variant-row-full'),ret=parseFloat(r.querySelector('.vretail').value)||0,w=parseFloat(r.querySelector('.vwholesale').value)||0,c=ret-w;r.querySelector('.variant-comm-preview').innerHTML=`Comision: <strong style="color:var(--green);">${c>0?'$'+c.toLocaleString():'--'}</strong>`}
 function updateCommission(){const r=parseFloat(document.getElementById('p-retail').value)||0,w=parseFloat(document.getElementById('p-wholesale').value)||0,c=r-w;document.getElementById('commPreview').innerHTML=`Comision para el vendedor: <strong>${c>0?'$'+c.toLocaleString():'--'}</strong>`}
-function handleFileSelect(input){const f=input.files[0];if(!f)return;if(f.size>5*1024*1024){showPhotoError('Max 5MB');input.value='';return}if(!f.type.startsWith('image/')){showPhotoError('Selecciona una imagen');input.value='';return}selectedFile=f;hidePhotoError();const reader=new FileReader();reader.onload=e=>{document.getElementById('filePreviewImg').src=e.target.result;document.getElementById('fileName').textContent=f.name;document.getElementById('uploadPlaceholder').style.display='none';document.getElementById('filePreviewContainer').style.display='block'};reader.readAsDataURL(f)}
-function removeFile(e){if(e){e.stopPropagation();e.preventDefault()}selectedFile=null;document.getElementById('p-photo').value='';document.getElementById('uploadPlaceholder').style.display='block';document.getElementById('filePreviewContainer').style.display='none'}
+function handleFilesSelect(input){
+  const files=Array.from(input.files)
+  const total=pendingPhotos.length+existingPhotos.length
+  if(total+files.length>8){showPhotoError('Maximo 8 fotos');input.value='';return}
+  files.forEach(f=>{
+    if(f.size>5*1024*1024){showPhotoError('Cada foto max 5MB');return}
+    if(!f.type.startsWith('image/'))return
+    pendingPhotos.push(f)
+  })
+  input.value='';hidePhotoError();renderPhotoGrid()
+}
+function renderPhotoGrid(){
+  const grid=document.getElementById('photosGrid')
+  const total=existingPhotos.length+pendingPhotos.length
+  let html=''
+  existingPhotos.forEach((url,i)=>{
+    html+=`<div class="photo-thumb ${i===0?'main':''}"><img src="${url}" alt="foto"><button class="photo-thumb-remove" onclick="removeExistingPhoto(${i})">x</button></div>`
+  })
+  pendingPhotos.forEach((f,i)=>{
+    const idx=existingPhotos.length+i
+    html+=`<div class="photo-thumb ${idx===0&&existingPhotos.length===0?'main':''}" id="pending-${i}"><div style="width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;"><span class="spinner" style="border-color:var(--border);border-top-color:var(--orange);"></span></div><button class="photo-thumb-remove" onclick="removePendingPhoto(${i})">x</button></div>`
+    const reader=new FileReader();reader.onload=e=>{const el=document.getElementById('pending-'+i);if(el)el.innerHTML=`<img src="${e.target.result}" alt="foto"><button class="photo-thumb-remove" onclick="removePendingPhoto(${i})">x</button>`+(idx===0&&existingPhotos.length===0?'':'')}
+    reader.readAsDataURL(f)
+  })
+  if(total<8){html+=`<div class="photo-add" id="photoAddBtn"><input type="file" id="p-photo" accept="image/*" multiple onchange="handleFilesSelect(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Agregar</span></div>`}
+  grid.innerHTML=html
+}
+function removeExistingPhoto(i){existingPhotos.splice(i,1);renderPhotoGrid()}
+function removePendingPhoto(i){pendingPhotos.splice(i,1);renderPhotoGrid()}
 function showPhotoError(msg){const el=document.getElementById('photoError');el.textContent=msg;el.style.display='block'}
 function hidePhotoError(){document.getElementById('photoError').style.display='none'}
 async function uploadPhoto(file){const ext=file.name.split('.').pop(),fileName=`${currentUser.id}/${Date.now()}.${ext}`,prog=document.getElementById('uploadProgress'),bar=document.getElementById('uploadProgressBar');prog.style.display='block';bar.style.width='30%';const{error}=await sb.storage.from('product-images').upload(fileName,file,{cacheControl:'3600',upsert:false});bar.style.width='100%';if(error){prog.style.display='none';throw new Error(error.message)}const{data:{publicUrl}}=sb.storage.from('product-images').getPublicUrl(fileName);return publicUrl}
@@ -609,11 +623,17 @@ async function saveProduct(){
   if(retail<=wholesale){errEl.textContent='El precio publico debe ser mayor al costo.';return}
   const btn=document.getElementById('saveProductBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Guardando...'
   try{
-    let imageUrl=null
-    if(selectedFile){btn.innerHTML='<span class="spinner"></span>Subiendo foto...';imageUrl=await uploadPhoto(selectedFile)}
+    // Upload pending photos
+    let allImages=[...existingPhotos]
+    if(pendingPhotos.length>0){
+      btn.innerHTML='<span class="spinner"></span>Subiendo fotos...'
+      for(let i=0;i<pendingPhotos.length;i++){
+        const url=await uploadPhoto(pendingPhotos[i])
+        allImages.push(url)
+      }
+    }
     const stock=hasV?0:parseInt(document.getElementById('p-stock').value)||0
-    const productData={title,description:desc,retail_price:retail,wholesale_price:wholesale,commission:retail-wholesale,commission_payment_type:payment,has_variants:hasV,stock}
-    if(imageUrl)productData.image_url=imageUrl
+    const productData={title,description:desc,retail_price:retail,wholesale_price:wholesale,commission:retail-wholesale,commission_payment_type:payment,has_variants:hasV,stock,images:allImages,image_url:allImages[0]||null}
 
     if(editingProductId){
       // UPDATE existing product
@@ -652,7 +672,7 @@ function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();se
 async function marcarVendido(){const btn=document.getElementById('btnMarcarVendido');btn.disabled=true;btn.textContent='Registrando...';await _registrarVenta(chatNotifId,chatVendorId,chatCommission);closeChat()}
 function closeChat(){document.getElementById('chatOverlay').classList.remove('open');if(chatChannel){sb.removeChannel(chatChannel);chatChannel=null}chatNotifId=null}
 function subscribeToNewNotifications(){sb.channel('notifs-c-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`comercio_id=eq.${currentUser.id}`},()=>{loadNotifications();loadStats()}).subscribe()}
-function openModal(){editingProductId=null;['p-title','p-retail','p-wholesale','p-stock'].forEach(id=>document.getElementById(id).value='');document.getElementById('p-desc').value='';document.getElementById('saveError').textContent='';document.getElementById('uploadProgress').style.display='none';document.getElementById('uploadProgressBar').style.width='0%';document.getElementById('hasVariants').checked=false;document.getElementById('stockSimple').style.display='block';document.getElementById('variantsSection').classList.remove('show');document.getElementById('variantRows').innerHTML='';removeFile(null);selectedFile=null;document.getElementById('saveProductBtn').disabled=false;document.getElementById('saveProductBtn').textContent='Publicar producto';document.getElementById('commPreview').innerHTML='Comision para el vendedor: <strong>--</strong>';document.querySelector('.modal-title').textContent='Agregar producto';document.querySelector('.modal-sub').textContent='Publica un producto para que los vendedores lo promuevan';document.getElementById('productModal').classList.add('open')}
+function openModal(){editingProductId=null;['p-title','p-retail','p-wholesale','p-stock'].forEach(id=>document.getElementById(id).value='');document.getElementById('p-desc').value='';document.getElementById('saveError').textContent='';document.getElementById('uploadProgress').style.display='none';document.getElementById('uploadProgressBar').style.width='0%';document.getElementById('hasVariants').checked=false;document.getElementById('stockSimple').style.display='block';document.getElementById('variantsSection').classList.remove('show');document.getElementById('variantRows').innerHTML='';pendingPhotos=[];existingPhotos=[];renderPhotoGrid();document.getElementById('saveProductBtn').disabled=false;document.getElementById('saveProductBtn').textContent='Publicar producto';document.getElementById('commPreview').innerHTML='Comision para el vendedor: <strong>--</strong>';document.querySelector('.modal-title').textContent='Agregar producto';document.querySelector('.modal-sub').textContent='Publica un producto para que los vendedores lo promuevan';document.getElementById('productModal').classList.add('open')}
 function closeModal(){document.getElementById('productModal').classList.remove('open')}
 async function handleLogout(){await sb.auth.signOut();window.location.href='login.html'}
 init()
