@@ -60,6 +60,7 @@ body {
 .logo span { color: var(--orange); }
 .title { font-family: var(--serif); font-size: 28px; text-align: center; letter-spacing: -0.5px; margin-bottom: 28px; }
 
+/* Selector — se oculta si viene ?tipo= en la URL */
 .type-select { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
 .type-btn {
   padding: 16px 14px;
@@ -82,6 +83,20 @@ body {
 .ti-green { background: var(--green-08); }
 .type-name { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
 .type-desc { font-size: 12px; color: var(--navy-50); line-height: 1.4; }
+
+/* Badge que aparece cuando viene pre-seleccionado */
+.type-badge {
+  display: none;
+  align-items: center; gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 24px;
+}
+.type-badge.comercio { background: var(--orange-12); color: var(--orange); border: 1px solid var(--orange-border); }
+.type-badge.vendedor { background: var(--green-08); color: var(--green); border: 1px solid var(--green-border); }
+.type-badge a { font-size: 12px; font-weight: 400; color: var(--navy-30); text-decoration: none; margin-left: auto; }
+.type-badge a:hover { color: var(--navy-50); }
 
 .form-group { margin-bottom: 14px; }
 .form-label { font-size: 13px; font-weight: 500; color: var(--navy-50); margin-bottom: 6px; display: block; }
@@ -139,7 +154,8 @@ body {
   <div class="logo">Venta<span>Conecta</span></div>
   <div class="title">Crear cuenta gratis</div>
 
-  <div class="type-select">
+  <!-- Selector: solo visible si NO viene ?tipo= en la URL -->
+  <div class="type-select" id="typeSelect">
     <div class="type-btn" id="btn-comercio" onclick="selectType('comercio')">
       <div class="type-icon ti-navy">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f1729" stroke-width="1.7" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/><path d="M10 15h4v4h-4z"/></svg>
@@ -154,6 +170,18 @@ body {
       <div class="type-name">Vendedor</div>
       <div class="type-desc">Gana comisiones sin inventario</div>
     </div>
+  </div>
+
+  <!-- Badge: visible cuando viene pre-seleccionado desde el landing -->
+  <div class="type-badge comercio" id="badgeComerco">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/><path d="M10 15h4v4h-4z"/></svg>
+    Registrándote como Comercio
+    <a href="registro.html">Cambiar</a>
+  </div>
+  <div class="type-badge vendedor" id="badgeVendedor">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Registrándote como Vendedor
+    <a href="registro.html">Cambiar</a>
   </div>
 
   <div id="errorMsg" class="error-msg"></div>
@@ -202,6 +230,7 @@ const SUPABASE_KEY='sb_publishable_uONmieVhZiope7XWhMnFHA_gQbIHF2w'
 const {createClient}=supabase
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY)
 let selectedType=null
+
 function selectType(type){
   selectedType=type
   document.getElementById('btn-comercio').className='type-btn'+(type==='comercio'?' sel-comercio':'')
@@ -213,6 +242,25 @@ function selectType(type){
   btn.className='btn-submit'+(type==='comercio'?' orange':'')
   btn.textContent=type==='comercio'?'Registrar mi negocio':'Empezar a ganar'
 }
+
+// Si viene ?tipo= en la URL, ocultar selector y mostrar badge directo
+const params=new URLSearchParams(window.location.search)
+const tipoParam=params.get('tipo')
+if(tipoParam==='comercio'||tipoParam==='vendedor'){
+  // Ocultar selector
+  document.getElementById('typeSelect').style.display='none'
+  // Mostrar badge correspondiente
+  document.getElementById(tipoParam==='comercio'?'badgeComerco':'badgeVendedor').style.display='flex'
+  // Seleccionar tipo y mostrar formulario
+  selectType(tipoParam)
+}
+
+if(params.get('pending')){
+  const el=document.getElementById('errorMsg')
+  el.textContent='Tu cuenta fue creada pero necesitas suscribirte para activar tus productos. Inicia sesion para completar el pago.'
+  el.classList.add('show')
+}
+
 async function handleRegister(){
   const errorMsg=document.getElementById('errorMsg'),successMsg=document.getElementById('successMsg')
   errorMsg.classList.remove('show');successMsg.classList.remove('show')
@@ -240,7 +288,6 @@ async function handleRegister(){
   await sb.from('users').insert(profileData)
 
   if(selectedType==='comercio'){
-    // Comercio: redirect to Stripe Checkout for $299/month subscription
     btn.innerHTML='<span class="spinner"></span>Preparando pago...'
     try{
       const session=await sb.auth.getSession()
@@ -255,21 +302,16 @@ async function handleRegister(){
       const result=await resp.json()
       if(result.url){window.location.href=result.url;return}
     }catch(e){console.error('Stripe error:',e)}
-    // Fallback if Stripe fails
     successMsg.textContent='Cuenta creada. Inicia sesion para activar tu suscripcion.'
     successMsg.classList.add('show');btn.textContent='Listo'
     setTimeout(()=>{window.location.href='login.html'},3000)
   }else{
-    // Vendedor: just go to login, no payment needed
     successMsg.textContent='Cuenta creada. Revisa tu correo para confirmar y luego inicia sesion.'
     successMsg.classList.add('show');btn.textContent='Listo'
     setTimeout(()=>{window.location.href='login.html'},3000)
   }
 }
 function showError(msg){const el=document.getElementById('errorMsg');el.textContent=msg;el.classList.add('show')}
-const params=new URLSearchParams(window.location.search)
-if(params.get('tipo'))selectType(params.get('tipo'))
-if(params.get('pending')){const el=document.getElementById('errorMsg');el.textContent='Tu cuenta fue creada pero necesitas suscribirte para activar tus productos. Inicia sesion para completar el pago.';el.classList.add('show')}
 </script>
 </body>
 </html>
