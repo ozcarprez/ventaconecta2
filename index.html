@@ -3,631 +3,439 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clevermedia — Tijuana</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>VentaConecta — Más ventas para tu negocio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080808;
-    --surface: #111111;
-    --border: rgba(255,255,255,0.07);
-    --white: #ffffff;
-    --gray: #888;
-    --light: #bbb;
-    --accent: #3b82f6;
-    --accent2: #06d6a0;
-  }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+:root {
+  --ink: #0e0e0e;
+  --ink-60: rgba(14,14,14,0.6);
+  --ink-20: rgba(14,14,14,0.2);
+  --ink-08: rgba(14,14,14,0.08);
+  --paper: #f7f5f0;
+  --white: #ffffff;
+  --orange: #e8520a;
+  --orange-soft: rgba(232,82,10,0.1);
+  --green: #1a6e4a;
+  --green-soft: rgba(26,110,74,0.1);
+  --border: rgba(14,14,14,0.1);
+  --display: 'Bricolage Grotesque', sans-serif;
+  --body: 'Lora', Georgia, serif;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--white);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 400;
-    overflow-x: hidden;
-    line-height: 1;
-  }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 0 48px;
-    height: 68px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(8,8,8,0.9);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(247,245,240,0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1080px; margin: 0 auto; padding: 0 28px;
+  height: 58px; display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-family: var(--display);
+  font-weight: 800; font-size: 18px; letter-spacing: -0.5px;
+  color: var(--ink); text-decoration: none;
+}
+.logo em { color: var(--orange); font-style: normal; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-a {
+  font-family: var(--display);
+  font-size: 13px; font-weight: 500;
+  color: var(--ink-60); text-decoration: none;
+  padding: 7px 14px; border-radius: 6px;
+  transition: all 0.15s;
+}
+.nav-a:hover { color: var(--ink); background: var(--ink-08); }
+.nav-cta {
+  font-family: var(--display);
+  font-size: 13px; font-weight: 700;
+  background: var(--ink); color: var(--white);
+  padding: 8px 18px; border-radius: 8px;
+  text-decoration: none; transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.82; }
 
-  .logo {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    color: var(--white);
-    text-decoration: none;
-  }
+/* ── HERO ── */
+.hero {
+  min-height: 60vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 28px 60px;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(232,82,10,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--display);
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 32px;
+  padding: 6px 14px;
+  background: var(--orange-soft);
+  border-radius: 100px;
+  border: 1px solid rgba(232,82,10,0.2);
+  opacity: 0; animation: up 0.5s 0.1s ease forwards;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(42px, 7vw, 86px);
+  line-height: 1.0;
+  letter-spacing: -2.5px;
+  color: var(--ink);
+  max-width: 820px;
+  margin: 0 auto 28px;
+  opacity: 0; animation: up 0.5s 0.2s ease forwards;
+}
+.hero h1 .accent {
+  color: var(--orange);
+  font-style: italic;
+  font-family: var(--body);
+  font-weight: 600;
+}
+.hero-sub {
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: var(--ink-60);
+  line-height: 1.65;
+  max-width: 480px;
+  margin: 0 auto 48px;
+  font-weight: 400;
+  opacity: 0; animation: up 0.5s 0.3s ease forwards;
+}
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  opacity: 0; animation: up 0.5s 0.4s ease forwards;
+}
+.btn-main {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-weight: 700; font-size: 15px;
+  background: var(--orange); color: var(--white);
+  padding: 14px 28px; border-radius: 10px;
+  text-decoration: none; transition: all 0.2s;
+  border: none; cursor: pointer;
+}
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,82,10,0.3); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-weight: 600; font-size: 15px;
+  background: transparent; color: var(--ink-60);
+  padding: 14px 28px; border-radius: 10px;
+  text-decoration: none; transition: all 0.2s;
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { color: var(--ink); border-color: var(--ink-20); }
 
-  .logo span { color: var(--accent); }
+/* ── DIVIDER ── */
+.divider {
+  max-width: 1080px; margin: 0 auto; padding: 0 28px;
+}
+.rule {
+  border: none; border-top: 1px solid var(--border); margin: 0;
+}
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-  }
+/* ── HOW IT WORKS ── */
+.how {
+  max-width: 1080px; margin: 0 auto;
+  padding: 100px 28px;
+}
+.section-label {
+  font-family: var(--display);
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink-60); margin-bottom: 16px;
+}
+.section-h {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800; letter-spacing: -1.5px; line-height: 1.05;
+  color: var(--ink); margin-bottom: 64px;
+}
 
-  .nav-links a {
-    font-size: 15px;
-    color: var(--gray);
-    text-decoration: none;
-    font-weight: 400;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--white); }
+/* TWO COLUMNS — one per role */
+.how-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.role-col {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.role-col::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.role-col.comercio::before { background: var(--orange); }
+.role-col.vendedor::before { background: var(--green); }
 
-  .nav-btn {
-    background: var(--accent) !important;
-    color: var(--white) !important;
-    padding: 9px 22px;
-    border-radius: 6px;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    transition: opacity 0.2s !important;
-  }
-  .nav-btn:hover { opacity: 0.85; }
+.role-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--display); font-size: 11px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 100px;
+  margin-bottom: 20px;
+}
+.role-col.comercio .role-pill { background: var(--orange-soft); color: var(--orange); }
+.role-col.vendedor .role-pill { background: var(--green-soft); color: var(--green); }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 120px 48px 64px;
-    position: relative;
-    overflow: hidden;
-  }
+.role-title {
+  font-family: var(--display);
+  font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.role-desc {
+  font-size: 15px; color: var(--ink-60);
+  line-height: 1.6; margin-bottom: 32px;
+}
 
-  .hero-glow {
-    position: absolute;
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 65%);
-    top: -100px; right: -100px;
-    pointer-events: none;
-  }
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  display: flex; gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--ink-08);
+  align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+.step-n {
+  font-family: var(--display);
+  font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.role-col.comercio .step-n { background: var(--orange-soft); color: var(--orange); }
+.role-col.vendedor .step-n { background: var(--green-soft); color: var(--green); }
+.step-body {}
+.step-title {
+  font-family: var(--display);
+  font-size: 14px; font-weight: 700; margin-bottom: 3px;
+}
+.step-text { font-size: 13px; color: var(--ink-60); line-height: 1.55; }
 
-  .hero-glow2 {
-    position: absolute;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(6,214,160,0.03) 0%, transparent 65%);
-    bottom: 0; left: 200px;
-    pointer-events: none;
-  }
+.role-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--display); font-size: 14px; font-weight: 700;
+  padding: 11px 22px; border-radius: 9px;
+  text-decoration: none; margin-top: 28px;
+  transition: all 0.2s;
+}
+.role-col.comercio .role-cta {
+  background: var(--orange); color: var(--white);
+}
+.role-col.comercio .role-cta:hover { box-shadow: 0 6px 20px rgba(232,82,10,0.3); transform: translateY(-1px); }
+.role-col.vendedor .role-cta {
+  background: var(--green); color: var(--white);
+}
+.role-col.vendedor .role-cta:hover { box-shadow: 0 6px 20px rgba(26,110,74,0.25); transform: translateY(-1px); }
 
-  .hero-title {
-    font-size: clamp(72px, 13.5vw, 200px);
-    font-weight: 800;
-    line-height: 0.88;
-    letter-spacing: -5px;
-    margin-bottom: 40px;
-    opacity: 0;
-    animation: up 0.7s forwards 0.35s;
-  }
+/* ── BOTTOM CTA ── */
+.bottom-cta {
+  text-align: center;
+  padding: 100px 28px;
+  border-top: 1px solid var(--border);
+}
+.bottom-cta h2 {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800; letter-spacing: -1.5px;
+  margin-bottom: 12px;
+}
+.bottom-cta p {
+  font-size: 16px; color: var(--ink-60);
+  margin-bottom: 36px;
+}
 
-  .hero-title .line1 { color: var(--white); }
-  .hero-title .line2 { color: var(--gray); }
-  .hero-title .highlight { color: var(--accent); }
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 28px;
+  text-align: center;
+  font-family: var(--display);
+  font-size: 13px; color: var(--ink-60);
+}
 
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    opacity: 0;
-    animation: up 0.7s forwards 0.65s;
-  }
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
 
-  .btn-primary {
-    background: var(--accent);
-    color: var(--white);
-    padding: 14px 32px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+/* ── ANIMATIONS ── */
+@keyframes up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  .btn-ghost {
-    color: var(--light);
-    font-size: 16px;
-    font-weight: 400;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.2s;
-  }
-  .btn-ghost:hover { color: var(--white); }
-
-  @keyframes up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* STATS BAR */
-  .stats-bar {
-    margin: 80px 48px 0;
-    padding: 40px 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .stats-phrase {
-    font-size: clamp(28px, 3.5vw, 48px);
-    font-weight: 700;
-    color: var(--white);
-    text-align: center;
-    line-height: 1.3;
-    letter-spacing: -1px;
-    max-width: 900px;
-  }
-
-  .stats-phrase span { color: var(--accent); }
-
-  /* SECTION */
-  .section {
-    padding: 100px 48px;
-  }
-
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    color: var(--accent);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-
-  .tag::before {
-    content: '';
-    width: 20px; height: 1px;
-    background: var(--accent);
-  }
-
-  .section-title {
-    font-size: clamp(32px, 5vw, 56px);
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1;
-    margin-bottom: 16px;
-  }
-
-  .section-sub {
-    font-size: 16px;
-    color: var(--gray);
-    font-weight: 300;
-    margin-bottom: 64px;
-    max-width: 480px;
-    line-height: 1.6;
-  }
-
-  /* SERVICES */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3px;
-    margin-top: 48px;
-  }
-
-  .svc {
-    background: var(--surface);
-    padding: 48px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    border-radius: 16px;
-  }
-
-  .svc::before {
-    content: attr(data-num);
-    position: absolute;
-    top: -20px; right: -10px;
-    font-size: 160px;
-    font-weight: 800;
-    color: rgba(255,255,255,0.02);
-    letter-spacing: -8px;
-    line-height: 1;
-    pointer-events: none;
-    transition: color 0.3s;
-  }
-
-  .svc::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 0; height: 2px;
-    background: var(--accent);
-    transition: width 0.4s ease;
-  }
-
-  .svc:hover { background: #161616; }
-  .svc:hover::after { width: 100%; }
-  .svc:hover::before { color: rgba(59,130,246,0.05); }
-  .svc:hover .svc-arrow { color: var(--accent); transform: translate(3px, -3px); }
-
-  .svc-num {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    margin-bottom: 20px;
-  }
-
-  .svc-arrow {
-    position: absolute;
-    top: 40px; right: 40px;
-    font-size: 16px;
-    color: rgba(255,255,255,0.12);
-    transition: color 0.3s, transform 0.3s;
-  }
-
-  .svc-name {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 10px;
-    line-height: 1.1;
-  }
-
-  .svc-desc {
-    font-size: 15px;
-    color: var(--gray);
-    line-height: 1.65;
-    font-weight: 300;
-    max-width: 440px;
-  }
-
-  .svc-tag {
-    display: inline-block;
-    margin-top: 20px;
-    background: rgba(59,130,246,0.1);
-    border: 1px solid rgba(59,130,246,0.2);
-    color: var(--accent);
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 100px;
-    width: fit-content;
-  }
-
-  /* PORTFOLIO */
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3px;
-    margin-top: 48px;
-  }
-
-  .proj {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 40px 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 220px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-    text-decoration: none;
-    color: var(--white);
-  }
-
-  .proj::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 0; height: 2px;
-    transition: width 0.4s ease;
-  }
-
-  .proj:hover { background: #161616; }
-  .proj:hover::after { width: 100%; }
-  .proj:hover .proj-arrow { color: var(--white); transform: translate(3px, -3px); }
-
-  .proj-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .proj-tag {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 100px;
-    border: 1px solid;
-  }
-
-  .proj-arrow {
-    font-size: 18px;
-    color: rgba(255,255,255,0.2);
-    transition: color 0.3s, transform 0.3s;
-  }
-
-  .proj-bottom { margin-top: 32px; }
-
-  .proj-name {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
-    line-height: 1.1;
-  }
-
-  .proj-desc {
-    font-size: 14px;
-    color: var(--gray);
-    font-weight: 300;
-    line-height: 1.5;
-  }
-
-  /* colores por proyecto */
-  .proj-restaurante .proj-tag { color: #f97316; border-color: rgba(249,115,22,0.3); background: rgba(249,115,22,0.08); }
-  .proj-restaurante::after { background: #f97316; }
-
-  .proj-papaya .proj-tag { color: #22c55e; border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.08); }
-  .proj-papaya::after { background: #22c55e; }
-
-  .proj-purificadora .proj-tag { color: #38bdf8; border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08); }
-  .proj-purificadora::after { background: #38bdf8; }
-
-  .proj-ventaconecta .proj-tag { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
-  .proj-ventaconecta::after { background: #a78bfa; }
-
-  /* IDEA SECTION */
-  .idea-section {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .idea-inner {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .idea-tag {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-
-  .idea-title {
-    font-size: clamp(36px, 5vw, 64px);
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-  }
-
-  .idea-desc {
-    font-size: 18px;
-    color: var(--gray);
-    line-height: 1.75;
-    font-weight: 300;
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .footer-right {
-    font-size: 15px;
-    color: #444;
-  }
-
-  .footer-right a { color: var(--gray); text-decoration: none; }
-  .footer-right a:hover { color: var(--white); }
-
-  /* MOBILE */
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    .nav-links { display: none; }
-    .hero { padding: 100px 20px 60px; }
-    .hero-title { letter-spacing: -2px; }
-    .stats-bar { margin: 40px 20px 0; padding: 24px; }
-    .section { padding: 80px 20px; }
-    .services-grid { grid-template-columns: 1fr; }
-    .portfolio-grid { grid-template-columns: 1fr; }
-    .idea-section { padding: 80px 20px; }
-    .cta-section { padding: 100px 20px; }
-    footer { padding: 28px 20px; flex-direction: column; gap: 12px; text-align: center; }
-  }
+/* ── MOBILE ── */
+@media (max-width: 720px) {
+  .how-cols { grid-template-columns: 1fr; }
+  .nav-a { display: none; }
+  .hero h1 { letter-spacing: -1.5px; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .btn-main, .btn-ghost { width: 100%; max-width: 320px; justify-content: center; }
+}
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="#" class="logo">clever<span>media</span></a>
-  <div class="nav-links">
-    <a href="#servicios">Servicios</a>
-    <a href="#portafolio">Portafolio</a>
-    <a href="#contacto" class="nav-btn">Cotizar gratis</a>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Venta<em>Conecta</em></a>
+    <div class="nav-links">
+      <a href="#como-funciona" class="nav-a">Cómo funciona</a>
+      <a href="login.html" class="nav-a">Iniciar sesión</a>
+      <a href="registro.html" class="nav-cta">Crear cuenta</a>
+    </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
+  <h1>Más ventas.<br><span class="accent">Sin gastar</span><br>en publicidad.</h1>
+  <p class="hero-sub">
+    Conectamos comercios con vendedores independientes. Ellos promocionan tus productos. Tú recibes clientes. Nadie paga hasta que se cierra la venta.
+  </p>
+</section>
 
-  <h1 class="hero-title">
-    <span class="line1">Diseñamos</span><br>
-    <span class="line2">tu presencia</span><br>
-    <span class="highlight">digital.</span>
-  </h1>
+<hr class="rule">
 
-  <div class="hero-actions">
-    <a href="#portafolio" class="btn-primary">Ver portafolio</a>
-    <a href="#servicios" class="btn-ghost">Ver servicios →</a>
+<!-- HOW IT WORKS -->
+<section class="how" id="como-funciona">
+  <div class="reveal" style="text-align:center;">
+    <div class="section-label">Cómo funciona</div>
+    <div class="section-h">Dos lados. Un mismo objetivo.</div>
+  </div>
+
+  <div class="how-cols">
+
+    <!-- COMERCIO -->
+    <div class="role-col comercio reveal">
+      <div class="role-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 11v8h14v-8"/></svg>
+        Para comercios
+      </div>
+      <div class="role-title">Publica tu producto.<br>Los clientes llegan solos.</div>
+      <div class="role-desc">No necesitas publicidad. Una red de vendedores promociona tu inventario y trae compradores directo a tu tienda.</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div class="step-body">
+            <div class="step-title">Sube tu producto</div>
+            <div class="step-text">Foto, precio al público y tu costo. La diferencia es la comisión del vendedor. Tú decides el margen.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div class="step-body">
+            <div class="step-title">Los vendedores lo promocionan</div>
+            <div class="step-text">Lo publican en Marketplace, WhatsApp y redes. Sin que hagas nada.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div class="step-body">
+            <div class="step-title">Recibes una notificación</div>
+            <div class="step-text">Nombre del cliente, cuándo llega y qué quiere comprar — antes de que llegue a tu puerta.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">4</div>
+          <div class="step-body">
+            <div class="step-title">Confirmas la venta. Le pagas al vendedor.</div>
+            <div class="step-text">Solo pagas la comisión cuando hay venta real. Cero riesgo.</div>
+          </div>
+        </div>
+      </div>
+      <a href="registro.html?tipo=comercio" class="role-cta">
+        Registrar mi negocio
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <!-- VENDEDOR -->
+    <div class="role-col vendedor reveal">
+      <div class="role-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Para vendedores
+      </div>
+      <div class="role-title">Elige un producto.<br>Gana sin inventario.</div>
+      <div class="role-desc">No necesitas dinero inicial ni bodega. Eliges qué vender, lo promocionas y cobras tu comisión cuando se cierra la venta.</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div class="step-body">
+            <div class="step-title">Elige un producto del catálogo</div>
+            <div class="step-text">Explora productos de comercios locales. Cada uno muestra cuánto ganas por venta.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div class="step-body">
+            <div class="step-title">Publícalo donde quieras</div>
+            <div class="step-text">Facebook Marketplace, WhatsApp, Instagram. Comparte la info con un clic.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div class="step-body">
+            <div class="step-title">Cuando alguien se interesa</div>
+            <div class="step-text">Notificas al comercio con el nombre del cliente y cuándo va a ir. En 10 segundos.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">4</div>
+          <div class="step-body">
+            <div class="step-title">Cobras tu comisión</div>
+            <div class="step-text">Cuando el comercio confirma la venta, vas a cobrar. Efectivo o transferencia.</div>
+          </div>
+        </div>
+      </div>
+      <a href="registro.html?tipo=vendedor" class="role-cta">
+        Empezar a ganar
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="stats-phrase">Diseño web rápido y a tu medida. <span>Para personas, proyectos y negocios.</span> Apoyados en IA.</div>
-</div>
-
-<!-- SERVICIOS -->
-<section class="section" id="servicios" style="text-align: center;">
-  <div class="tag" style="justify-content: center;">Servicios</div>
-  <h2 class="section-title">Lo que hacemos</h2>
-
-  <div class="services-grid">
-    <div class="svc" data-num="01">
-      <div class="svc-num">01</div>
-      <div class="svc-arrow">↗</div>
-      <h3 class="svc-name">Página Web</h3>
-      <p class="svc-desc">Tu presencia en línea, profesional y lista para atraer a quien buscas. Diseñada para verse bien en celular y computadora.</p>
-      <div class="svc-tag">Lo más solicitado</div>
-    </div>
-    <div class="svc" data-num="02">
-      <div class="svc-num">02</div>
-      <div class="svc-arrow">↗</div>
-      <h3 class="svc-name">Tienda en Línea</h3>
-      <p class="svc-desc">Vende tus productos las 24 horas. Con catálogo, carrito de compras y pagos integrados.</p>
-    </div>
-    <div class="svc" data-num="03">
-      <div class="svc-num">03</div>
-      <div class="svc-arrow">↗</div>
-      <h3 class="svc-name">Landing Page</h3>
-      <p class="svc-desc">Una página enfocada en convertir visitas en clientes. Perfecta para promociones, servicios o lanzamientos.</p>
-    </div>
-    <div class="svc" data-num="04">
-      <div class="svc-num">04</div>
-      <div class="svc-arrow">↗</div>
-      <h3 class="svc-name">Mejora de Procesos</h3>
-      <p class="svc-desc">¿Algo que se puede hacer mejor, más rápido o más fácil? Nos sentamos contigo, entendemos cómo trabajas y buscamos la solución juntos.</p>
-    </div>
-  </div>
-</section>
-
-<!-- PORTAFOLIO -->
-<section class="section" id="portafolio" style="text-align: center;">
-  <div class="tag" style="justify-content: center;">Portafolio</div>
-  <h2 class="section-title">Proyectos recientes</h2>
-  <p class="section-sub" style="margin: 0 auto 0;">Páginas reales, para negocios reales en Tijuana.</p>
-
-  <div class="portfolio-grid">
-
-    <a href="https://restaurante-majo.vercel.app/" target="_blank" class="proj proj-restaurante">
-      <div class="proj-top">
-        <span class="proj-tag">Restaurante</span>
-        <span class="proj-arrow">↗</span>
-      </div>
-      <div class="proj-bottom">
-        <div class="proj-name">Restaurante Majo</div>
-        <div class="proj-desc">Landing page con menú, galería y ubicación para restaurante familiar en Tijuana.</div>
-      </div>
-    </a>
-
-    <a href="https://papayafreshinc.vercel.app/" target="_blank" class="proj proj-papaya">
-      <div class="proj-top">
-        <span class="proj-tag">Exportación</span>
-        <span class="proj-arrow">↗</span>
-      </div>
-      <div class="proj-bottom">
-        <div class="proj-name">Papaya Fresh Inc.</div>
-        <div class="proj-desc">Sitio corporativo bilingüe para empresa exportadora de productos agrícolas.</div>
-      </div>
-    </a>
-
-    <a href="https://purificadora-el-canon.vercel.app/" target="_blank" class="proj proj-purificadora">
-      <div class="proj-top">
-        <span class="proj-tag">Servicio local</span>
-        <span class="proj-arrow">↗</span>
-      </div>
-      <div class="proj-bottom">
-        <div class="proj-name">Purificadora El Cañón</div>
-        <div class="proj-desc">Página de purificadora local con precios, servicios y contacto directo por WhatsApp.</div>
-      </div>
-    </a>
-
-    <a href="https://ventaconecta2.vercel.app/" target="_blank" class="proj proj-ventaconecta">
-      <div class="proj-top">
-        <span class="proj-tag">Marketplace</span>
-        <span class="proj-arrow">↗</span>
-      </div>
-      <div class="proj-bottom">
-        <div class="proj-name">VentaConecta</div>
-        <div class="proj-desc">Plataforma que conecta comercios locales de Tijuana con vendedores independientes.</div>
-      </div>
-    </a>
-
-  </div>
-</section>
-
-<!-- IDEA -->
-<section class="section idea-section" id="contacto">
-  <div class="idea-inner">
-    <div class="idea-tag">Para los curiosos</div>
-    <h2 class="idea-title">¿Tienes una idea digital?</h2>
-    <p class="idea-desc">No importa si es un proyecto personal, un negocio o algo que todavía no sabes cómo explicar.<br>Cuéntanos y lo construimos juntos.</p>
-    <a href="https://wa.me/526631261241?text=Hola%2C%20tengo%20una%20idea%20digital%20que%20quisiera%20desarrollar" class="btn-primary" target="_blank">Cuéntanos tu idea</a>
-  </div>
+<!-- BOTTOM CTA -->
+<section class="bottom-cta reveal">
+  <h2>¿Listo para empezar?</h2>
+  <p>Gratis para vendedores · $299/mes para comercios</p>
 </section>
 
 <footer>
-  <a href="#" class="logo">clever<span>media</span></a>
-  <div class="footer-right">
-    <a href="mailto:hola@clevermedia.mx">hola@clevermedia.mx</a>
-  </div>
+  VentaConecta &middot; Tijuana &middot; <a href="login.html" style="color:inherit;">Iniciar sesión</a>
 </footer>
 
 <script>
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.svc, .proj').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-  });
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 
 </body>
